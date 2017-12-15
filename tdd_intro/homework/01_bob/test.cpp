@@ -16,13 +16,14 @@ std::string GetBobAnswer(const std::string& in)
         return "Fine. Be that way!";
     }
     const size_t lastChIndex = in.size() - 1;
-    if (in.find('?') == lastChIndex)
+    switch(in[lastChIndex])
     {
+    case '?':
         return "Sure.";
-    }
-    if (in.find('!') == lastChIndex)
-    {
+
+    case '!':
         return "Whoa, chill out!";
+    // default: you get the warning on clang if default case is absent
     }
     return "Whatever.";
 }

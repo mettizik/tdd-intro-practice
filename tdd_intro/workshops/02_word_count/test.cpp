@@ -19,9 +19,9 @@ WordCount_mt CountWords(const std::string& input)
 {
     WordCount_mt map;
     std::stringstream stream(input);
-    while (std::getline(stream, word, " ") && !word.empty())
+    //while (std::getline(stream, word, " ") && !word.empty())
     {
-        ++map[word];
+        //++map[word];
     }
     return map;
 }
