@@ -67,3 +67,9 @@ TEST(GetAnnagrams, GetAnnagrams_returns_list_of_words_from_input_list_if_they_ar
     ListOfStrings expectedList{"etxxpe", "eetxxp", "pexetx"};
     EXPECT_EQ(expectedList, GetAnnagrams("expext", {"etxxpe", "eetxxp", "pexetx", "not_annagram"}));
 }
+
+TEST(GetAnnagrams, GetAnnagrams_Acceptence_test)
+{
+    ListOfStrings expectedList{"inlets"};
+    EXPECT_EQ(expectedList, GetAnnagrams("listen", {"enlists", "google", "inlets", "banana"}));
+}
