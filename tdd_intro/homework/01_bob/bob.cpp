@@ -23,3 +23,10 @@ TEST(GetBobsAnswer, GetBobsAnswer_Returns_Fine_On_Empty_Request)
 {
     EXPECT_EQ("Fine. Be that way!", GetBobsAnswer(""));
 }
+
+TEST(GetBobsAnswer, GetBobsAnswer_Returns_Sure_On_Question)
+{
+    EXPECT_EQ("Sure.", GetBobsAnswer("?"));
+    EXPECT_EQ("Sure.", GetBobsAnswer("What kind of person are you?"));
+    EXPECT_EQ("Sure.", GetBobsAnswer("Are you crazy?"));
+}
