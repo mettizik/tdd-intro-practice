@@ -23,3 +23,9 @@ TEST(GetAnnagrams, GetAnnagrams_returns_empty_list_on_empty_input)
 {
     EXPECT_EQ(ListOfStrings{}, GetAnnagrams("", {}));
 }
+
+TEST(GetAnnagrams, GetAnnagrams_returns_list_with_word_if_it_matches_word_in_list)
+{
+    EXPECT_EQ(ListOfStrings{"expext"}, GetAnnagrams("expext", {"expext"}));
+    EXPECT_EQ(ListOfStrings{"expext"}, GetAnnagrams("expext", {"expext", "not_so_expext"}));
+}
