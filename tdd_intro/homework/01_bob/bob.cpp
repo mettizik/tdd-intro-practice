@@ -16,7 +16,7 @@ Implement Bob!
 
 std::string GetBobsAnswer(const std::string& request)
 {
-    return "";
+    return "Fine. Be that way!";
 }
 
 TEST(GetBobsAnswer, GetBobsAnswer_Returns_Fine_On_Empty_Request)
