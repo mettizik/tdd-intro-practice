@@ -28,16 +28,17 @@ ListOfStrings GetAnnagrams(const std::string& word, const ListOfStrings& list)
     }
     MapOfChars expectMap;
     CountChars(word, expectMap);
+    ListOfStrings result{};
     for (const auto& wordFromList : list)
     {
         MapOfChars testedMap;
         CountChars(wordFromList, testedMap);
         if (expectMap == testedMap)
         {
-            return ListOfStrings{wordFromList};
+            result.push_back(wordFromList);
         }
     }
-    return ListOfStrings{};
+    return result;
 }
 
 TEST(GetAnnagrams, GetAnnagrams_returns_empty_list_on_empty_input)
