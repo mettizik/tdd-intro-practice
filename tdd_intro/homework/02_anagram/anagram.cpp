@@ -23,7 +23,7 @@ ListOfStrings GetAnnagrams(const std::string& word, const ListOfStrings& list)
             return ListOfStrings{word};
         }
     }
-    return ListOfStrings{""};
+    return ListOfStrings{};
 }
 
 TEST(GetAnnagrams, GetAnnagrams_returns_empty_list_on_empty_input)
