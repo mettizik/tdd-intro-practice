@@ -16,6 +16,13 @@ ListOfStrings GetAnnagrams(const std::string& word, const ListOfStrings& list)
     {
         return ListOfStrings{};
     }
+    for (const auto& wordFromList : list)
+    {
+        if (wordFromList == word)
+        {
+            return ListOfStrings{word};
+        }
+    }
     return ListOfStrings{""};
 }
 
