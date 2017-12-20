@@ -15,7 +15,7 @@ using ListOfStrings = std::list<std::string>;
 
 ListOfStrings WordWrapp(const std::string& line, size_t limit)
 {
-    return ListOfStrings{};
+    return ListOfStrings{""};
 }
 
 TEST(WordWrapp, WordWrapp_returns_empty_line_on_empty_input_string)
