@@ -26,3 +26,8 @@ TEST(WordWrapp, WordWrapp_returns_empty_line_on_empty_input_string)
 {
     EXPECT_EQ(ListOfStrings{""}, WordWrapp("", 0));
 }
+
+TEST(WordWrapp, WordWrapp_returns_string_if_it_shorter_then_limit)
+{
+    EXPECT_EQ(ListOfStrings{"string"}, WordWrapp("string", INT_LEAST64_MAX));
+}
