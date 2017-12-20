@@ -7,8 +7,18 @@ Given "listen" and a list of candidates like "enlists" "google" "inlets" "banana
 #include <gtest/gtest.h>
 #include <string>
 #include <list>
+#include <map>
 
 using ListOfStrings = std::list<std::string>;
+using MapOfChars = std::map<char, size_t>;
+
+void CountChars(const std::string& word, MapOfChars& map)
+{
+    for (const auto& character : word)
+    {
+        ++map[character];
+    }
+}
 
 ListOfStrings GetAnnagrams(const std::string& word, const ListOfStrings& list)
 {
@@ -16,11 +26,15 @@ ListOfStrings GetAnnagrams(const std::string& word, const ListOfStrings& list)
     {
         return ListOfStrings{};
     }
+    MapOfChars expectMap;
+    CountChars(word, expectMap);
     for (const auto& wordFromList : list)
     {
-        if (wordFromList == word)
+        MapOfChars testedMap;
+        CountChars(wordFromList, testedMap);
+        if (expectMap == testedMap)
         {
-            return ListOfStrings{word};
+            return ListOfStrings{wordFromList};
         }
     }
     return ListOfStrings{};
