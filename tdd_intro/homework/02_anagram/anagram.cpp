@@ -12,6 +12,10 @@ using ListOfStrings = std::list<std::string>;
 
 ListOfStrings GetAnnagrams(const std::string& word, const ListOfStrings& list)
 {
+    if (word.empty() || list.empty())
+    {
+        return ListOfStrings{};
+    }
     return ListOfStrings{""};
 }
 
