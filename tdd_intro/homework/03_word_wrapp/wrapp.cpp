@@ -15,6 +15,10 @@ using ListOfStrings = std::list<std::string>;
 
 ListOfStrings WordWrapp(const std::string& line, size_t limit)
 {
+    if (line.length() <= limit)
+    {
+        return ListOfStrings{line};
+    }
     return ListOfStrings{""};
 }
 
