@@ -21,11 +21,15 @@ std::string GetBobsAnswer(const std::string& request)
         return "Fine. Be that way!";
     }
     char lastChar = *request.rbegin();
-    if (lastChar != '!')
+    if (lastChar == '!')
+    {
+        return "Whoa, chill out!";
+    }
+    else if (lastChar == '?')
     {
         return "Sure.";
     }
-    return "Whoa, chill out!";
+    return "Whatever.";
 }
 
 TEST(GetBobsAnswer, GetBobsAnswer_Returns_Fine_On_Empty_Request)
