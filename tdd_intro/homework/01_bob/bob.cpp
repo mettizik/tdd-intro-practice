@@ -46,3 +46,8 @@ TEST(GetBobsAnswer, GetBobsAnswer_Returns_Sure_On_Exclamation)
     EXPECT_EQ("Whoa, chill out!", GetBobsAnswer("You are pathetic!"));
     EXPECT_EQ("Whoa, chill out!", GetBobsAnswer("Are you crazy?!"));
 }
+
+TEST(GetBobsAnswer, GetBobsAnswer_Returns_Fine_On_Reqular_Request)
+{
+    EXPECT_EQ("Whatever.", GetBobsAnswer("Hey, Bob."));
+}
