@@ -20,7 +20,12 @@ std::string GetBobsAnswer(const std::string& request)
     {
         return "Fine. Be that way!";
     }
-    return "Sure.";
+    char lastChar = *request.rbegin();
+    if (lastChar != '!')
+    {
+        return "Sure.";
+    }
+    return "Whoa, chill out!";
 }
 
 TEST(GetBobsAnswer, GetBobsAnswer_Returns_Fine_On_Empty_Request)
@@ -33,4 +38,11 @@ TEST(GetBobsAnswer, GetBobsAnswer_Returns_Sure_On_Question)
     EXPECT_EQ("Sure.", GetBobsAnswer("?"));
     EXPECT_EQ("Sure.", GetBobsAnswer("What kind of person are you?"));
     EXPECT_EQ("Sure.", GetBobsAnswer("Are you crazy?"));
+}
+
+TEST(GetBobsAnswer, GetBobsAnswer_Returns_Sure_On_Exclamation)
+{
+    EXPECT_EQ("Whoa, chill out!", GetBobsAnswer("!"));
+    EXPECT_EQ("Whoa, chill out!", GetBobsAnswer("You are pathetic!"));
+    EXPECT_EQ("Whoa, chill out!", GetBobsAnswer("Are you crazy?!"));
 }
