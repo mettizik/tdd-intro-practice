@@ -19,6 +19,17 @@ ListOfStrings WordWrapp(const std::string& line, size_t limit)
     {
         return ListOfStrings{line};
     }
+    else
+    {
+        ListOfStrings result;
+        size_t curPos = 0;
+        while (curPos < line.length())
+        {
+            result.push_back(line.substr(curPos, curPos + limit));
+            curPos += limit;
+        }
+        return result;
+    }
     return ListOfStrings{""};
 }
 
@@ -30,4 +41,10 @@ TEST(WordWrapp, WordWrapp_returns_empty_line_on_empty_input_string)
 TEST(WordWrapp, WordWrapp_returns_string_if_it_shorter_then_limit)
 {
     EXPECT_EQ(ListOfStrings{"string"}, WordWrapp("string", INT_LEAST64_MAX));
+}
+
+TEST(WordWrapp, WordWrapp_returns_cutted_in_half_if_it_longer_then_limit)
+{
+    ListOfStrings expectList{"str", "ing"};
+    EXPECT_EQ(expectList, WordWrapp("string", 3));
 }
