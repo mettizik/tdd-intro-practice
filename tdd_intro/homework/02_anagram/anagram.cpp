@@ -60,3 +60,9 @@ TEST(GetAnnagrams, GetAnnagrams_returns_list_with_word_from_input_list_if_it_is_
 {
     EXPECT_EQ(ListOfStrings{"etxxpe"}, GetAnnagrams("expext", {"etxxpe"}));
 }
+
+TEST(GetAnnagrams, GetAnnagrams_returns_list_of_words_from_input_list_if_they_are_annagram_to_given_word)
+{
+    ListOfStrings expectedList{"etxxpe", "eetxxp", "pexetx"};
+    EXPECT_EQ(expectedList, GetAnnagrams("expext", {"etxxpe", "eetxxp", "pexetx", "not_annagram"}));
+}
