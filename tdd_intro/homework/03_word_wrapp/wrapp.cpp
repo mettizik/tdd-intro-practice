@@ -15,27 +15,19 @@ using ListOfStrings = std::list<std::string>;
 
 ListOfStrings WordWrapp(const std::string& line, size_t limit)
 {
-    if (line.length() <= limit)
+    ListOfStrings result;
+    size_t curPos = 0;
+    while (curPos < line.length())
     {
-        return ListOfStrings{line};
+        result.push_back(line.substr(curPos, curPos + limit));
+        curPos += limit;
     }
-    else
-    {
-        ListOfStrings result;
-        size_t curPos = 0;
-        while (curPos < line.length())
-        {
-            result.push_back(line.substr(curPos, curPos + limit));
-            curPos += limit;
-        }
-        return result;
-    }
-    return ListOfStrings{""};
+    return result;
 }
 
 TEST(WordWrapp, WordWrapp_returns_empty_line_on_empty_input_string)
 {
-    EXPECT_EQ(ListOfStrings{""}, WordWrapp("", 0));
+    EXPECT_EQ(ListOfStrings{}, WordWrapp("", 0));
 }
 
 TEST(WordWrapp, WordWrapp_returns_string_if_it_shorter_then_limit)
