@@ -59,3 +59,10 @@ TEST(WordWrapp, WordWrapp_returns_strings_splitted_by_space_if_limit_is_on_the_l
     ListOfStrings resultList = WordWrapp("str longword", 5);
     EXPECT_EQ(expectList, resultList);
 }
+
+TEST(WordWrapp, WordWrapp_acceptance)
+{
+    ListOfStrings expectList{"Write", " a", "funct", "ion,", "that", "is", "given"};
+    ListOfStrings resultList = WordWrapp("Write a function, that is given", 5);
+    EXPECT_EQ(expectList, resultList);
+}
