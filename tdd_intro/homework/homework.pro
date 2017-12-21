@@ -5,4 +5,4 @@ SUBDIRS += \
     02_anagram \
     03_word_wrapp \
     04_leap_year \
-    04_trinary_numbers
+    05_trinary_numbers
