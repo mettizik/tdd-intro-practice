@@ -44,3 +44,10 @@ TEST(IsLeap, IsLeap_returns_false_on_devided_by_100)
     EXPECT_FALSE(IsLeap(500));
     EXPECT_FALSE(IsLeap(2100));
 }
+
+TEST(IsLeap, IsLeap_returns_true_on_devided_by_400)
+{
+    EXPECT_TRUE(IsLeap(400));
+    EXPECT_TRUE(IsLeap(800));
+    EXPECT_TRUE(IsLeap(2000));
+}
