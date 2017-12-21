@@ -32,3 +32,11 @@ TEST(IsLeap, IsLeap_returns_true_on_devided_by_4)
     EXPECT_TRUE(IsLeap(104));
     EXPECT_TRUE(IsLeap(2004));
 }
+
+TEST(IsLeap, IsLeap_returns_false_on_devided_by_100)
+{
+    EXPECT_FALSE(IsLeap(100));
+    EXPECT_FALSE(IsLeap(200));
+    EXPECT_FALSE(IsLeap(500));
+    EXPECT_FALSE(IsLeap(2100));
+}
