@@ -52,3 +52,10 @@ TEST(WordWrapp, WordWrapp_returns_strings_splitted_by_space_if_limit_is_on_the_w
     ListOfStrings resultList = WordWrapp("str ing", 5);
     EXPECT_EQ(expectList, resultList);
 }
+
+TEST(WordWrapp, WordWrapp_returns_strings_splitted_by_space_if_limit_is_on_the_long_word)
+{
+    ListOfStrings expectList{"str", "longw", "ord"};
+    ListOfStrings resultList = WordWrapp("str longword", 5);
+    EXPECT_EQ(expectList, resultList);
+}
