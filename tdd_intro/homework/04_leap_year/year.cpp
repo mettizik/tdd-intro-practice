@@ -14,7 +14,7 @@ If your language provides a method in the standard library that does this look-u
 
 bool IsLeap(int year)
 {
-    return false;
+    return year % 4 == 0;
 }
 
 TEST(IsLeap, IsLeap_returns_false_on_non_devided_by_4)
