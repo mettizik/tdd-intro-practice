@@ -33,3 +33,4 @@
 
 # QtCreator build files
 build-*
+*.pro.user
