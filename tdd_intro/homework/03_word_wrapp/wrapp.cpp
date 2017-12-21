@@ -19,8 +19,8 @@ ListOfStrings WordWrapp(const std::string& line, size_t limit)
     size_t curPos = 0;
     while (curPos < line.length())
     {
-        size_t lastSpacePos = std::min(curPos + limit, std::max(curPos, line.find_last_of(' ', curPos + limit)));
-        if (lastSpacePos == curPos)
+        size_t lastSpacePos = std::max(curPos, line.find_last_of(' ', curPos + limit));
+        if (lastSpacePos == curPos || lastSpacePos > curPos + limit)
         {
             lastSpacePos = curPos + limit;
         }
