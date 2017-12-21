@@ -20,11 +20,11 @@ ListOfStrings WordWrapp(const std::string& line, size_t limit)
     while (curPos < line.length())
     {
         size_t lastSpacePos = std::max(curPos, line.find_last_of(' ', curPos + limit));
-        if (lastSpacePos == curPos || lastSpacePos > curPos + limit)
+        if ((lastSpacePos <= curPos) || (lastSpacePos > curPos + limit))
         {
             lastSpacePos = curPos + limit;
         }
-        result.push_back(line.substr(curPos, lastSpacePos));
+        result.push_back(line.substr(curPos, lastSpacePos - curPos));
         curPos = lastSpacePos < curPos + limit ? lastSpacePos + 1 : lastSpacePos;
     }
     return result;
