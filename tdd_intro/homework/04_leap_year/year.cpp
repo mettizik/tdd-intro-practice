@@ -24,3 +24,11 @@ TEST(IsLeap, IsLeap_returns_false_on_non_devided_by_4)
     EXPECT_FALSE(IsLeap(101));
     EXPECT_FALSE(IsLeap(2001));
 }
+
+TEST(IsLeap, IsLeap_returns_true_on_devided_by_4)
+{
+    EXPECT_TRUE(IsLeap(4));
+    EXPECT_TRUE(IsLeap(16));
+    EXPECT_TRUE(IsLeap(104));
+    EXPECT_TRUE(IsLeap(2004));
+}
