@@ -6,5 +6,4 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-    test.cpp
-
+    bob.cpp
