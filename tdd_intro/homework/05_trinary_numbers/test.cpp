@@ -60,3 +60,10 @@ TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_number_on_multip
     EXPECT_EQ(21, ConvertFromTrinaryNumber("210"));
     EXPECT_EQ(33, ConvertFromTrinaryNumber("1020"));
 }
+
+TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_zero_on_non_trinary_input)
+{
+    EXPECT_EQ(0, ConvertFromTrinaryNumber("103001"));
+    EXPECT_EQ(0, ConvertFromTrinaryNumber("21a"));
+    EXPECT_EQ(0, ConvertFromTrinaryNumber("102-"));
+}
