@@ -23,19 +23,11 @@ If your language provides a method in the standard library to perform the conver
 
 uint64_t ConvertFromTrinaryNumber(const std::string& number)
 {
-    if (number == "0")
+    if (number.empty())
     {
         return 0;
     }
-    else if (number == "1")
-    {
-        return 1;
-    }
-    else if (number == "2")
-    {
-        return 2;
-    }
-    return 0;
+    return number[0] - '0';
 }
 
 TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_0_on_empty_input)
