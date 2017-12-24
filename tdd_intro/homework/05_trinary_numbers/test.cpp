@@ -54,3 +54,10 @@ TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_number_on_two_sy
     EXPECT_EQ(7, ConvertFromTrinaryNumber("21"));
     EXPECT_EQ(6, ConvertFromTrinaryNumber("20"));
 }
+
+TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_number_on_multiple_symbols_input)
+{
+    EXPECT_EQ(244, ConvertFromTrinaryNumber("100001"));
+    EXPECT_EQ(12, ConvertFromTrinaryNumber("210"));
+    EXPECT_EQ(33, ConvertFromTrinaryNumber("1020"));
+}
