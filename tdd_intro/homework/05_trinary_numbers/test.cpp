@@ -30,3 +30,10 @@ TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_0_on_empty_input
 {
     EXPECT_EQ(0, ConvertFromTrinaryNumber(""));
 }
+
+TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_number_on_one_symbol_input)
+{
+    EXPECT_EQ(0, ConvertFromTrinaryNumber("0"));
+    EXPECT_EQ(1, ConvertFromTrinaryNumber("1"));
+    EXPECT_EQ(2, ConvertFromTrinaryNumber("2"));
+}
