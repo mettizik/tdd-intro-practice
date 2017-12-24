@@ -27,11 +27,10 @@ uint64_t ConvertFromTrinaryNumber(const std::string& number)
     {
         return 0;
     }
-    int64_t ret = number[0] - '0';
-    if (number.size() == 2)
+    int64_t ret = 0;
+    for (const auto& digit : number)
     {
-        ret *= 3;
-        ret += number[1] - '0';
+        ret = ret * 3 + (digit - '0');
     }
     return ret;
 }
@@ -58,6 +57,6 @@ TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_number_on_two_sy
 TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_number_on_multiple_symbols_input)
 {
     EXPECT_EQ(244, ConvertFromTrinaryNumber("100001"));
-    EXPECT_EQ(12, ConvertFromTrinaryNumber("210"));
+    EXPECT_EQ(21, ConvertFromTrinaryNumber("210"));
     EXPECT_EQ(33, ConvertFromTrinaryNumber("1020"));
 }
