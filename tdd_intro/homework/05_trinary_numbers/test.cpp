@@ -27,7 +27,13 @@ uint64_t ConvertFromTrinaryNumber(const std::string& number)
     {
         return 0;
     }
-    return number[0] - '0';
+    int64_t ret = number[0] - '0';
+    if (number.size() == 2)
+    {
+        ret *= 3;
+        ret += number[1] - '0';
+    }
+    return ret;
 }
 
 TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_0_on_empty_input)
