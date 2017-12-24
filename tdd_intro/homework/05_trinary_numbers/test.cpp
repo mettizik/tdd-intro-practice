@@ -30,7 +30,14 @@ uint64_t ConvertFromTrinaryNumber(const std::string& number)
     int64_t ret = 0;
     for (const auto& digit : number)
     {
-        ret = ret * 3 + (digit - '0');
+        if (digit == '0' || digit == '1' || digit == '2')
+        {
+            ret = ret * 3 + (digit - '0');
+        }
+        else
+        {
+            return 0;
+        }
     }
     return ret;
 }
