@@ -41,3 +41,10 @@ TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_number_on_one_sy
     EXPECT_EQ(1, ConvertFromTrinaryNumber("1"));
     EXPECT_EQ(2, ConvertFromTrinaryNumber("2"));
 }
+
+TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_number_on_two_symbols_input)
+{
+    EXPECT_EQ(3, ConvertFromTrinaryNumber("10"));
+    EXPECT_EQ(7, ConvertFromTrinaryNumber("21"));
+    EXPECT_EQ(6, ConvertFromTrinaryNumber("20"));
+}
