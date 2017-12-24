@@ -17,3 +17,16 @@ The last place in a trinary number is the 1's place. The second to last is the 3
 
 If your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.
 */
+
+#include <string>
+#include <stdint.h>
+
+uint64_t ConvertFromTrinaryNumber(const std::string& number)
+{
+    return 0;
+}
+
+TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_0_on_empty_input)
+{
+    EXPECT_EQ(0, ConvertFromTrinaryNumber(""));
+}
