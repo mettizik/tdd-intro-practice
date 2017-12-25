@@ -1,14 +1,3 @@
-/*
-Given a phrase, count the occurrences of each word in that phrase.
-
-For example for the input "olly olly in come free"
-
-olly: 2
-in: 1
-come: 1
-free: 1
-
-*/
 
 #include <gtest/gtest.h>
 
@@ -28,3 +17,60 @@ The last place in a trinary number is the 1's place. The second to last is the 3
 
 If your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.
 */
+
+#include <string>
+#include <stdint.h>
+
+uint64_t ConvertFromTrinaryNumber(const std::string& number)
+{
+    if (number.empty())
+    {
+        return 0;
+    }
+    int64_t ret = 0;
+    for (const auto& digit : number)
+    {
+        if (digit == '0' || digit == '1' || digit == '2')
+        {
+            ret = ret * 3 + (digit - '0');
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    return ret;
+}
+
+TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_0_on_empty_input)
+{
+    EXPECT_EQ(0, ConvertFromTrinaryNumber(""));
+}
+
+TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_number_on_one_symbol_input)
+{
+    EXPECT_EQ(0, ConvertFromTrinaryNumber("0"));
+    EXPECT_EQ(1, ConvertFromTrinaryNumber("1"));
+    EXPECT_EQ(2, ConvertFromTrinaryNumber("2"));
+}
+
+TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_number_on_two_symbols_input)
+{
+    EXPECT_EQ(3, ConvertFromTrinaryNumber("10"));
+    EXPECT_EQ(7, ConvertFromTrinaryNumber("21"));
+    EXPECT_EQ(6, ConvertFromTrinaryNumber("20"));
+}
+
+TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_number_on_multiple_symbols_input)
+{
+    EXPECT_EQ(244, ConvertFromTrinaryNumber("100001"));
+    EXPECT_EQ(21, ConvertFromTrinaryNumber("210"));
+    EXPECT_EQ(33, ConvertFromTrinaryNumber("1020"));
+}
+
+TEST(ConvertFromTrinaryNumber, ConvertFromTrinaryNumber_returns_zero_on_non_trinary_input)
+{
+    EXPECT_EQ(0, ConvertFromTrinaryNumber("103001"));
+    EXPECT_EQ(0, ConvertFromTrinaryNumber("21a"));
+    EXPECT_EQ(0, ConvertFromTrinaryNumber("102-"));
+}
