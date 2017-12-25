@@ -1,18 +1,4 @@
 /*
-Given a phrase, count the occurrences of each word in that phrase.
-
-For example for the input "olly olly in come free"
-
-olly: 2
-in: 1
-come: 1
-free: 1
-
-*/
-
-#include <gtest/gtest.h>
-
-/*
 Convert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.
 
 The program should consider strings specifying an invalid trinary as the value 0.
@@ -28,3 +14,106 @@ The last place in a trinary number is the 1's place. The second to last is the 3
 
 If your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.
 */
+
+#include <gtest/gtest.h>
+#include <string>
+#include <exception>
+#include <cmath>
+
+size_t validate_digit(char val, size_t base)
+{
+  const auto res = val - 0x30;
+  if (!(res >= 0 && res < base))
+  {
+    throw std::runtime_error("Invalid digit for provided base!");
+  }
+  return res;
+}
+
+size_t parse_digit_line_base(const std::string &digitsLine, size_t base)
+{
+  assert(base > 0 && base <= 10);
+  size_t result = 0;
+  auto power = digitsLine.size() - 1;
+  for (auto digit : digitsLine)
+  {
+    result += validate_digit(digit, base) * std::pow(base, power--);
+  }
+  return result;
+}
+
+size_t trinary(const std::string &line)
+{
+  try
+  {
+    return parse_digit_line_base(line, 3);
+  }
+  catch (const std::exception &ex)
+  {
+  }
+  return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+TEST(trinary, trinary_returns_zero_if_receives_empty_string)
+{
+  EXPECT_EQ(0, trinary(""));
+}
+
+TEST(trinary, trinary_returns_zero_if_receives_zero)
+{
+  EXPECT_EQ(0, trinary("0"));
+}
+
+TEST(trinary, trinary_returns_one_if_receives_one)
+{
+  EXPECT_EQ(1, trinary("1"));
+}
+
+TEST(trinary, trinary_returns_zero_if_receives_invalid_symbol)
+{
+  EXPECT_EQ(0, trinary("a"));
+  EXPECT_EQ(0, trinary("ab"));
+  EXPECT_EQ(0, trinary("x;"));
+}
+
+TEST(trinary, trinary_returns_zero_if_receives_negative_number)
+{
+  EXPECT_EQ(0, trinary("-1"));
+}
+
+TEST(trinary, trinary_returns_zero_if_receives_number_more_than_2)
+{
+  EXPECT_EQ(0, trinary("3"));
+}
+
+TEST(trinary, trinary_returns_three_if_receives_10)
+{
+  EXPECT_EQ(3, trinary("10"));
+}
+
+TEST(trinary, trinary_returns_four_if_receives_11)
+{
+  EXPECT_EQ(4, trinary("11"));
+}
+
+TEST(trinary, trinary_returns_37_if_receives_121)
+{
+  EXPECT_EQ(16, trinary("121"));
+}
+
+TEST(trinary, acceptance_test)
+{
+  EXPECT_EQ(302, trinary("102012"));
+}
+
+TEST(decimal, acceptance_test)
+{
+  EXPECT_EQ(123456787643, parse_digit_line_base("123456787643", 10));
+}
+
+TEST(octal, acceptance_test)
+{
+  EXPECT_EQ(01234567, parse_digit_line_base("1234567", 8));
+}
