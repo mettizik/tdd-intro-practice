@@ -28,3 +28,57 @@ The last place in a trinary number is the 1's place. The second to last is the 3
 
 If your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.
 */
+
+int TrinaryToDecimal(const std::string& str)
+{
+    int result = 0;
+    const int size = static_cast<int>(str.size());
+    int power = size - 1;
+    for (int i = 0; i < size; ++i)
+    {
+        std::string tmp;
+        char ch = str[i];
+        if (ch < '0' || ch > '2')
+        {
+            return 0;
+        }
+        tmp.push_back(ch);
+        result += std::atoi(tmp.c_str()) * static_cast<int>(std::pow(3, power--));
+    }
+    return result;
+}
+
+TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Empty_Returns_0)
+{
+    EXPECT_EQ(0, TrinaryToDecimal(""));
+}
+
+TEST(TrinaryToDecimal, TrinaryToDecimal_Take_One_Digit_Returns_0)
+{
+    EXPECT_EQ(0, TrinaryToDecimal("0"));
+}
+
+TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Two_Digit_Returns_4)
+{
+    EXPECT_EQ(4, TrinaryToDecimal("11"));
+}
+
+TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Invalid_Returns_0)
+{
+    EXPECT_EQ(0, TrinaryToDecimal("cc"));
+}
+
+TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Big_String_Returns_Correct_Value)
+{
+    EXPECT_EQ(302, TrinaryToDecimal("102012"));
+}
+
+TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Big_Invalid_String_Returns_0)
+{
+    EXPECT_EQ(0, TrinaryToDecimal("1c2012"));
+}
+
+TEST(TrinaryToDecimal, TrinaryToDecimal_Take_String_With_Other_Digits_Returns_0)
+{
+    EXPECT_EQ(0, TrinaryToDecimal("103012"));
+}
