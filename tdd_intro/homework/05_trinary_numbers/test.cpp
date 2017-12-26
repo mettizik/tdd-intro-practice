@@ -31,6 +31,10 @@ If your language provides a method in the standard library to perform the conver
 
 int TrinaryToDecimal(const std::string& str)
 {
+    if (str.empty())
+    {
+        return 0;
+    }
     return 0;
 }
 
