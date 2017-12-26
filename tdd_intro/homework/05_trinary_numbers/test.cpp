@@ -38,7 +38,7 @@ int TrinaryToDecimal(const std::string& str)
     {
         std::string tmp;
         char ch = str[i];
-        if (ch < '0' || ch > '9')
+        if (ch < '0' || ch > '2')
         {
             return 0;
         }
@@ -76,4 +76,9 @@ TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Big_String_Returns_Correct_Value)
 TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Big_Invalid_String_Returns_0)
 {
     EXPECT_EQ(0, TrinaryToDecimal("1c2012"));
+}
+
+TEST(TrinaryToDecimal, TrinaryToDecimal_Take_String_With_Other_Digits_Returns_0)
+{
+    EXPECT_EQ(0, TrinaryToDecimal("103012"));
 }
