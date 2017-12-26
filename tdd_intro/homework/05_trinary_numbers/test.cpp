@@ -31,12 +31,13 @@ If your language provides a method in the standard library to perform the conver
 
 int TrinaryToDecimal(const std::string& str)
 {
-    if (str.empty())
+    if (str.size() > 2 || str.size() < 2)
     {
         return 0;
     }
-    double digit = static_cast<double>(str[0]) - 48.0;
-    return static_cast<int>(std::pow(digit, 1));
+    int digit1 = static_cast<int>(str[0]) - 48;
+    int digit2 = static_cast<int>(str[1]) - 48;
+    return digit1*static_cast<int>(std::pow(3, 0)) + digit2*static_cast<int>(std::pow(3, 1));
 }
 
 TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Invalid_Returns_0)
@@ -47,4 +48,9 @@ TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Invalid_Returns_0)
 TEST(TrinaryToDecimal, TrinaryToDecimal_Take_One_Digit_Returns_0)
 {
     EXPECT_EQ(0, TrinaryToDecimal("0"));
+}
+
+TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Two_Digit_Returns_4)
+{
+    EXPECT_EQ(4, TrinaryToDecimal("11"));
 }
