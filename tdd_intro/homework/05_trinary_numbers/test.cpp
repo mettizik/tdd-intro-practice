@@ -35,10 +35,16 @@ int TrinaryToDecimal(const std::string& str)
     {
         return 0;
     }
-    return 0;
+    int digit = static_cast<int>(str[0]) - 48;
+    return std::pow(digit, 1);
 }
 
 TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Invalid_Returns_0)
 {
     EXPECT_EQ(0, TrinaryToDecimal(""));
+}
+
+TEST(TrinaryToDecimal, TrinaryToDecimal_Take_One_Digit_Returns_0)
+{
+    EXPECT_EQ(0, TrinaryToDecimal("0"));
 }
