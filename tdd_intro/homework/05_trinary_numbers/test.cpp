@@ -35,8 +35,8 @@ int TrinaryToDecimal(const std::string& str)
     {
         return 0;
     }
-    int digit = static_cast<int>(str[0]) - 48;
-    return std::pow(digit, 1);
+    double digit = static_cast<double>(str[0]) - 48.0;
+    return static_cast<int>(std::pow(digit, 1));
 }
 
 TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Invalid_Returns_0)
