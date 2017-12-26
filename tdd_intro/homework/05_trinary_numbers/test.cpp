@@ -40,7 +40,7 @@ int TrinaryToDecimal(const std::string& str)
     return digit1*static_cast<int>(std::pow(3, 0)) + digit2*static_cast<int>(std::pow(3, 1));
 }
 
-TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Invalid_Returns_0)
+TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Empty_Returns_0)
 {
     EXPECT_EQ(0, TrinaryToDecimal(""));
 }
