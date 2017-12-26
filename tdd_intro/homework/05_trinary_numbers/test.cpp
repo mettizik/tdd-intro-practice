@@ -35,9 +35,17 @@ int TrinaryToDecimal(const std::string& str)
     {
         return 0;
     }
-    int digit1 = static_cast<int>(str[0]) - 48;
-    int digit2 = static_cast<int>(str[1]) - 48;
-    return digit1*static_cast<int>(std::pow(3, 0)) + digit2*static_cast<int>(std::pow(3, 1));
+    int result = 0;
+    const int size = static_cast<int>(str.size());
+    int power = size - 1;
+    for (int i = 0; i < size; ++i)
+    {
+        std::string tmp;
+        tmp.push_back(str[i]);
+        int digit = std::atoi(tmp.c_str());
+        result += digit * static_cast<int>(std::pow(3, power--));
+    }
+    return result;
 }
 
 TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Empty_Returns_0)
@@ -53,4 +61,9 @@ TEST(TrinaryToDecimal, TrinaryToDecimal_Take_One_Digit_Returns_0)
 TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Two_Digit_Returns_4)
 {
     EXPECT_EQ(4, TrinaryToDecimal("11"));
+}
+
+TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Invalid_Returns_0)
+{
+    EXPECT_EQ(0, TrinaryToDecimal("cc"));
 }
