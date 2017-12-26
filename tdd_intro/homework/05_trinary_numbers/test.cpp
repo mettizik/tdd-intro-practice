@@ -31,10 +31,6 @@ If your language provides a method in the standard library to perform the conver
 
 int TrinaryToDecimal(const std::string& str)
 {
-    if (str.size() > 2 || str.size() < 2)
-    {
-        return 0;
-    }
     int result = 0;
     const int size = static_cast<int>(str.size());
     int power = size - 1;
@@ -42,8 +38,7 @@ int TrinaryToDecimal(const std::string& str)
     {
         std::string tmp;
         tmp.push_back(str[i]);
-        int digit = std::atoi(tmp.c_str());
-        result += digit * static_cast<int>(std::pow(3, power--));
+        result += std::atoi(tmp.c_str()) * static_cast<int>(std::pow(3, power--));
     }
     return result;
 }
