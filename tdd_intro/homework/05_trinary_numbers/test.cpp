@@ -37,7 +37,12 @@ int TrinaryToDecimal(const std::string& str)
     for (int i = 0; i < size; ++i)
     {
         std::string tmp;
-        tmp.push_back(str[i]);
+        char ch = str[i];
+        if (ch < '0' || ch > '9')
+        {
+            return 0;
+        }
+        tmp.push_back(ch);
         result += std::atoi(tmp.c_str()) * static_cast<int>(std::pow(3, power--));
     }
     return result;
@@ -66,4 +71,9 @@ TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Invalid_Returns_0)
 TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Big_String_Returns_Correct_Value)
 {
     EXPECT_EQ(302, TrinaryToDecimal("102012"));
+}
+
+TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Big_Invalid_String_Returns_0)
+{
+    EXPECT_EQ(0, TrinaryToDecimal("1c2012"));
 }
