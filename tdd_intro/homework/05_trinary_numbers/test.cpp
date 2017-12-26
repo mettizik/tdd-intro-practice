@@ -62,3 +62,8 @@ TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Invalid_Returns_0)
 {
     EXPECT_EQ(0, TrinaryToDecimal("cc"));
 }
+
+TEST(TrinaryToDecimal, TrinaryToDecimal_Take_Big_String_Returns_Correct_Value)
+{
+    EXPECT_EQ(302, TrinaryToDecimal("102012"));
+}
