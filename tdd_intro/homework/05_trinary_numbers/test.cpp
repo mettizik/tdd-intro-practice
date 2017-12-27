@@ -70,3 +70,8 @@ TEST(Ternary, returns_valid_value_for_two_digits)
     EXPECT_EQ(Ternary("20"), 6);
     EXPECT_EQ(Ternary("22"), 8);
 }
+
+TEST(Ternary, acceptance_test)
+{
+    EXPECT_EQ(Ternary("102012"), 302);
+}
