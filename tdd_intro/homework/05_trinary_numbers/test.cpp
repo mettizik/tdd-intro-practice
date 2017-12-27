@@ -29,12 +29,33 @@ The last place in a trinary number is the 1's place. The second to last is the 3
 If your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.
 */
 
-int Ternary(const std::string&)
+int Ternary(const std::string& input)
 {
-    return 0;
+    if (input.empty())
+    {
+        return 0;
+    }
+
+    switch (input[0])
+    {
+    case '0':
+        return 0;
+    case '1':
+        return 1;
+    case '2':
+        return 2;
+    }
 }
 
 TEST(Ternary, returns_zero_for_empty_input)
 {
     EXPECT_EQ(Ternary(""), 0);
 }
+
+TEST(Ternary, returns_digit_value_for_single_digit)
+{
+    EXPECT_EQ(Ternary("0"), 0);
+    EXPECT_EQ(Ternary("1"), 1);
+    EXPECT_EQ(Ternary("2"), 2);
+}
+
