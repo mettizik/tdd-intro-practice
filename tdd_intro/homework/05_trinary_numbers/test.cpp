@@ -36,15 +36,7 @@ int Ternary(const std::string& input)
         return 0;
     }
 
-    switch (input[0])
-    {
-    case '0':
-        return 0;
-    case '1':
-        return 1;
-    case '2':
-        return 2;
-    }
+    return input[0] - '0';
 }
 
 TEST(Ternary, returns_zero_for_empty_input)
