@@ -31,21 +31,10 @@ If your language provides a method in the standard library to perform the conver
 
 int Ternary(const std::string& input)
 {
-    if (input.empty())
-    {
-        return 0;
-    }
+    int result = 0;
 
-    const char digit = input[0];
-    if (digit < '0' || digit > '2')
+    for (const char digit : input)
     {
-        return 0;
-    }
-    int result = digit - '0';
-
-    if (input.size() > 1)
-    {
-        const char digit = input[1];
         if (digit < '0' || digit > '2')
         {
             return 0;
@@ -53,6 +42,7 @@ int Ternary(const std::string& input)
         result *= 3;
         result += digit - '0';
     }
+
     return result;
 }
 
