@@ -41,7 +41,19 @@ int Ternary(const std::string& input)
     {
         return 0;
     }
-    return digit - '0';
+    int result = digit - '0';
+
+    if (input.size() > 1)
+    {
+        const char digit = input[1];
+        if (digit < '0' || digit > '2')
+        {
+            return 0;
+        }
+        result *= 3;
+        result += digit - '0';
+    }
+    return result;
 }
 
 TEST(Ternary, returns_zero_for_empty_input)
@@ -60,4 +72,11 @@ TEST(Ternary, returns_zero_for_invalid_character)
 {
     EXPECT_EQ(Ternary("4"), 0);
     EXPECT_EQ(Ternary("-"), 0);
+}
+
+TEST(Ternary, returns_valid_value_for_two_digits)
+{
+    EXPECT_EQ(Ternary("12"), 5);
+    EXPECT_EQ(Ternary("20"), 6);
+    EXPECT_EQ(Ternary("22"), 8);
 }
