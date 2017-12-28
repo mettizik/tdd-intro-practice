@@ -68,3 +68,8 @@ TEST(GetAnagrams, Take_word_and_list_with_duplicated_correct_anagrams_Returns_on
 {
     EXPECT_EQ(WordsList({"snleti"}), GetAnagrams("listen", {"snleti", "snleti"}));
 }
+
+TEST(GetAnagrams, acceptance_test)
+{
+    EXPECT_EQ(WordsList({"inlets"}), GetAnagrams("listen", {"enlists", "google", "inlets", "banana"}));
+}
