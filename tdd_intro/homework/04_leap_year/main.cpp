@@ -17,7 +17,13 @@ If your language provides a method in the standard library that does this look-u
 
 bool IsLeap(unsigned year)
 {
-    return year == 1996;
+    switch (year % 4)
+    {
+    case 0:
+        return true;
+    default:
+        return false;
+    }
 }
 
 TEST(IsLeap, Take_leap_year_Returns_true)
@@ -28,4 +34,11 @@ TEST(IsLeap, Take_leap_year_Returns_true)
 TEST(IsLeap, Take_not_leap_year_Returns_false)
 {
     EXPECT_EQ(false, IsLeap(1997));
+}
+
+TEST(IsLeap, Take_years_that_is_evenly_divisible_by_4_Returns_true_for_each)
+{
+    EXPECT_EQ(true, IsLeap(4));
+    EXPECT_EQ(true, IsLeap(8));
+    EXPECT_EQ(true, IsLeap(12));
 }
