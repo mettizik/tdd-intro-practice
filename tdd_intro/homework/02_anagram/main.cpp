@@ -14,7 +14,17 @@ WordsList GetAnagrams(std::string word, WordsList candidates)
     return {};
 }
 
-TEST(GetAnagrams, take_empty_list_returns_empty)
+TEST(GetAnagrams, Take_empty_list_and_empty_word_Returns_empty)
 {
     EXPECT_EQ(WordsList{}, GetAnagrams("", {}));
 }
+
+TEST(GetAnagrams, Take_word_and_empty_list_Returns_empty)
+{
+    EXPECT_EQ(WordsList{}, GetAnagrams("listen", {}));
+}
+
+//TEST(GetAnagrams, Take_list_without_correct_anagrams_and_empty_word_Returns_empty)
+//{
+//    EXPECT_EQ(WordsList{}, GetAnagrams("", {"", ""}));
+//}
