@@ -50,7 +50,7 @@ TEST(TrinaryToDec, Take_10_Returns_3)
     EXPECT_EQ(3, TrinaryToDec("10"));
 }
 
-TEST(TrinaryToDec, Take_100_Returns_3)
+TEST(TrinaryToDec, Take_100_Returns_9)
 {
     EXPECT_EQ(9, TrinaryToDec("100"));
 }
