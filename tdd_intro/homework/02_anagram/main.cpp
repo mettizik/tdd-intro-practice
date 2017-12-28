@@ -6,10 +6,11 @@
 #include <gtest/gtest.h>
 #include <vector>
 #include <string>
+#include <algorithm>
 
 using WordsList = std::vector<std::string>;
 
-WordsList GetAnagrams(std::string word, WordsList candidates)
+WordsList GetAnagrams(const std::string& word, const WordsList& candidates)
 {
     if (word.empty() || candidates.empty())
     {
@@ -17,9 +18,14 @@ WordsList GetAnagrams(std::string word, WordsList candidates)
     }
     WordsList anagrams;
 
+    std::string sortedWord = word;
+    std::sort(sortedWord.begin(), sortedWord.end());
+
     for (const auto& candidate : candidates)
     {
-        if (candidate.length() == word.length())
+        std::string sortedCandidate = candidate;
+        std::sort(sortedCandidate.begin(), sortedCandidate.end());
+        if (sortedWord == sortedCandidate)
         {
             anagrams.push_back(candidate);
         }
@@ -45,7 +51,7 @@ TEST(GetAnagrams, Take_list_and_empty_word_Returns_empty)
 
 TEST(GetAnagrams, Take_word_and_list_without_correct_anagrams_Returns_empty)
 {
-    EXPECT_EQ(WordsList{}, GetAnagrams("listen", {"enlists", "googlee"}));
+    EXPECT_EQ(WordsList{}, GetAnagrams("listen", {"enlists", "google"}));
 }
 
 TEST(GetAnagrams, Take_word_and_list_with_1_correct_anagram_Returns_it)
