@@ -20,7 +20,7 @@ bool IsLeap(unsigned year)
     switch (year % 4)
     {
     case 0:
-        return true;
+        return (year % 100 != 0);
     default:
         return false;
     }
@@ -39,3 +39,11 @@ TEST(IsLeap, Take_years_that_is_not_evenly_divisible_by_4_Returns_false_for_each
     EXPECT_EQ(false, IsLeap(9));
     EXPECT_EQ(false, IsLeap(13));
 }
+
+TEST(IsLeap, Take_years_that_is_evenly_divisible_by_100_Returns_false_for_each)
+{
+    EXPECT_EQ(false, IsLeap(100));
+    EXPECT_EQ(false, IsLeap(200));
+    EXPECT_EQ(false, IsLeap(300));
+}
+
