@@ -24,6 +24,11 @@ TEST(GetAnagrams, Take_word_and_empty_list_Returns_empty)
     EXPECT_EQ(WordsList{}, GetAnagrams("listen", {}));
 }
 
+TEST(GetAnagrams, Take_list_and_empty_word_Returns_empty)
+{
+    EXPECT_EQ(WordsList{}, GetAnagrams("", {"enlists", "google"}));
+}
+
 //TEST(GetAnagrams, Take_list_without_correct_anagrams_and_empty_word_Returns_empty)
 //{
 //    EXPECT_EQ(WordsList{}, GetAnagrams("", {"", ""}));
