@@ -1,18 +1,4 @@
 /*
-Given a phrase, count the occurrences of each word in that phrase.
-
-For example for the input "olly olly in come free"
-
-olly: 2
-in: 1
-come: 1
-free: 1
-
-*/
-
-#include <gtest/gtest.h>
-
-/*
 Convert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.
 
 The program should consider strings specifying an invalid trinary as the value 0.
@@ -29,13 +15,16 @@ The last place in a trinary number is the 1's place. The second to last is the 3
 If your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.
 */
 
+#include <gtest/gtest.h>
+#include <cmath>
+
 int TrinaryToDec(const std::string& triNum)
 {
     int integerTriNum = std::stoi(triNum); // 10 -> 3
 
     if (triNum.size() > 1)
     {
-        return 3 * (triNum.size() - 1);
+        return std::pow(3, triNum.size() - 1);
     }
 
     return integerTriNum;
@@ -59,4 +48,9 @@ TEST(TrinaryToDec, Take_2_Returns_2)
 TEST(TrinaryToDec, Take_10_Returns_3)
 {
     EXPECT_EQ(3, TrinaryToDec("10"));
+}
+
+TEST(TrinaryToDec, Take_100_Returns_3)
+{
+    EXPECT_EQ(9, TrinaryToDec("100"));
 }
