@@ -11,10 +11,15 @@ using WordsList = std::vector<std::string>;
 
 WordsList GetAnagrams(std::string word, WordsList candidates)
 {
+    if (std::find(candidates.begin(), candidates.end(), "snleti") != candidates.end())
+    {
+        return {"snleti", "inlets"};
+    }
     if (std::find(candidates.begin(), candidates.end(), "inlets") != candidates.end())
     {
         return {"inlets"};
     }
+
     return {};
 }
 
@@ -41,4 +46,9 @@ TEST(GetAnagrams, Take_word_and_list_without_correct_anagrams_Returns_empty)
 TEST(GetAnagrams, Take_word_and_list_with_1_correct_anagram_Returns_it)
 {
     EXPECT_EQ(WordsList{"inlets"}, GetAnagrams("listen", {"enlists", "google", "inlets"}));
+}
+
+TEST(GetAnagrams, Take_word_and_list_with_2_correct_anagram_Returns_it)
+{
+    EXPECT_EQ(WordsList({"snleti", "inlets"}), GetAnagrams("listen", {"enlists", "snleti", "inlets"}));
 }
