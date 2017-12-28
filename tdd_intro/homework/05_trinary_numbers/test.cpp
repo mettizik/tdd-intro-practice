@@ -31,10 +31,15 @@ If your language provides a method in the standard library to perform the conver
 
 int TrinaryToDec(const std::string& num)
 {
-    return 0;
+    return std::stoi(num);
 }
 
 TEST(TrinaryToDec, Take_zero_Returns_zero)
 {
     EXPECT_EQ(0, TrinaryToDec("0"));
+}
+
+TEST(TrinaryToDec, Take_1_Returns_1)
+{
+    EXPECT_EQ(1, TrinaryToDec("1"));
 }
