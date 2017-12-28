@@ -17,6 +17,12 @@ If your language provides a method in the standard library that does this look-u
 
 bool IsLeap(unsigned year)
 {
+    if (year == 0)
+    {
+        // https://en.wikipedia.org/wiki/Year_zero
+        throw std::exception("Year zero does not exist");
+    }
+
     switch (year % 4)
     {
     case 0:
@@ -56,3 +62,7 @@ TEST(IsLeap, Take_years_that_is_evenly_divisible_by_400_Returns_true_for_each)
     EXPECT_EQ(true, IsLeap(2000));
 }
 
+TEST(IsLeap, Take_year_0_Throws_exception)
+{
+    EXPECT_THROW((true, IsLeap(0)), std::exception);
+}
