@@ -17,10 +17,15 @@ If your language provides a method in the standard library that does this look-u
 
 bool IsLeap(unsigned year)
 {
-    return true;
+    return year == 1996;
 }
 
 TEST(IsLeap, Take_leap_year_Returns_true)
 {
     EXPECT_EQ(true, IsLeap(1996));
+}
+
+TEST(IsLeap, Take_not_leap_year_Returns_false)
+{
+    EXPECT_EQ(false, IsLeap(1997));
 }
