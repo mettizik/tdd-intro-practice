@@ -24,7 +24,7 @@ int TrinaryToDec(const std::string& triNum)
 
     if (triNum.size() > 1)
     {
-        return std::pow(3, triNum.size() - 1);
+        return std::pow(3, triNum.size() - 1) + integerTriNum % 10;
     }
 
     return integerTriNum;
@@ -53,4 +53,14 @@ TEST(TrinaryToDec, Take_10_Returns_3)
 TEST(TrinaryToDec, Take_100_Returns_9)
 {
     EXPECT_EQ(9, TrinaryToDec("100"));
+}
+
+TEST(TrinaryToDec, Take_11_Returns_4)
+{
+    EXPECT_EQ(4, TrinaryToDec("11"));
+}
+
+TEST(TrinaryToDec, Take_12_Returns_5)
+{
+    EXPECT_EQ(5, TrinaryToDec("12"));
 }
