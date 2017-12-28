@@ -14,3 +14,13 @@ If your language provides a method in the standard library that does this look-u
 */
 
 #include <gtest/gtest.h>
+
+bool IsLeap(unsigned year)
+{
+    return true;
+}
+
+TEST(IsLeap, Take_leap_year_Returns_true)
+{
+    EXPECT_EQ(true, IsLeap(1996));
+}
