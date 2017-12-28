@@ -1,0 +1,68 @@
+/*### Leap Year
+
+Given a year, report if it is a leap year.
+
+The tricky thing here is that a leap year in the Gregorian calendar occurs:
+
+on every year that is evenly divisible by 4
+  except every year that is evenly divisible by 100
+    unless the year is also evenly divisible by 400
+
+For example, 1997 is not a leap year, but 1996 is. 1900 is not a leap year, but 2000 is.
+
+If your language provides a method in the standard library that does this look-up, pretend it doesn't exist and implement it yourself.
+*/
+
+#include <gtest/gtest.h>
+
+bool IsLeap(unsigned year)
+{
+    if (year == 0)
+    {
+        // https://en.wikipedia.org/wiki/Year_zero
+        throw std::exception("Year zero does not exist");
+    }
+
+    switch (year % 4)
+    {
+    case 0:
+        return (year % 400 == 0)
+               ? true
+               : (year % 100 != 0);
+    default:
+        return false;
+    }
+}
+
+TEST(IsLeap, Take_years_that_is_evenly_divisible_by_4_Returns_true_for_each)
+{
+    EXPECT_EQ(true, IsLeap(4));
+    EXPECT_EQ(true, IsLeap(8));
+    EXPECT_EQ(true, IsLeap(12));
+}
+
+TEST(IsLeap, Take_years_that_is_not_evenly_divisible_by_4_Returns_false_for_each)
+{
+    EXPECT_EQ(false, IsLeap(5));
+    EXPECT_EQ(false, IsLeap(9));
+    EXPECT_EQ(false, IsLeap(13));
+}
+
+TEST(IsLeap, Take_years_that_is_evenly_divisible_by_100_Returns_false_for_each)
+{
+    EXPECT_EQ(false, IsLeap(100));
+    EXPECT_EQ(false, IsLeap(200));
+    EXPECT_EQ(false, IsLeap(300));
+}
+
+TEST(IsLeap, Take_years_that_is_evenly_divisible_by_400_Returns_true_for_each)
+{
+    EXPECT_EQ(true, IsLeap(400));
+    EXPECT_EQ(true, IsLeap(1600));
+    EXPECT_EQ(true, IsLeap(2000));
+}
+
+TEST(IsLeap, Take_year_0_Throws_exception)
+{
+    EXPECT_THROW((true, IsLeap(0)), std::exception);
+}
