@@ -15,22 +15,14 @@ WordsList GetAnagrams(std::string word, WordsList candidates)
     {
         return {};
     }
-
     WordsList anagrams;
 
-    auto& anagramIt = candidates.begin();
-    while (true)
+    for (const auto& candidate : candidates)
     {
-        anagramIt = std::find_if(anagramIt, candidates.end(), [&word](const std::string& anagramCandidate)
+        if (candidate.length() == word.length())
         {
-            return anagramCandidate.length() == word.length();
-        });
-        if (anagramIt == candidates.end())
-        {
-            break;
+            anagrams.push_back(candidate);
         }
-        anagrams.push_back(*anagramIt);
-        ++anagramIt;
     }
 
     return anagrams;
