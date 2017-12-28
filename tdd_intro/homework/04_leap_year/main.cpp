@@ -26,19 +26,16 @@ bool IsLeap(unsigned year)
     }
 }
 
-TEST(IsLeap, Take_leap_year_Returns_true)
-{
-    EXPECT_EQ(true, IsLeap(1996));
-}
-
-TEST(IsLeap, Take_not_leap_year_Returns_false)
-{
-    EXPECT_EQ(false, IsLeap(1997));
-}
-
 TEST(IsLeap, Take_years_that_is_evenly_divisible_by_4_Returns_true_for_each)
 {
     EXPECT_EQ(true, IsLeap(4));
     EXPECT_EQ(true, IsLeap(8));
     EXPECT_EQ(true, IsLeap(12));
+}
+
+TEST(IsLeap, Take_years_that_is_not_evenly_divisible_by_4_Returns_false_for_each)
+{
+    EXPECT_EQ(false, IsLeap(5));
+    EXPECT_EQ(false, IsLeap(9));
+    EXPECT_EQ(false, IsLeap(13));
 }
