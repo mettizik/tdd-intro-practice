@@ -18,13 +18,19 @@ WordsList GetAnagrams(std::string word, WordsList candidates)
 
     WordsList anagrams;
 
-    auto& anagramIt = std::find_if(candidates.begin(), candidates.end(), [&word](const std::string& anagramCandidate)
+    auto& anagramIt = candidates.begin();
+    while (true)
     {
-        return anagramCandidate.length() == word.length();
-    });
-    if (anagramIt != candidates.end())
-    {
+        anagramIt = std::find_if(anagramIt, candidates.end(), [&word](const std::string& anagramCandidate)
+        {
+            return anagramCandidate.length() == word.length();
+        });
+        if (anagramIt == candidates.end())
+        {
+            break;
+        }
         anagrams.push_back(*anagramIt);
+        ++anagramIt;
     }
 
     return anagrams;
@@ -55,7 +61,7 @@ TEST(GetAnagrams, Take_word_and_list_with_1_correct_anagram_Returns_it)
     EXPECT_EQ(WordsList{"inlets"}, GetAnagrams("listen", {"enlists", "googlee", "inlets"}));
 }
 
-//TEST(GetAnagrams, Take_word_and_list_with_2_correct_anagram_Returns_it)
-//{
-//    EXPECT_EQ(WordsList({"snleti", "inlets"}), GetAnagrams("listen", {"enlists", "snleti", "inlets"}));
-//}
+TEST(GetAnagrams, Take_word_and_list_with_2_correct_anagram_Returns_it)
+{
+    EXPECT_EQ(WordsList({"snleti", "inlets"}), GetAnagrams("listen", {"enlists", "snleti", "inlets"}));
+}
