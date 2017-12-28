@@ -8,7 +8,7 @@
 #include <string>
 #include <algorithm>
 
-using WordsList = std::vector<std::string>;
+using WordsList = std::set<std::string>;
 
 WordsList GetAnagrams(const std::string& word, const WordsList& candidates)
 {
@@ -27,7 +27,7 @@ WordsList GetAnagrams(const std::string& word, const WordsList& candidates)
         std::sort(sortedCandidate.begin(), sortedCandidate.end());
         if (sortedWord == sortedCandidate)
         {
-            anagrams.push_back(candidate);
+            anagrams.insert(candidate);
         }
     }
 
@@ -62,4 +62,9 @@ TEST(GetAnagrams, Take_word_and_list_with_1_correct_anagram_Returns_it)
 TEST(GetAnagrams, Take_word_and_list_with_2_correct_anagram_Returns_it)
 {
     EXPECT_EQ(WordsList({"snleti", "inlets"}), GetAnagrams("listen", {"enlists", "snleti", "inlets"}));
+}
+
+TEST(GetAnagrams, Take_word_and_list_with_duplicated_correct_anagrams_Returns_one)
+{
+    EXPECT_EQ(WordsList({"snleti"}), GetAnagrams("listen", {"snleti", "snleti"}));
 }
