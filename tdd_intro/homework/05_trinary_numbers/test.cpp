@@ -86,3 +86,8 @@ TEST(TrinaryToDec, Acceptance_test)
 {
     EXPECT_EQ(302, TrinaryToDec("102012"));
 }
+
+TEST(TrinaryToDec, Take_empty_Returns_0)
+{
+    EXPECT_EQ(0, TrinaryToDec(""));
+}
