@@ -1,18 +1,4 @@
 /*
-Given a phrase, count the occurrences of each word in that phrase.
-
-For example for the input "olly olly in come free"
-
-olly: 2
-in: 1
-come: 1
-free: 1
-
-*/
-
-#include <gtest/gtest.h>
-
-/*
 Convert a trinary number, represented as a string (e.g. '102012'), to its decimal equivalent using first principles.
 
 The program should consider strings specifying an invalid trinary as the value 0.
@@ -28,3 +14,80 @@ The last place in a trinary number is the 1's place. The second to last is the 3
 
 If your language provides a method in the standard library to perform the conversion, pretend it doesn't exist and implement it yourself.
 */
+
+#include <gtest/gtest.h>
+#include <cmath>
+
+int TrinaryToDec(const std::string& triNum)
+{
+    int result = 0;
+    int powVal = triNum.length() - 1;
+
+    for (const auto& digit : triNum)
+    {
+        result += (digit - 0x30) * std::pow(3, powVal);
+        --powVal;
+    }
+
+    return result;
+}
+
+TEST(TrinaryToDec, Take_zero_Returns_zero)
+{
+    EXPECT_EQ(0, TrinaryToDec("0"));
+}
+
+TEST(TrinaryToDec, Take_1_Returns_1)
+{
+    EXPECT_EQ(1, TrinaryToDec("1"));
+}
+
+TEST(TrinaryToDec, Take_2_Returns_2)
+{
+    EXPECT_EQ(2, TrinaryToDec("2"));
+}
+
+TEST(TrinaryToDec, Take_10_Returns_3)
+{
+    EXPECT_EQ(3, TrinaryToDec("10"));
+}
+
+TEST(TrinaryToDec, Take_100_Returns_9)
+{
+    EXPECT_EQ(9, TrinaryToDec("100"));
+}
+
+TEST(TrinaryToDec, Take_11_Returns_4)
+{
+    EXPECT_EQ(4, TrinaryToDec("11"));
+}
+
+TEST(TrinaryToDec, Take_12_Returns_5)
+{
+    EXPECT_EQ(5, TrinaryToDec("12"));
+}
+
+TEST(TrinaryToDec, Take_101_Returns_10)
+{
+    EXPECT_EQ(10, TrinaryToDec("101"));
+}
+
+TEST(TrinaryToDec, Take_102_Returns_11)
+{
+    EXPECT_EQ(11, TrinaryToDec("102"));
+}
+
+TEST(TrinaryToDec, Take_110_Returns_12)
+{
+    EXPECT_EQ(12, TrinaryToDec("110"));
+}
+
+TEST(TrinaryToDec, Acceptance_test)
+{
+    EXPECT_EQ(302, TrinaryToDec("102012"));
+}
+
+TEST(TrinaryToDec, Take_empty_Returns_0)
+{
+    EXPECT_EQ(0, TrinaryToDec(""));
+}
