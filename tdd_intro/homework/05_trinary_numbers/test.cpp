@@ -81,3 +81,8 @@ TEST(TrinaryToDec, Take_110_Returns_12)
 {
     EXPECT_EQ(12, TrinaryToDec("110"));
 }
+
+TEST(TrinaryToDec, Acceptance_test)
+{
+    EXPECT_EQ(302, TrinaryToDec("102012"));
+}
