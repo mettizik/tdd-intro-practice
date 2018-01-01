@@ -20,14 +20,16 @@ If your language provides a method in the standard library to perform the conver
 
 int TrinaryToDec(const std::string& triNum)
 {
-    int integerTriNum = std::stoi(triNum); // 10 -> 3
+    int result = 0;
+    int powVal = triNum.length() - 1;
 
-    if (triNum.size() > 1)
+    for (const auto& digit : triNum)
     {
-        return std::pow(3, triNum.size() - 1) + integerTriNum % 10;
+        result += (digit - 0x30) * std::pow(3, powVal);
+        --powVal;
     }
 
-    return integerTriNum;
+    return result;
 }
 
 TEST(TrinaryToDec, Take_zero_Returns_zero)
@@ -63,4 +65,19 @@ TEST(TrinaryToDec, Take_11_Returns_4)
 TEST(TrinaryToDec, Take_12_Returns_5)
 {
     EXPECT_EQ(5, TrinaryToDec("12"));
+}
+
+TEST(TrinaryToDec, Take_101_Returns_10)
+{
+    EXPECT_EQ(10, TrinaryToDec("101"));
+}
+
+TEST(TrinaryToDec, Take_102_Returns_11)
+{
+    EXPECT_EQ(11, TrinaryToDec("102"));
+}
+
+TEST(TrinaryToDec, Take_110_Returns_12)
+{
+    EXPECT_EQ(12, TrinaryToDec("110"));
 }
