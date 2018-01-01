@@ -27,10 +27,15 @@ using Lines = std::vector<std::string>;
 
 Lines WordWrap(const std::string& text, const unsigned maxLineLen)
 {
-    return {};
+    return {text};
 }
 
 TEST(WordWrap, Take_empty_string_Return_empty)
 {
-    EXPECT_EQ(Lines(), WordWrap("", 10));
+    EXPECT_EQ(Lines({""}), WordWrap("", 10));
+}
+
+TEST(WordWrap, Take_string_and_zero_limit_Return_this_string)
+{
+    EXPECT_EQ(Lines({"hello world"}), WordWrap("hello world", 0));
 }
