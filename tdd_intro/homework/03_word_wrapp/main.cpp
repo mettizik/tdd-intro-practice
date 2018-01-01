@@ -57,5 +57,5 @@ TEST(WordWrap, Take_string_without_spaces_Return_2_strings_splitted_by_length_li
 
 TEST(WordWrap, Take_string_without_spaces_Return_3_strings_splitted_by_length_limit)
 {
-    EXPECT_EQ(Lines({"hello", "world"}), WordWrap("helloworld", 5));
+    EXPECT_EQ(Lines({"hello", "world", "hello"}), WordWrap("helloworldhello", 5));
 }
