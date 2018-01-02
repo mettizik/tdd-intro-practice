@@ -36,6 +36,10 @@ Lines WordWrap(const std::string& text, const unsigned maxLineLen)
     for (size_t startPos = 0; startPos < text.length(); startPos += maxLineLen)
     {
         lines.push_back(text.substr(startPos, maxLineLen));
+        if (isspace(lines.back().back()))
+        {
+            lines.back().pop_back();
+        }
     }
     return lines;
 }
@@ -58,4 +62,9 @@ TEST(WordWrap, Take_string_without_spaces_Return_2_strings_splitted_by_length_li
 TEST(WordWrap, Take_string_without_spaces_Return_3_strings_splitted_by_length_limit)
 {
     EXPECT_EQ(Lines({"hello", "world", "hello"}), WordWrap("helloworldhello", 5));
+}
+
+TEST(WordWrap, Take_string_with_1_space_Return_2_strings_splitted_by_space)
+{
+    EXPECT_EQ(Lines({"hell", "world"}), WordWrap("hell world", 5));
 }
