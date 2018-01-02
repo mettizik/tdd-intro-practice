@@ -69,7 +69,7 @@ TEST(WordWrap, Take_string_with_1_space_Return_2_strings_splitted_by_space)
     EXPECT_EQ(Lines({"hell", "world"}), WordWrap("hell world", 6));
 }
 
-//TEST(WordWrap, Take_string_with_2_spaces_Return_3_strings_splitted_by_space)
-//{
-//    EXPECT_EQ(Lines({"it", "is", "cat"}), WordWrap("it is cat", 3));
-//}
+TEST(WordWrap, Take_string_with_2_spaces_Return_3_strings_splitted_by_space)
+{
+    EXPECT_EQ(Lines({"it", "is", "cat"}), WordWrap("it is cat", 4));
+}
