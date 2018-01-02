@@ -27,7 +27,7 @@ using Lines = std::vector<std::string>;
 
 Lines WordWrap(const std::string& text, const unsigned maxLineLen)
 {
-    if (maxLineLen == 0 || text.empty())
+    if (maxLineLen == 0 || text.empty() || text.length() <= maxLineLen)
     {
         return {text};
     }
@@ -37,7 +37,7 @@ Lines WordWrap(const std::string& text, const unsigned maxLineLen)
     for (size_t startPos = 0; startPos < text.length(); startPos += lineLen)
     {
         std::string line = text.substr(startPos, maxLineLen);
-        lines.push_back(line.substr(0, line.find(' ')));
+        lines.push_back(line.substr(0, line.rfind(' ')));
         lineLen = lines.back().length();
         lineLen += (lineLen != maxLineLen);
     }
@@ -72,4 +72,10 @@ TEST(WordWrap, Take_string_with_1_space_Return_2_strings_splitted_by_space)
 TEST(WordWrap, Take_string_with_2_spaces_Return_3_strings_splitted_by_space)
 {
     EXPECT_EQ(Lines({"it", "is", "cat"}), WordWrap("it is cat", 4));
+}
+
+TEST(WordWrap, Take_string_with_space_and_big_limit_Return_this_line)
+{
+    EXPECT_EQ(Lines({"it is"}), WordWrap("it is", 5));
+    EXPECT_EQ(Lines({"it is"}), WordWrap("it is", 6));
 }
