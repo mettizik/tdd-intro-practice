@@ -37,8 +37,9 @@ Lines WordWrap(const std::string& text, const unsigned maxLineLen)
     for (size_t startPos = 0; startPos < text.length(); startPos += lineLen)
     {
         std::string line = text.substr(startPos, maxLineLen);
+        bool isLastLine = (startPos + line.length() >= text.length());
         bool isSpaceAfterLine = (text[startPos + line.length()] == ' ');
-        lines.push_back(isSpaceAfterLine ? line : line.substr(0, line.rfind(' ')));
+        lines.push_back(isSpaceAfterLine || isLastLine ? line : line.substr(0, line.rfind(' ')));
         lineLen = lines.back().length();
         bool isWrappedBySpace = (lineLen != maxLineLen);
         startPos += (isSpaceAfterLine || isWrappedBySpace) ? 1 : 0;
@@ -85,4 +86,16 @@ TEST(WordWrap, Take_string_with_space_and_big_limit_Return_this_line)
 TEST(WordWrap, Take_string_with_space_at_once_after_limit_Return_2_lines)
 {
     EXPECT_EQ(Lines({"it is", "cat"}), WordWrap("it is cat", 5));
+}
+
+TEST(WordWrap, Acceptance_test)
+{
+    EXPECT_EQ(Lines({"When pos is specified, the",
+                     "search only includes sequences",
+                     "of characters that begin at or",
+                     "before position pos, ignoring",
+                     "any possible match beginning",
+                     "after pos."}),
+              WordWrap("When pos is specified, the search only includes sequences of characters "
+                       "that begin at or before position pos, ignoring any possible match beginning after pos.", 30));
 }
