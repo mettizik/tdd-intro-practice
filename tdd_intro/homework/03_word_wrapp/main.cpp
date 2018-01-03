@@ -37,9 +37,11 @@ Lines WordWrap(const std::string& text, const unsigned maxLineLen)
     for (size_t startPos = 0; startPos < text.length(); startPos += lineLen)
     {
         std::string line = text.substr(startPos, maxLineLen);
-        lines.push_back(line.substr(0, line.rfind(' ')));
+        bool isSpaceAfterLine = (text[startPos + line.length()] == ' ');
+        lines.push_back(isSpaceAfterLine ? line : line.substr(0, line.rfind(' ')));
         lineLen = lines.back().length();
-        lineLen += (lineLen != maxLineLen);
+        bool isWrappedBySpace = (lineLen != maxLineLen);
+        startPos += (isSpaceAfterLine || isWrappedBySpace) ? 1 : 0;
     }
     return lines;
 }
@@ -78,4 +80,9 @@ TEST(WordWrap, Take_string_with_space_and_big_limit_Return_this_line)
 {
     EXPECT_EQ(Lines({"it is"}), WordWrap("it is", 5));
     EXPECT_EQ(Lines({"it is"}), WordWrap("it is", 6));
+}
+
+TEST(WordWrap, Take_string_with_space_at_once_after_limit_Return_2_lines)
+{
+    EXPECT_EQ(Lines({"it is", "cat"}), WordWrap("it is cat", 5));
 }
