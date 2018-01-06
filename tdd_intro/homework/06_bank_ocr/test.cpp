@@ -2,14 +2,19 @@
 
 using OCRData = std::vector<std::string>;
 
+template <class Type>
+bool IsSizeInvalid(const Type& data)
+{
+    return data.size() < 3;
+}
 
 std::string OCR2StringDigits(const OCRData& input)
 {
-    if (input.empty() || input.size() < 3)
+    if (input.empty() || IsSizeInvalid(input))
     {
         return "";
     }
-    if (input[0].size() < 3 || input[1].size() < 3 || input[2].size() < 3)
+    if (IsSizeInvalid(input[0]) || IsSizeInvalid(input[1]) || IsSizeInvalid(input[2]))
     {
         return "";
     }
