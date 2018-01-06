@@ -88,14 +88,16 @@ std::string OCR2StringDigits(const OCRData& input)
     }
 
     std::string result;
+    const size_t digitLenght = 3;
     for (size_t i = 0; i < input[0].size() / 3; ++i)
     {
+        const size_t offset = i*3;
         std::string line1;
-        line1.assign(input[0].begin() + i*3, input[0].begin() + 3 + i*3);
+        line1.assign(input[0].begin() + offset, input[0].begin() + digitLenght + offset);
         std::string line2;
-        line2.assign(input[1].begin() + i*3, input[1].begin() + 3 + i*3);
+        line2.assign(input[1].begin() + offset, input[1].begin() + digitLenght + offset);
         std::string line3;
-        line3.assign(input[2].begin() + i*3, input[2].begin() + 3 + i*3);
+        line3.assign(input[2].begin() + offset, input[2].begin() + digitLenght + offset);
 
         result += OneOCR2StringDigit(line1, line2, line3);
     }
