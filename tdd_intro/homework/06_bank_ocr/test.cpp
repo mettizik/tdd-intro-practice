@@ -14,9 +14,12 @@ std::string OCR2StringDigits(const OCRData& input)
     {
         return "";
     }
-    if (IsSizeInvalid(input[0]) || IsSizeInvalid(input[1]) || IsSizeInvalid(input[2]))
+    for (size_t i = 0; i < input.size(); ++i)
     {
-        return "";
+        if (IsSizeInvalid(input[i]))
+        {
+            return "";
+        }
     }
     return "1";
 }
