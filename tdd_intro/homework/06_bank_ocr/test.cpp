@@ -30,7 +30,14 @@ std::string OCR2StringDigits(const OCRData& input)
     {
         return "1";
     }
-    return "2";
+
+    if (line1 == " _ " &&
+        line2 == " _|" &&
+        line3 == "|_ ")
+    {
+        return "2";
+    }
+    return "3";
 }
 
 TEST(OCR2StringDigits, OCR2StringDigits_Check_Empty)
@@ -67,4 +74,13 @@ TEST(OCR2StringDigits, OCR2StringDigits_Take_One_OCR_Return_2)
                     {" _|"},
                     {"|_ "}};
     EXPECT_EQ("2", OCR2StringDigits(OCRData(data)));
+}
+
+
+TEST(OCR2StringDigits, OCR2StringDigits_Take_One_OCR_Return_3)
+{
+    OCRData data = {{" _ "},
+                    {" _|"},
+                    {" _|"}};
+    EXPECT_EQ("3", OCR2StringDigits(OCRData(data)));
 }
