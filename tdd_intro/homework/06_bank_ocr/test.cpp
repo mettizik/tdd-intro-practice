@@ -86,7 +86,24 @@ std::string OCR2StringDigits(const OCRData& input)
             return "";
         }
     }
-    return OneOCR2StringDigit(input[0], input[1], input[2]);
+    std::string line1;
+    line1.assign(input[0].begin(), input[0].begin() + 3);
+    std::string line2;
+    line2.assign(input[1].begin(), input[1].begin() + 3);
+    std::string line3;
+    line3.assign(input[2].begin(), input[2].begin() + 3);
+
+
+    std::string line12;
+    line12.assign(input[0].begin() + 3, input[0].end());
+    std::string line22;
+    line22.assign(input[1].begin() + 3, input[1].end());
+    std::string line32;
+    line32.assign(input[2].begin() + 3, input[2].end());
+
+    std::string result = OneOCR2StringDigit(line1, line2, line3);
+    result += OneOCR2StringDigit(line12, line22, line32);
+    return result;
 }
 
 TEST(OCR2StringDigits, OCR2StringDigits_Check_Empty)
@@ -132,4 +149,13 @@ TEST(OCR2StringDigits, OCR2StringDigits_Take_One_OCR_Return_3)
                     {" _|"},
                     {" _|"}};
     EXPECT_EQ("3", OCR2StringDigits(OCRData(data)));
+}
+
+
+TEST(OCR2StringDigits, OCR2StringDigits_Take_Two_OCR_Return_12)
+{
+    OCRData data = {{"    _ "},
+                    {"  | _|"},
+                    {"  ||_ "}};
+    EXPECT_EQ("12", OCR2StringDigits(OCRData(data)));
 }
