@@ -89,7 +89,7 @@ std::string OCR2StringDigits(const OCRData& input)
 
     std::string result;
     const size_t digitLenght = 3;
-    for (size_t i = 0; i < input[0].size() / 3; ++i)
+    for (size_t i = 0; i < input[0].size() / 3 && i < 9; ++i)
     {
         const size_t offset = i*3;
         std::string line1;
@@ -174,3 +174,12 @@ TEST(OCR2StringDigits, OCR2StringDigits_Acceptance)
                     {"  ||_  _|  | _||_|  ||_| _|"}};
     EXPECT_EQ("123456789", OCR2StringDigits(OCRData(data)));
 }
+
+TEST(OCR2StringDigits, OCR2StringDigits_Acceptance_Size)
+{
+    OCRData data = {{"    _  _     _  _  _  _  _  _ "},
+                    {"  | _| _||_||_ |_   ||_||_||_|"},
+                    {"  ||_  _|  | _||_|  ||_| _| _|"}};
+    EXPECT_EQ("123456789", OCR2StringDigits(OCRData(data)));
+}
+
