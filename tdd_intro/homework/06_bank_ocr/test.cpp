@@ -5,11 +5,7 @@ using OCRData = std::vector<std::string>;
 
 std::string OCR2StringDigits(const OCRData& input)
 {
-    if (input.empty())
-    {
-        return "";
-    }
-    if (input.size() < 3)
+    if (input.empty() || input.size() < 3)
     {
         return "";
     }
