@@ -9,6 +9,10 @@ std::string OCR2StringDigits(const OCRData& input)
     {
         return "";
     }
+    if (input.size() < 3)
+    {
+        return "";
+    }
     return "1";
 }
 
@@ -23,4 +27,12 @@ TEST(OCR2StringDigits, OCR2StringDigits_Take_One_OCR_Return_1)
                     {"  |"},
                     {"  |"}};
     EXPECT_EQ("1", OCR2StringDigits(OCRData(data)));
+}
+
+
+TEST(OCR2StringDigits, OCR2StringDigits_Take_Invalid_Size)
+{
+    OCRData data = {{" _"},
+                    {" _|"}};
+    EXPECT_EQ("", OCR2StringDigits(OCRData(data)));
 }
