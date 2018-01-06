@@ -10,7 +10,7 @@ bool IsSizeInvalid(const Type& data)
 
 std::string OCR2StringDigits(const OCRData& input)
 {
-    if (input.empty() || IsSizeInvalid(input))
+    if (IsSizeInvalid(input))
     {
         return "";
     }
