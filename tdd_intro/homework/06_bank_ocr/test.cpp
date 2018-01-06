@@ -8,6 +8,71 @@ bool IsSizeInvalid(const Type& data)
     return data.size() < 3;
 }
 
+std::string OneOCR2StringDigit(const std::string& line1,
+                               const std::string& line2,
+                               const std::string& line3)
+{
+    using OCRDataTemplate = std::vector<std::vector<std::string>>;
+    OCRDataTemplate templateData = {
+                                    {
+                                        {"   "},
+                                        {"  |"},
+                                        {"  |"}
+                                    },
+                                    {
+                                        {" _ "},
+                                        {" _|"},
+                                        {"|_ "}
+                                    },
+                                    {
+                                        {" _ "},
+                                        {" _|"},
+                                        {" _|"}
+                                    },
+                                    {
+                                        {"   "},
+                                        {"|_|"},
+                                        {"  |"}
+                                    },
+                                    {
+                                        {" _ "},
+                                        {"|_ "},
+                                        {" _|"}
+                                    },
+                                    {
+                                        {" _ "},
+                                        {"|_ "},
+                                        {"|_|"}
+                                    },
+                                    {
+                                        {" _ "},
+                                        {"  |"},
+                                        {"  |"}
+                                    },
+                                    {
+                                        {" _ "},
+                                        {"|_|"},
+                                        {"|_|"}
+                                    },
+                                    {
+                                        {" _ "},
+                                        {"|_|"},
+                                        {" _|"}
+                                    }
+                                    };
+
+    for (size_t i = 0; i < templateData.size(); ++i)
+    {
+        if (line1 == templateData[i][0] &&
+            line2 == templateData[i][1] &&
+            line3 == templateData[i][2])
+        {
+            return std::to_string(i + 1);
+        }
+    }
+    return "";
+}
+
 std::string OCR2StringDigits(const OCRData& input)
 {
     if (IsSizeInvalid(input))
@@ -21,23 +86,7 @@ std::string OCR2StringDigits(const OCRData& input)
             return "";
         }
     }
-    const std::string& line1 = input[0];
-    const std::string& line2 = input[1];
-    const std::string& line3 = input[2];
-    if (line1 == "   " &&
-        line2 == "  |" &&
-        line3 == "  |")
-    {
-        return "1";
-    }
-
-    if (line1 == " _ " &&
-        line2 == " _|" &&
-        line3 == "|_ ")
-    {
-        return "2";
-    }
-    return "3";
+    return OneOCR2StringDigit(input[0], input[1], input[2]);
 }
 
 TEST(OCR2StringDigits, OCR2StringDigits_Check_Empty)
