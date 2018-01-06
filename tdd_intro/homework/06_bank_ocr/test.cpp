@@ -166,3 +166,11 @@ TEST(OCR2StringDigits, OCR2StringDigits_Take_Two_OCR_Return_123)
                     {"  ||_  _|"}};
     EXPECT_EQ("123", OCR2StringDigits(OCRData(data)));
 }
+
+TEST(OCR2StringDigits, OCR2StringDigits_Acceptance)
+{
+    OCRData data = {{"    _  _     _  _  _  _  _ "},
+                    {"  | _| _||_||_ |_   ||_||_|"},
+                    {"  ||_  _|  | _||_|  ||_| _|"}};
+    EXPECT_EQ("123456789", OCR2StringDigits(OCRData(data)));
+}
