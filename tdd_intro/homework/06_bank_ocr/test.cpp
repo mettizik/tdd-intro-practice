@@ -26,10 +26,14 @@ Write a program that can take this file and parse it into actual account numbers
 
 using Lines = std::vector<std::string>;
 
+std::string ParseNumber(const Lines& /*number*/)
+{
+    return "0";
+}
 
 TEST(ParseNumber, ParseNumberTakesZeroReturns0)
 {
-    EXPECT_EQ(0, GetNumber(Lines({" _ ",
+    EXPECT_EQ("0", ParseNumber(Lines({" _ ",
                                  "| |",
                                  "|_|"})));
 }
