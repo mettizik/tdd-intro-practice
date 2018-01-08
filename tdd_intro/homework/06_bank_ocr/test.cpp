@@ -46,7 +46,49 @@ std::string ParseNumber(const Lines& number)
     {
         return "2";
     }
-    return "3";
+    else if (number == Lines({" _ ",
+                              " _|",
+                              " _|"}))
+    {
+        return "3";
+    }
+    else if (number == Lines({"   ",
+                              "|_|",
+                              "  |"}))
+    {
+        return "4";
+    }
+    else if (number == Lines({" _ ",
+                              "|_ ",
+                              " _|"}))
+    {
+        return "5";
+    }
+    else if (number == Lines({" _ ",
+                              "|_ ",
+                              "|_|"}))
+    {
+        return "6";
+    }
+    else if (number == Lines({" _ ",
+                              "  |",
+                              "  |"}))
+    {
+        return "7";
+    }
+    else if (number == Lines({" _ ",
+                              "|_|",
+                              "|_|"}))
+    {
+        return "8";
+    }
+    /*else if (number == Lines({" _ ",
+                              "|_|",
+                              " _|"}))
+    {*/
+        return "9";
+    /*}
+    return "?";*/
 }
 
 TEST(ParseNumber, ParseNumberTakesZeroReturns0)
