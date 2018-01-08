@@ -28,11 +28,11 @@ using Lines = std::vector<std::string>;
 
 std::string ParseNumber(const Lines& number)
 {
-    if (number[0] != " _ ")
+    if (number == Lines({" _ ", "| |", "|_|"}))
     {
-        return "1";
+        return "0";
     }
-    return "0";
+    return "1";
 }
 
 TEST(ParseNumber, ParseNumberTakesZeroReturns0)
