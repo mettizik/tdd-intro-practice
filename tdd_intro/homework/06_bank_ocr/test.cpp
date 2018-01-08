@@ -73,18 +73,37 @@ std::string ParseNumber(const Lines& number)
 
 std::string GetNumberFromString(const Lines& numbers)
 {
-    if (numbers[0].size() != 3)
+    if (numbers[0].size() == 6)
     {
         Lines firstNumber;
         firstNumber.push_back(numbers[0].substr(0, 3));
         firstNumber.push_back(numbers[1].substr(0, 3));
         firstNumber.push_back(numbers[2].substr(0, 3));
         Lines secondNumber;
-        secondNumber.push_back(numbers[0].substr(3, 6));
-        secondNumber.push_back(numbers[1].substr(3, 6));
-        secondNumber.push_back(numbers[2].substr(3, 6));
+        secondNumber.push_back(numbers[0].substr(3, 3));
+        secondNumber.push_back(numbers[1].substr(3, 3));
+        secondNumber.push_back(numbers[2].substr(3, 3));
         std::string result = ParseNumber(firstNumber);
         result += ParseNumber(secondNumber);
+        return result;
+    }
+    if (numbers[0].size() == 9)
+    {
+        Lines firstNumber;
+        firstNumber.push_back(numbers[0].substr(0, 3));
+        firstNumber.push_back(numbers[1].substr(0, 3));
+        firstNumber.push_back(numbers[2].substr(0, 3));
+        Lines secondNumber;
+        secondNumber.push_back(numbers[0].substr(3, 3));
+        secondNumber.push_back(numbers[1].substr(3, 3));
+        secondNumber.push_back(numbers[2].substr(3, 3));
+        Lines thirdNumber;
+        thirdNumber.push_back(numbers[0].substr(6, 3));
+        thirdNumber.push_back(numbers[1].substr(6, 3));
+        thirdNumber.push_back(numbers[2].substr(6, 3));
+        std::string result = ParseNumber(firstNumber);
+        result += ParseNumber(secondNumber);
+        result += ParseNumber(thirdNumber);
         return result;
     }
     return ParseNumber(numbers);
@@ -172,4 +191,11 @@ TEST(GetNumberFromString, GetNumberFromStringTakesTwoDigitNumberAndConvertItToTw
     EXPECT_EQ("10", GetNumberFromString (Lines({"    _ ",
                                                 "  || |",
                                                 "  ||_|"})));
+}
+
+TEST(GetNumberFromString, GetNumberFromStringTakesThreeDigitNumberAndConvertItToThreeDigitsString)
+{
+    EXPECT_EQ("234", GetNumberFromString (Lines({" _  _    ",
+                                                 " _| _||_|",
+                                                 "|_  _|  |"})));
 }
