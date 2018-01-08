@@ -76,3 +76,45 @@ TEST(ParseNumber, ParseNumberTakesThreeReturns3)
                                       " _|",
                                       " _|"})));
 }
+
+TEST(ParseNumber, ParseNumberTakesFourReturns4)
+{
+    EXPECT_EQ("4", ParseNumber(Lines({"   ",
+                                      "|_|",
+                                      "  |"})));
+}
+
+TEST(ParseNumber, ParseNumberTakesThreeReturns5)
+{
+    EXPECT_EQ("5", ParseNumber(Lines({" _ ",
+                                      "|_ ",
+                                      " _|"})));
+}
+
+TEST(ParseNumber, ParseNumberTakesThreeReturns6)
+{
+    EXPECT_EQ("6", ParseNumber(Lines({" _ ",
+                                      "|_ ",
+                                      "|_|"})));
+}
+
+TEST(ParseNumber, ParseNumberTakesThreeReturns7)
+{
+    EXPECT_EQ("7", ParseNumber(Lines({" _ ",
+                                      "  |",
+                                      "  |"})));
+}
+
+TEST(ParseNumber, ParseNumberTakesThreeReturns8)
+{
+    EXPECT_EQ("8", ParseNumber(Lines({" _ ",
+                                      "|_|",
+                                      "|_|"})));
+}
+
+TEST(ParseNumber, ParseNumberTakesThreeReturns9)
+{
+    EXPECT_EQ("9", ParseNumber(Lines({" _ ",
+                                      "|_|",
+                                      " _|"})));
+}
