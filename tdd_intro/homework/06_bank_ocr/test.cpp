@@ -73,7 +73,7 @@ std::string ParseNumber(const Lines& number)
 
 std::string GetNumberFromString(const Lines& numbers)
 {
-    return "";
+    return ParseNumber(numbers);
 }
 
 TEST(ParseNumber, ParseNumberTakesZeroReturns0)
