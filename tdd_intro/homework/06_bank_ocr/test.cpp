@@ -32,7 +32,11 @@ std::string ParseNumber(const Lines& number)
     {
         return "0";
     }
-    return "1";
+    else if (number == Lines({"   ", "  |", "  |"}))
+    {
+        return "1";
+    }
+    return "2";
 }
 
 TEST(ParseNumber, ParseNumberTakesZeroReturns0)
