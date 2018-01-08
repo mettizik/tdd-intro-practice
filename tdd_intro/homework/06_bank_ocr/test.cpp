@@ -75,7 +75,17 @@ std::string GetNumberFromString(const Lines& numbers)
 {
     if (numbers[0].size() != 3)
     {
-        return "10";
+        Lines firstNumber;
+        firstNumber.push_back(numbers[0].substr(0, 3));
+        firstNumber.push_back(numbers[1].substr(0, 3));
+        firstNumber.push_back(numbers[2].substr(0, 3));
+        Lines secondNumber;
+        secondNumber.push_back(numbers[0].substr(3, 6));
+        secondNumber.push_back(numbers[1].substr(3, 6));
+        secondNumber.push_back(numbers[2].substr(3, 6));
+        std::string result = ParseNumber(firstNumber);
+        result += ParseNumber(secondNumber);
+        return result;
     }
     return ParseNumber(numbers);
 }
