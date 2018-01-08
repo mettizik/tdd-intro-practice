@@ -59,3 +59,10 @@ TEST(ParseNumber, ParseNumberTakesTwoReturns2)
                                       " _|",
                                       "|_ "})));
 }
+
+TEST(ParseNumber, ParseNumberTakesThreeReturns3)
+{
+    EXPECT_EQ("3", ParseNumber(Lines({" _ ",
+                                      " _|",
+                                      " _|"})));
+}
