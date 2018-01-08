@@ -28,22 +28,32 @@ using Lines = std::vector<std::string>;
 
 std::string ParseNumber(const Lines& number)
 {
-    if (number == Lines({" _ ", "| |", "|_|"}))
+    if (number == Lines({" _ ",
+                         "| |",
+                         "|_|"}))
     {
         return "0";
     }
-    else if (number == Lines({"   ", "  |", "  |"}))
+    else if (number == Lines({"   ",
+                              "  |",
+                              "  |"}))
     {
         return "1";
     }
-    return "2";
+    else if (number == Lines({" _ ",
+                              " _|",
+                              "|_ "}))
+    {
+        return "2";
+    }
+    return "3";
 }
 
 TEST(ParseNumber, ParseNumberTakesZeroReturns0)
 {
     EXPECT_EQ("0", ParseNumber(Lines({" _ ",
-                                 "| |",
-                                 "|_|"})));
+                                      "| |",
+                                      "|_|"})));
 }
 
 TEST(ParseNumber, ParseNumberTakesOneReturns1)
