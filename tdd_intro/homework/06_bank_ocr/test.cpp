@@ -26,8 +26,12 @@ Write a program that can take this file and parse it into actual account numbers
 
 using Lines = std::vector<std::string>;
 
-std::string ParseNumber(const Lines& /*number*/)
+std::string ParseNumber(const Lines& number)
 {
+    if (number[0] != " _ ")
+    {
+        return "1";
+    }
     return "0";
 }
 
