@@ -25,6 +25,8 @@ Write a program that can take this file and parse it into actual account numbers
 */
 
 using Lines = std::vector<std::string>;
+const size_t s_linesForNumber = 3;
+const size_t s_columnsForNumber = 3;
 
 std::string ParseNumber(const Lines& number)
 {
@@ -73,40 +75,16 @@ std::string ParseNumber(const Lines& number)
 
 std::string GetNumberFromString(const Lines& numbers)
 {
-    if (numbers[0].size() == 6)
+    std::string result = "";
+    for (size_t i = 0; i < numbers[0].size(); i += s_columnsForNumber)
     {
-        Lines firstNumber;
-        firstNumber.push_back(numbers[0].substr(0, 3));
-        firstNumber.push_back(numbers[1].substr(0, 3));
-        firstNumber.push_back(numbers[2].substr(0, 3));
-        Lines secondNumber;
-        secondNumber.push_back(numbers[0].substr(3, 3));
-        secondNumber.push_back(numbers[1].substr(3, 3));
-        secondNumber.push_back(numbers[2].substr(3, 3));
-        std::string result = ParseNumber(firstNumber);
-        result += ParseNumber(secondNumber);
-        return result;
+        Lines number;
+        number.push_back(numbers[0].substr(i, s_columnsForNumber));
+        number.push_back(numbers[1].substr(i, s_columnsForNumber));
+        number.push_back(numbers[2].substr(i, s_columnsForNumber));
+        result += ParseNumber(number);
     }
-    if (numbers[0].size() == 9)
-    {
-        Lines firstNumber;
-        firstNumber.push_back(numbers[0].substr(0, 3));
-        firstNumber.push_back(numbers[1].substr(0, 3));
-        firstNumber.push_back(numbers[2].substr(0, 3));
-        Lines secondNumber;
-        secondNumber.push_back(numbers[0].substr(3, 3));
-        secondNumber.push_back(numbers[1].substr(3, 3));
-        secondNumber.push_back(numbers[2].substr(3, 3));
-        Lines thirdNumber;
-        thirdNumber.push_back(numbers[0].substr(6, 3));
-        thirdNumber.push_back(numbers[1].substr(6, 3));
-        thirdNumber.push_back(numbers[2].substr(6, 3));
-        std::string result = ParseNumber(firstNumber);
-        result += ParseNumber(secondNumber);
-        result += ParseNumber(thirdNumber);
-        return result;
-    }
-    return ParseNumber(numbers);
+    return result;
 }
 
 TEST(ParseNumber, ParseNumberTakesZeroReturns0)
@@ -198,4 +176,11 @@ TEST(GetNumberFromString, GetNumberFromStringTakesThreeDigitNumberAndConvertItTo
     EXPECT_EQ("234", GetNumberFromString (Lines({" _  _    ",
                                                  " _| _||_|",
                                                  "|_  _|  |"})));
+}
+
+TEST(GetNumberFromString, GetNumberFromStringAcceptance)
+{
+    EXPECT_EQ("123456789", GetNumberFromString (Lines({"    _  _     _  _  _  _  _ ",
+                                                 "  | _| _||_||_ |_   ||_||_|",
+                                                 "  ||_  _|  | _||_|  ||_| _|"})));
 }
