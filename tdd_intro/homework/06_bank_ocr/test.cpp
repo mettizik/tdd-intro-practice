@@ -7,6 +7,10 @@ The following format is created by the machine:
     _  _     _  _  _  _  _
   | _| _||_||_ |_   ||_||_|
   ||_  _|  | _||_|  ||_| _|
+ _  _  _  _  _  _  _  _  _
+| || || || || || || || || |
+|_||_||_||_||_||_||_||_||_|
+
 
 Each entry is 3 lines long, and each line has 27 characters. 3 lines of each entry contain an account number written using pipes and underscores.
 
@@ -19,3 +23,13 @@ Write a program that can take this file and parse it into actual account numbers
  * 1. Parse one digit number (0-9 - 10 separate tests)
  * 2. Parse multiple digits number (10, 234, 123456789)
 */
+
+using Lines = std::vector<std::string>;
+
+
+TEST(ParseNumber, ParseNumberTakesZeroReturns0)
+{
+    EXPECT_EQ(0, GetNumber(Lines({" _ ",
+                                 "| |",
+                                 "|_|"})));
+}
