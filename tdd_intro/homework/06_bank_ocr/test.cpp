@@ -152,3 +152,10 @@ TEST(GetNumberFromString, GetNumberFromStringTakesOneDigitNumberAndConvertItToSt
                                                "| |",
                                                "|_|"})));
 }
+
+TEST(GetNumberFromString, GetNumberFromStringTakesTwoDigitNumberAndConvertItToTwoDigitsString)
+{
+    EXPECT_EQ("10", GetNumberFromString (Lines({"    _ ",
+                                                "  || |",
+                                                "  ||_|"})));
+}
