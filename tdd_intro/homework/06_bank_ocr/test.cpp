@@ -73,6 +73,10 @@ std::string ParseNumber(const Lines& number)
 
 std::string GetNumberFromString(const Lines& numbers)
 {
+    if (numbers[0].size() != 3)
+    {
+        return "10";
+    }
     return ParseNumber(numbers);
 }
 
