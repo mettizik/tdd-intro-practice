@@ -71,6 +71,11 @@ std::string ParseNumber(const Lines& number)
     return "?";
 }
 
+std::string GetNumberFromString(const Lines& numbers)
+{
+    return "";
+}
+
 TEST(ParseNumber, ParseNumberTakesZeroReturns0)
 {
     EXPECT_EQ("0", ParseNumber(Lines({" _ ",
@@ -139,4 +144,11 @@ TEST(ParseNumber, ParseNumberTakesThreeReturns9)
     EXPECT_EQ("9", ParseNumber(Lines({" _ ",
                                       "|_|",
                                       " _|"})));
+}
+
+TEST(GetNumberFromString, GetNumberFromStringTakesOneDigitNumberAndConvertItToString)
+{
+    EXPECT_EQ("0", GetNumberFromString (Lines({" _ ",
+                                               "| |",
+                                               "|_|"})));
 }
