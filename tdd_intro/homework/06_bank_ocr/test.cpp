@@ -28,67 +28,47 @@ using Lines = std::vector<std::string>;
 
 std::string ParseNumber(const Lines& number)
 {
-    if (number == Lines({" _ ",
-                         "| |",
-                         "|_|"}))
+    static const std::vector<Lines> numbers = std::vector<Lines>({
+        Lines({" _ ",
+               "| |",
+               "|_|"}),
+        Lines({"   ",
+               "  |",
+               "  |"}),
+        Lines({" _ ",
+               " _|",
+               "|_ "}),
+        Lines({" _ ",
+               " _|",
+               " _|"}),
+        Lines({"   ",
+               "|_|",
+               "  |"}),
+        Lines({" _ ",
+               "|_ ",
+               " _|"}),
+        Lines({" _ ",
+               "|_ ",
+               "|_|"}),
+        Lines({" _ ",
+               "  |",
+               "  |"}),
+        Lines({" _ ",
+               "|_|",
+               "|_|"}),
+        Lines({" _ ",
+               "|_|",
+               " _|"})
+    });
+    for (size_t i = 0; i < numbers.size(); ++i)
     {
-        return "0";
+        if (numbers[i] == number)
+        {
+            return std::to_string(i);
+        }
     }
-    else if (number == Lines({"   ",
-                              "  |",
-                              "  |"}))
-    {
-        return "1";
-    }
-    else if (number == Lines({" _ ",
-                              " _|",
-                              "|_ "}))
-    {
-        return "2";
-    }
-    else if (number == Lines({" _ ",
-                              " _|",
-                              " _|"}))
-    {
-        return "3";
-    }
-    else if (number == Lines({"   ",
-                              "|_|",
-                              "  |"}))
-    {
-        return "4";
-    }
-    else if (number == Lines({" _ ",
-                              "|_ ",
-                              " _|"}))
-    {
-        return "5";
-    }
-    else if (number == Lines({" _ ",
-                              "|_ ",
-                              "|_|"}))
-    {
-        return "6";
-    }
-    else if (number == Lines({" _ ",
-                              "  |",
-                              "  |"}))
-    {
-        return "7";
-    }
-    else if (number == Lines({" _ ",
-                              "|_|",
-                              "|_|"}))
-    {
-        return "8";
-    }
-    /*else if (number == Lines({" _ ",
-                              "|_|",
-                              " _|"}))
-    {*/
-        return "9";
-    /*}
-    return "?";*/
+    assert(false);
+    return "?";
 }
 
 TEST(ParseNumber, ParseNumberTakesZeroReturns0)
