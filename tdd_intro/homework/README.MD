@@ -309,7 +309,22 @@ Example input and output:
 
 => 490867715 
 ```
-## Mocking & Faking practicies
 
-### TODO
+### Mocking & Faking practicies
 
+Implement a class for recursively copying files from source directory to the destination directory.
+For example it can be something that looks like a
+
+class FileCopier
+{
+public:
+	explicit FileCopier(IFileSystem* fsys);
+	bool Copy(const std::string& src, const std::string& dst);
+};
+
+You don't need to test filesystem functions, you need to test only FileCopier class.
+Therefore for working with a filesystem you need to declare an interface and to mock it.
+Then in your test cases you can check the work of FileCopier expecting of appropriate calls to the mocked filesystem class.
+
+A folder hierarchy must be saved.
+You can start from https://goo.gl/j7EkQX, good luck!
