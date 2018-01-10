@@ -8,7 +8,8 @@ CONFIG -= qt
 SOURCES += \
     BankOcr.cpp \
     RecognizeDigitTests.cpp \
-    RecognizeNumberTests.cpp
+    RecognizeNumberTests.cpp \
+    CheckNumberTests.cpp
 
 HEADERS += \
     BankOcr.h

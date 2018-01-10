@@ -54,3 +54,18 @@ int BankOcr::detail::RecognizeNumber(const std::string& line1, const std::string
     }
     return result;
 }
+
+bool BankOcr::detail::CheckNumber(int number)
+{
+    assert(number >= 0 && number <= 999999999);
+
+    int remainder = number;
+    int result = 0;
+    for (int multiplier = 1; multiplier <= 9; ++multiplier)
+    {
+        const int digit = remainder % 10;
+        remainder /= 10;
+        result += digit * multiplier;
+    }
+    return result % 11 == 0;
+}
