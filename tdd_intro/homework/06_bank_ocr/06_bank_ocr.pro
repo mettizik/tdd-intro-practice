@@ -6,4 +6,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-    test.cpp
+    BankOcr.cpp \
+    RecognizeDigitTests.cpp
+
+HEADERS += \
+    BankOcr.h
