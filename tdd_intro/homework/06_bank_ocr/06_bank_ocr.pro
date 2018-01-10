@@ -7,7 +7,8 @@ CONFIG -= qt
 
 SOURCES += \
     BankOcr.cpp \
-    RecognizeDigitTests.cpp
+    RecognizeDigitTests.cpp \
+    RecognizeNumberTests.cpp
 
 HEADERS += \
     BankOcr.h

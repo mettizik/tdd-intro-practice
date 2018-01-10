@@ -1,3 +1,4 @@
+#include <cassert>
 #include "BankOcr.h"
 
 int BankOcr::detail::RecognizeDigit(const std::string& line1, const std::string& line2, const std::string& line3)
@@ -39,4 +40,17 @@ int BankOcr::detail::RecognizeDigit(const std::string& line1, const std::string&
         return 9;
     }
     return 0;
+}
+
+int BankOcr::detail::RecognizeNumber(const std::string& line1, const std::string& line2, const std::string& line3)
+{
+    assert(line1.size() == 27 && line2.size() == 27 && line3.size() == 27);
+
+    int result = 0;
+    for (size_t i = 0; i < 27; i += 3)
+    {
+        result *= 10;
+        result += RecognizeDigit(line1.substr(i, 3), line2.substr(i, 3), line3.substr(i, 3));
+    }
+    return result;
 }
