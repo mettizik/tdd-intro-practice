@@ -35,3 +35,9 @@ For more of kata examples visit one of the following resources:
 
 - http://exercism.io/
 - https://www.codewars.com/
+
+## Using conan for externals
+
+Run this command inside tdd_info folder:
+> conan install -s build_type=Debug
+
