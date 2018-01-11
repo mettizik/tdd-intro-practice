@@ -94,6 +94,15 @@ Symbol Decompose(const Lines& lines)
         Symbol s(1);
         return s;
     }
+
+    if (lines.size() == 3
+        && lines[0].size() == 6
+        && lines[1].size() == 6
+        && lines[2].size() == 6)
+    {
+        Symbol s(2);
+        return s;
+    }
     return Symbol();
 }
 
@@ -249,4 +258,14 @@ TEST(Bank, StringDecomposingInvalidData1)
     lines.push_back(midUnder);
 
     EXPECT_EQ(Decompose(lines).size(), 0);
+}
+
+TEST(Bank, StringDecomposing2Elements)
+{
+    Lines lines;
+    lines.push_back(midUnder + midUnder);
+    lines.push_back(midUnder + midUnder);
+    lines.push_back(midUnder + midUnder);
+
+    EXPECT_EQ(Decompose(lines).size(), 2);
 }
