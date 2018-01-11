@@ -12,12 +12,26 @@ namespace
     const std::string one_top =    "   ";
     const std::string one_mid =    "  |";
     const std::string one_bottom = "  |";
+
+    const std::string two_top =    " _ ";
+    const std::string two_mid =    " _|";
+    const std::string two_bottom = "|_ ";
+
+    const std::string three_top =    " _ ";
+    const std::string three_mid =    " _|";
+    const std::string three_bottom = " _|";
 }
 
 int Parse(const Lines& lines)
 {
     if (!lines.empty())
     {
+        if (lines[0] == two_top
+            && lines[1] == two_mid
+            && lines[2] == two_bottom)
+        {
+            return 2;
+        }
         return 1;
     }
     return 0;
@@ -29,7 +43,7 @@ TEST(Bank, EmptyStrings)
     EXPECT_EQ(Parse(lines), 0);
 }
 
-TEST(Bank, InvalidStingCount)
+TEST(Bank, Single_one)
 {
     Lines lines;
     lines.push_back(one_top);
@@ -37,4 +51,24 @@ TEST(Bank, InvalidStingCount)
     lines.push_back(one_bottom);
 
     EXPECT_EQ(Parse(lines), 1);
+}
+
+TEST(Bank, Single_two)
+{
+    Lines lines;
+    lines.push_back(two_top);
+    lines.push_back(two_mid);
+    lines.push_back(two_bottom);
+
+    EXPECT_EQ(Parse(lines), 2);
+}
+
+TEST(Bank, Single_three)
+{
+    Lines lines;
+    lines.push_back(three_top);
+    lines.push_back(three_mid);
+    lines.push_back(three_bottom);
+
+    EXPECT_EQ(Parse(lines), 3);
 }
