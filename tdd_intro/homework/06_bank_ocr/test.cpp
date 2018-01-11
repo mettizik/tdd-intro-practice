@@ -5,7 +5,7 @@
  * + parse a digit from a square 3x9
  * + parse an account number (9 digits)
  * - parse a wrong digit (not in the range 0-9)
- * - parse several account numbers (500:)
+ * + parse several account numbers (500:)
  */
 
 using Lines = std::vector<std::string>;
@@ -91,9 +91,20 @@ namespace
     }
 }
 
+std::string AccountDigitToSimpleNumber(const Lines& digit)
+{
+    for (const auto& digitAndLines : s_digitToLines)
+    {
+        if (digitAndLines.second == digit)
+        {
+            return std::to_string(digitAndLines.first);
+        }
+    }
+}
+
 Lines ParseAccountNumbers(const Accounts& accounts)
 {
-    Lines lines;
+    Lines accountNumbers;
     for (const auto& accountLines : accounts)
     {
         const auto accountDigits = Split(accountLines);
@@ -101,19 +112,12 @@ Lines ParseAccountNumbers(const Accounts& accounts)
         std::string accountNumber;
         for (const auto& digit : accountDigits)
         {
-            for (const auto& digitAndLines : s_digitToLines)
-            {
-                if (digitAndLines.second == digit)
-                {
-                    accountNumber += std::to_string(digitAndLines.first);
-                    break;
-                }
-            }
+            accountNumber += AccountDigitToSimpleNumber(digit);
         }
 
-        lines.push_back(accountNumber);
+        accountNumbers.push_back(accountNumber);
     }
-    return lines;
+    return accountNumbers;
 }
 
 TEST(ParseAccountNumbers, Take_zero_Returns_0)
@@ -192,4 +196,3 @@ TEST(ParseAccountNumbers, Take_several_account_numbers_Returns_correct_strings)
                     }
                   ));
 }
-
