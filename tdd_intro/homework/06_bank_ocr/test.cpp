@@ -9,6 +9,7 @@
  */
 
 using Lines = std::vector<std::string>;
+using Accounts = std::vector<Lines>;
 
 namespace
 {
@@ -77,6 +78,17 @@ namespace
                "|_|",
                " _|" } },
     };
+
+    // "100500432" to account number
+    Lines MakeAccountNumber(const std::string& number)
+    {
+        std::vector<Lines> digits;
+        for (const auto& digit : number)
+        {
+            digits.push_back(s_digitToLines[digit - '0']);
+        }
+        return Join(digits);
+    }
 }
 
 std::string ParseAccountNumbers(const Lines& lines)
@@ -151,18 +163,17 @@ TEST(ParseAccountNumbers, Take_nine_Returns_9)
 
 TEST(ParseAccountNumbers, Take_2_digits_Returns_correct_string)
 {
-    EXPECT_EQ("10", ParseAccountNumbers(Join({s_digitToLines[1], s_digitToLines[0]})));
+    EXPECT_EQ("10", ParseAccountNumbers(MakeAccountNumber("10")));
 }
 
 TEST(ParseAccountNumbers, Take_3_digits_Returns_correct_string)
 {
-    EXPECT_EQ("105", ParseAccountNumbers(Join({s_digitToLines[1], s_digitToLines[0], s_digitToLines[5]})));
+    EXPECT_EQ("105", ParseAccountNumbers(MakeAccountNumber("105")));
 }
 
 TEST(ParseAccountNumbers, Take_account_number_Returns_correct_string)
 {
 
-    EXPECT_EQ("100500432", ParseAccountNumbers(Join({s_digitToLines[1], s_digitToLines[0], s_digitToLines[0],
-                                                     s_digitToLines[5], s_digitToLines[0], s_digitToLines[0],
-                                                     s_digitToLines[4], s_digitToLines[3], s_digitToLines[2]})));
+    EXPECT_EQ("100500432", ParseAccountNumbers(MakeAccountNumber("100500432")));
 }
+
