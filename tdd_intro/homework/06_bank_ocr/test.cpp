@@ -12,30 +12,36 @@ using Lines = std::vector<std::string>;
 
 namespace
 {
-    Lines Join(const Lines& digit1, const Lines& digit2)
+    Lines Join(const std::vector<Lines>& digits)
     {
-        return {
-            digit1[0] + digit2[0],
-            digit1[1] + digit2[1],
-            digit1[2] + digit2[2]
-        };
+        Lines result{"","",""};
+
+        for (const auto& digit : digits)
+        {
+            result[0] += digit[0];
+            result[1] += digit[1];
+            result[2] += digit[2];
+        }
+
+        return result;
     }
 
-    std::pair<Lines, Lines> Split(const Lines& digits)
+    std::vector<Lines> Split(const Lines& digits)
     {
-        return
+        std::vector<Lines> result;
+
+        size_t digitWidth = 3;
+        size_t lineLen = digits.front().size();
+        for (size_t pos = 0; pos < lineLen; pos += digitWidth)
         {
-            {
-                digits[0].substr(0, 3),
-                digits[1].substr(0, 3),
-                digits[2].substr(0, 3)
-            },
-            {
-                digits[0].substr(3, 3),
-                digits[1].substr(3, 3),
-                digits[2].substr(3, 3)
-            }
-        };
+            result.push_back({
+                                 digits[0].substr(pos, digitWidth),
+                                 digits[1].substr(pos, digitWidth),
+                                 digits[2].substr(pos, digitWidth)
+                             });
+        }
+
+        return result;
     }
 
     static std::map<unsigned, Lines> s_digitToLines =
@@ -80,7 +86,7 @@ std::string ParseAccountNumbers(const Lines& lines)
     std::string result;
     for (const auto& digitAndLines : s_digitToLines)
     {
-        if (digitAndLines.second == digits.first)
+        if (digitAndLines.second == digits[0])
         {
             result += std::to_string(digitAndLines.first);
             break;
@@ -90,7 +96,18 @@ std::string ParseAccountNumbers(const Lines& lines)
     {
         for (const auto& digitAndLines : s_digitToLines)
         {
-            if (digitAndLines.second == digits.second)
+            if (digitAndLines.second == digits[1])
+            {
+                result += std::to_string(digitAndLines.first);
+                break;
+            }
+        }
+    }
+    if (lines.front().size() > 6)
+    {
+        for (const auto& digitAndLines : s_digitToLines)
+        {
+            if (digitAndLines.second == digits[2])
             {
                 result += std::to_string(digitAndLines.first);
                 break;
@@ -152,5 +169,10 @@ TEST(ParseAccountNumbers, Take_nine_Returns_9)
 
 TEST(ParseAccountNumbers, Take_2_digits_Returns_correct_string)
 {
-    EXPECT_EQ("10", ParseAccountNumbers(Join(s_digitToLines[1], s_digitToLines[0])));
+    EXPECT_EQ("10", ParseAccountNumbers(Join({s_digitToLines[1], s_digitToLines[0]})));
+}
+
+TEST(ParseAccountNumbers, Take_3_digits_Returns_correct_string)
+{
+    EXPECT_EQ("105", ParseAccountNumbers(Join({s_digitToLines[1], s_digitToLines[0], s_digitToLines[5]})));
 }
