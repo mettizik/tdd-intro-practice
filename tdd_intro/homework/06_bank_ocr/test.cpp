@@ -52,6 +52,12 @@ int Parse(const Lines& lines)
         {
             return 6;
         }
+        else if (lines[0] == midUnder
+                 && lines[1] == lastPipe
+                 && lines[2] == lastPipe)
+        {
+            return 7;
+        }
 
         return 1;
     }
@@ -122,4 +128,14 @@ TEST(Bank, Single_six)
     lines.push_back(pipeUnderPipe);
 
     EXPECT_EQ(Parse(lines), 6);
+}
+
+TEST(Bank, Single_seven)
+{
+    Lines lines;
+    lines.push_back(midUnder);
+    lines.push_back(lastPipe);
+    lines.push_back(lastPipe);
+
+    EXPECT_EQ(Parse(lines), 7);
 }
