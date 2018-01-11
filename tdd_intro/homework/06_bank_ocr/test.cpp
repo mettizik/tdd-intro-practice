@@ -24,6 +24,10 @@ namespace
     const std::string four_top =    "   ";
     const std::string four_mid =    "|_|";
     const std::string four_bottom = "  |";
+
+    const std::string five_top =    " _ ";
+    const std::string five_mid =    "|_ ";
+    const std::string five_bottom = " _|";
 }
 
 int Parse(const Lines& lines)
@@ -47,6 +51,12 @@ int Parse(const Lines& lines)
                  && lines[2] == four_bottom)
         {
             return 4;
+        }
+        else if (lines[0] == five_top
+                 && lines[1] == five_mid
+                 && lines[2] == five_bottom)
+        {
+            return 5;
         }
         return 1;
     }
@@ -97,4 +107,14 @@ TEST(Bank, Single_four)
     lines.push_back(four_bottom);
 
     EXPECT_EQ(Parse(lines), 4);
+}
+
+TEST(Bank, Single_five)
+{
+    Lines lines;
+    lines.push_back(five_top);
+    lines.push_back(five_mid);
+    lines.push_back(five_bottom);
+
+    EXPECT_EQ(Parse(lines), 5);
 }
