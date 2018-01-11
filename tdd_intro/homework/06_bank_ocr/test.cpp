@@ -12,14 +12,23 @@ using Lines = std::vector<std::string>;
 
 std::string ParseAccountNumbers(const Lines& lines)
 {
-    return "1";
+    return lines.back().front() == ' ' ? "1" : "2";
 }
 
-TEST(ParseAccountNumbers, Take_one_Returns_one)
+TEST(ParseAccountNumbers, Take_one_Returns_1)
 {
     EXPECT_EQ("1", ParseAccountNumbers({
                                            "   ",
                                            "  |",
                                            "  |"
+                                       }));
+}
+
+TEST(ParseAccountNumbers, Take_two_Returns_2)
+{
+    EXPECT_EQ("2", ParseAccountNumbers({
+                                           " _ ",
+                                           " _|",
+                                           "|_ "
                                        }));
 }
