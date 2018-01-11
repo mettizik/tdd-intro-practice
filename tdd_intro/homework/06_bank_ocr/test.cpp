@@ -21,7 +21,7 @@ namespace
 
 int Parse(const Lines& lines)
 {
-    if (!lines.empty())
+    if (lines.size() == 3)
     {
         if (lines[0].size() == 3
             && lines[1].size() == 3
@@ -201,6 +201,15 @@ TEST(Bank, InvalidStrings)
     lines.push_back(midUnder + "_");
     lines.push_back(pipeWhitePipe);
     lines.push_back(pipeUnderPipe);
+
+    EXPECT_EQ(Parse(lines), -1);
+}
+
+TEST(Bank, InvalidStrings1)
+{
+    Lines lines;
+    lines.push_back(midUnder);
+    lines.push_back(pipeWhitePipe);
 
     EXPECT_EQ(Parse(lines), -1);
 }
