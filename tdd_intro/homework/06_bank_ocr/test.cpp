@@ -3,7 +3,7 @@
 /*
  * Tests list:
  * + parse a digit from a square 3x9
- * - parse an account number (9 digits)
+ * + parse an account number (9 digits)
  * - parse a wrong digit (not in the range 0-9)
  * - parse several account numbers (500:)
  */
@@ -157,4 +157,12 @@ TEST(ParseAccountNumbers, Take_2_digits_Returns_correct_string)
 TEST(ParseAccountNumbers, Take_3_digits_Returns_correct_string)
 {
     EXPECT_EQ("105", ParseAccountNumbers(Join({s_digitToLines[1], s_digitToLines[0], s_digitToLines[5]})));
+}
+
+TEST(ParseAccountNumbers, Take_account_number_Returns_correct_string)
+{
+
+    EXPECT_EQ("100500432", ParseAccountNumbers(Join({s_digitToLines[1], s_digitToLines[0], s_digitToLines[0],
+                                                     s_digitToLines[5], s_digitToLines[0], s_digitToLines[0],
+                                                     s_digitToLines[4], s_digitToLines[3], s_digitToLines[2]})));
 }
