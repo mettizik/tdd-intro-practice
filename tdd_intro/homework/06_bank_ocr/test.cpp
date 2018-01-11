@@ -15,7 +15,9 @@ std::string ParseAccountNumbers(const Lines& lines)
 
     return lines.front()[1] == ' '
             ? (lines[1].front() == ' ' ? "1" : "4")
-            : lines.back().front() == ' ' ? "3" : "2";
+            : lines.back().front() == ' '
+                ? (lines[1].front() == ' ' ? "3" : "5")
+                : "2";
 }
 
 TEST(ParseAccountNumbers, Take_one_Returns_1)
@@ -51,5 +53,14 @@ TEST(ParseAccountNumbers, Take_four_Returns_4)
                                            "   ",
                                            "|_|",
                                            "  |"
+                                       }));
+}
+
+TEST(ParseAccountNumbers, Take_five_Returns_5)
+{
+    EXPECT_EQ("5", ParseAccountNumbers({
+                                           " _ ",
+                                           "|_ ",
+                                           " _|"
                                        }));
 }
