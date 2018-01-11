@@ -9,6 +9,7 @@
 namespace
 {
     using Lines = std::vector<std::string>;
+    using Symbol = std::vector<Lines>;
 
     const std::string white          = "   ";
     const std::string lastPipe       = "  |";
@@ -81,6 +82,12 @@ int Parse(const Lines& lines)
         return 1;
     }
     return -1;
+}
+
+Symbol Decompose(const Lines& lines)
+{
+    Symbol s(1);
+    return s;
 }
 
 TEST(Bank, EmptyStrings)
@@ -206,4 +213,14 @@ TEST(Bank, InvalidStrings1)
     lines.push_back(pipeWhitePipe);
 
     EXPECT_EQ(Parse(lines), -1);
+}
+
+TEST(Bank, StringDecomposing)
+{
+    Lines lines;
+    lines.push_back(midUnder);
+    lines.push_back(midUnder);
+    lines.push_back(midUnder);
+
+    EXPECT_EQ(Decompose(lines).size(), 1);
 }
