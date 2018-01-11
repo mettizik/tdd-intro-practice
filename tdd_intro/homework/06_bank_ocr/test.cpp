@@ -16,6 +16,7 @@ namespace
     const std::string whiteUnderPipe = " _|";
     const std::string pipeUnderWhite = "|_ ";
     const std::string pipeUnderPipe  = "|_|";
+    const std::string pipeWhitePipe  = "| |";
 }
 
 int Parse(const Lines& lines)
@@ -69,6 +70,12 @@ int Parse(const Lines& lines)
                  && lines[2] == whiteUnderPipe)
         {
             return 9;
+        }
+        else if (lines[0] == midUnder
+                 && lines[1] == pipeWhitePipe
+                 && lines[2] == pipeUnderPipe)
+        {
+            return 0;
         }
 
         return 1;
@@ -170,4 +177,14 @@ TEST(Bank, Single_nine)
     lines.push_back(whiteUnderPipe);
 
     EXPECT_EQ(Parse(lines), 9);
+}
+
+TEST(Bank, Single_zero)
+{
+    Lines lines;
+    lines.push_back(midUnder);
+    lines.push_back(pipeWhitePipe);
+    lines.push_back(pipeUnderPipe);
+
+    EXPECT_EQ(Parse(lines), 0);
 }
