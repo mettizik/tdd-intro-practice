@@ -46,6 +46,13 @@ int Parse(const Lines& lines)
         {
             return 5;
         }
+        else if (lines[0] == midUnder
+                 && lines[1] == pipeUnderWhite
+                 && lines[2] == pipeUnderPipe)
+        {
+            return 6;
+        }
+
         return 1;
     }
     return 0;
@@ -105,4 +112,14 @@ TEST(Bank, Single_five)
     lines.push_back(whiteUnderPipe);
 
     EXPECT_EQ(Parse(lines), 5);
+}
+
+TEST(Bank, Single_six)
+{
+    Lines lines;
+    lines.push_back(midUnder);
+    lines.push_back(pipeUnderWhite);
+    lines.push_back(pipeUnderPipe);
+
+    EXPECT_EQ(Parse(lines), 6);
 }
