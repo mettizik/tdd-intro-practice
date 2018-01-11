@@ -23,70 +23,76 @@ int Parse(const Lines& lines)
 {
     if (!lines.empty())
     {
-        if (lines[0] == midUnder
-            && lines[1] == whiteUnderPipe
-            && lines[2] == pipeUnderWhite)
+        if (lines[0].size() == 3
+            && lines[1].size() == 3
+            && lines[2].size() == 3)
         {
-            return 2;
-        }
-        else if (lines[0] == midUnder
-                 && lines[1] == whiteUnderPipe
-                 && lines[2] == whiteUnderPipe)
-        {
-            return 3;
-        }
-        else if (lines[0] == white
-                 && lines[1] == pipeUnderPipe
-                 && lines[2] == lastPipe)
-        {
-            return 4;
-        }
-        else if (lines[0] == midUnder
-                 && lines[1] == pipeUnderWhite
-                 && lines[2] == whiteUnderPipe)
-        {
-            return 5;
-        }
-        else if (lines[0] == midUnder
-                 && lines[1] == pipeUnderWhite
-                 && lines[2] == pipeUnderPipe)
-        {
-            return 6;
-        }
-        else if (lines[0] == midUnder
-                 && lines[1] == lastPipe
-                 && lines[2] == lastPipe)
-        {
-            return 7;
-        }
-        else if (lines[0] == midUnder
-                 && lines[1] == pipeUnderPipe
-                 && lines[2] == pipeUnderPipe)
-        {
-            return 8;
-        }
-        else if (lines[0] == midUnder
-                 && lines[1] == pipeUnderPipe
-                 && lines[2] == whiteUnderPipe)
-        {
-            return 9;
-        }
-        else if (lines[0] == midUnder
-                 && lines[1] == pipeWhitePipe
-                 && lines[2] == pipeUnderPipe)
-        {
-            return 0;
+            if (lines[0] == midUnder
+                && lines[1] == whiteUnderPipe
+                && lines[2] == pipeUnderWhite)
+            {
+                return 2;
+            }
+            else if (lines[0] == midUnder
+                     && lines[1] == whiteUnderPipe
+                     && lines[2] == whiteUnderPipe)
+            {
+                return 3;
+            }
+            else if (lines[0] == white
+                     && lines[1] == pipeUnderPipe
+                     && lines[2] == lastPipe)
+            {
+                return 4;
+            }
+            else if (lines[0] == midUnder
+                     && lines[1] == pipeUnderWhite
+                     && lines[2] == whiteUnderPipe)
+            {
+                return 5;
+            }
+            else if (lines[0] == midUnder
+                     && lines[1] == pipeUnderWhite
+                     && lines[2] == pipeUnderPipe)
+            {
+                return 6;
+            }
+            else if (lines[0] == midUnder
+                     && lines[1] == lastPipe
+                     && lines[2] == lastPipe)
+            {
+                return 7;
+            }
+            else if (lines[0] == midUnder
+                     && lines[1] == pipeUnderPipe
+                     && lines[2] == pipeUnderPipe)
+            {
+                return 8;
+            }
+            else if (lines[0] == midUnder
+                     && lines[1] == pipeUnderPipe
+                     && lines[2] == whiteUnderPipe)
+            {
+                return 9;
+            }
+            else if (lines[0] == midUnder
+                     && lines[1] == pipeWhitePipe
+                     && lines[2] == pipeUnderPipe)
+            {
+                return 0;
+            }
+
+            return 1;
         }
 
-        return 1;
     }
-    return 0;
+    return -1;
 }
 
 TEST(Bank, EmptyStrings)
 {
     Lines lines;
-    EXPECT_EQ(Parse(lines), 0);
+    EXPECT_EQ(Parse(lines), -1);
 }
 
 TEST(Bank, Single_one)
@@ -187,4 +193,14 @@ TEST(Bank, Single_zero)
     lines.push_back(pipeUnderPipe);
 
     EXPECT_EQ(Parse(lines), 0);
+}
+
+TEST(Bank, InvalidStrings)
+{
+    Lines lines;
+    lines.push_back(midUnder + "_");
+    lines.push_back(pipeWhitePipe);
+    lines.push_back(pipeUnderPipe);
+
+    EXPECT_EQ(Parse(lines), -1);
 }
