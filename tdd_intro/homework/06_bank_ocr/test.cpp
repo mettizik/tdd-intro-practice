@@ -86,6 +86,13 @@ int Parse(const Lines& lines)
 
 Symbol Decompose(const Lines& lines)
 {
+    if (lines.size() != 3
+        || lines[0].size() != 3
+        || lines[1].size() != 3
+        || lines[2].size() != 3)
+    {
+        return Symbol();
+    }
     Symbol s(1);
     return s;
 }
@@ -223,4 +230,23 @@ TEST(Bank, StringDecomposing)
     lines.push_back(midUnder);
 
     EXPECT_EQ(Decompose(lines).size(), 1);
+}
+
+TEST(Bank, StringDecomposingInvalidData)
+{
+    Lines lines;
+    lines.push_back(midUnder);
+    lines.push_back(midUnder);
+
+    EXPECT_EQ(Decompose(lines).size(), 0);
+}
+
+TEST(Bank, StringDecomposingInvalidData1)
+{
+    Lines lines;
+    lines.push_back(midUnder + " ");
+    lines.push_back(midUnder);
+    lines.push_back(midUnder);
+
+    EXPECT_EQ(Decompose(lines).size(), 0);
 }
