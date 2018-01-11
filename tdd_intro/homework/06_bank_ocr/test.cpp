@@ -64,6 +64,12 @@ int Parse(const Lines& lines)
         {
             return 8;
         }
+        else if (lines[0] == midUnder
+                 && lines[1] == pipeUnderPipe
+                 && lines[2] == whiteUnderPipe)
+        {
+            return 9;
+        }
 
         return 1;
     }
@@ -154,4 +160,14 @@ TEST(Bank, Single_eight)
     lines.push_back(pipeUnderPipe);
 
     EXPECT_EQ(Parse(lines), 8);
+}
+
+TEST(Bank, Single_nine)
+{
+    Lines lines;
+    lines.push_back(midUnder);
+    lines.push_back(pipeUnderPipe);
+    lines.push_back(whiteUnderPipe);
+
+    EXPECT_EQ(Parse(lines), 9);
 }
