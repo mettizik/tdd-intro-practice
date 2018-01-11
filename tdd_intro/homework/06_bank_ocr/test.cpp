@@ -84,36 +84,18 @@ std::string ParseAccountNumbers(const Lines& lines)
     const auto digits = Split(lines);
 
     std::string result;
-    for (const auto& digitAndLines : s_digitToLines)
-    {
-        if (digitAndLines.second == digits[0])
-        {
-            result += std::to_string(digitAndLines.first);
-            break;
-        }
-    }
-    if (lines.front().size() > 3)
+    for (const auto& digit : digits)
     {
         for (const auto& digitAndLines : s_digitToLines)
         {
-            if (digitAndLines.second == digits[1])
+            if (digitAndLines.second == digit)
             {
                 result += std::to_string(digitAndLines.first);
                 break;
             }
         }
     }
-    if (lines.front().size() > 6)
-    {
-        for (const auto& digitAndLines : s_digitToLines)
-        {
-            if (digitAndLines.second == digits[2])
-            {
-                result += std::to_string(digitAndLines.first);
-                break;
-            }
-        }
-    }
+
     return result;
 }
 
