@@ -21,70 +21,64 @@ namespace
 
 int Parse(const Lines& lines)
 {
-    if (lines.size() == 3)
+    if (lines.size() == 3
+        && lines[0].size() == 3
+        && lines[1].size() == 3
+        && lines[2].size() == 3)
     {
-        if (lines[0].size() == 3
-            && lines[1].size() == 3
-            && lines[2].size() == 3)
+        if (lines[0] == midUnder)
         {
-            if (lines[0] == midUnder
-                && lines[1] == whiteUnderPipe
-                && lines[2] == pipeUnderWhite)
+            if (lines[1] == whiteUnderPipe)
             {
-                return 2;
+                if (lines[2] == pipeUnderWhite)
+                {
+                    return 2;
+                }
+                else if (lines[2] == whiteUnderPipe)
+                {
+                    return 3;
+                }
             }
-            else if (lines[0] == midUnder
-                     && lines[1] == whiteUnderPipe
-                     && lines[2] == whiteUnderPipe)
+            else if (lines[1] == pipeUnderWhite)
             {
-                return 3;
+                if (lines[2] == whiteUnderPipe)
+                {
+                    return 5;
+                }
+                else if (lines[2] == pipeUnderPipe)
+                {
+                    return 6;
+                }
             }
-            else if (lines[0] == white
-                     && lines[1] == pipeUnderPipe
-                     && lines[2] == lastPipe)
+            else if (lines[1] == pipeUnderPipe)
             {
-                return 4;
+                if (lines[2] == pipeUnderPipe)
+                {
+                    return 8;
+                }
+                else if (lines[2] == whiteUnderPipe)
+                {
+                    return 9;
+                }
             }
-            else if (lines[0] == midUnder
-                     && lines[1] == pipeUnderWhite
-                     && lines[2] == whiteUnderPipe)
-            {
-                return 5;
-            }
-            else if (lines[0] == midUnder
-                     && lines[1] == pipeUnderWhite
-                     && lines[2] == pipeUnderPipe)
-            {
-                return 6;
-            }
-            else if (lines[0] == midUnder
-                     && lines[1] == lastPipe
+            else if (lines[1] == lastPipe
                      && lines[2] == lastPipe)
             {
                 return 7;
             }
-            else if (lines[0] == midUnder
-                     && lines[1] == pipeUnderPipe
-                     && lines[2] == pipeUnderPipe)
-            {
-                return 8;
-            }
-            else if (lines[0] == midUnder
-                     && lines[1] == pipeUnderPipe
-                     && lines[2] == whiteUnderPipe)
-            {
-                return 9;
-            }
-            else if (lines[0] == midUnder
-                     && lines[1] == pipeWhitePipe
+            else if (lines[1] == pipeWhitePipe
                      && lines[2] == pipeUnderPipe)
             {
                 return 0;
             }
-
-            return 1;
         }
-
+        else if (lines[0] == white
+                 && lines[1] == pipeUnderPipe
+                 && lines[2] == lastPipe)
+        {
+            return 4;
+        }
+        return 1;
     }
     return -1;
 }
