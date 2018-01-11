@@ -86,15 +86,15 @@ int Parse(const Lines& lines)
 
 Symbol Decompose(const Lines& lines)
 {
-    if (lines.size() != 3
-        || lines[0].size() != 3
-        || lines[1].size() != 3
-        || lines[2].size() != 3)
+    if (lines.size() == 3
+        && lines[0].size() == 3
+        && lines[1].size() == 3
+        && lines[2].size() == 3)
     {
-        return Symbol();
+        Symbol s(1);
+        return s;
     }
-    Symbol s(1);
-    return s;
+    return Symbol();
 }
 
 TEST(Bank, EmptyStrings)
