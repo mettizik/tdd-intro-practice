@@ -310,7 +310,9 @@ Example input and output:
 => 490867715
 ```
 
-### Mocking & Faking practicies
+## Mocking & Faking practicies
+
+### Folder copying
 
 Implement a class for recursively copying files from source directory to the destination directory.
 
