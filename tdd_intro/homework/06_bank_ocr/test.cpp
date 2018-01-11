@@ -12,6 +12,32 @@ using Lines = std::vector<std::string>;
 
 namespace
 {
+    Lines Join(const Lines& digit1, const Lines& digit2)
+    {
+        return {
+            digit1[0] + digit2[0],
+            digit1[1] + digit2[1],
+            digit1[2] + digit2[2]
+        };
+    }
+
+    std::pair<Lines, Lines> Split(const Lines& digits)
+    {
+        return
+        {
+            {
+                digits[0].substr(0, 3),
+                digits[1].substr(0, 3),
+                digits[2].substr(0, 3)
+            },
+            {
+                digits[0].substr(3, 3),
+                digits[1].substr(3, 3),
+                digits[2].substr(3, 3)
+            }
+        };
+    }
+
     static std::map<unsigned, Lines> s_digitToLines =
     {
         { 0, { " _ ",
@@ -49,11 +75,29 @@ namespace
 
 std::string ParseAccountNumbers(const Lines& lines)
 {
+    const auto digits = Split(lines);
+
+    std::string result;
     for (const auto& digitAndLines : s_digitToLines)
     {
-        if (digitAndLines.second == lines)
-            return std::to_string(digitAndLines.first);
+        if (digitAndLines.second == digits.first)
+        {
+            result += std::to_string(digitAndLines.first);
+            break;
+        }
     }
+    if (lines.front().size() > 3)
+    {
+        for (const auto& digitAndLines : s_digitToLines)
+        {
+            if (digitAndLines.second == digits.second)
+            {
+                result += std::to_string(digitAndLines.first);
+                break;
+            }
+        }
+    }
+    return result;
 }
 
 TEST(ParseAccountNumbers, Take_zero_Returns_0)
@@ -104,4 +148,9 @@ TEST(ParseAccountNumbers, Take_eight_Returns_8)
 TEST(ParseAccountNumbers, Take_nine_Returns_9)
 {
     EXPECT_EQ("9", ParseAccountNumbers(s_digitToLines[9]));
+}
+
+TEST(ParseAccountNumbers, Take_2_digits_Returns_correct_string)
+{
+    EXPECT_EQ("10", ParseAccountNumbers(Join(s_digitToLines[1], s_digitToLines[0])));
 }
