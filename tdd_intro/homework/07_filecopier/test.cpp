@@ -8,6 +8,23 @@ public:
     virtual void Copy(const std::string& src, const std::string& dst) = 0;
 };
 
+class FolderCopier
+{
+public:
+    explicit FolderCopier(IFileCopier& copier)
+        : m_copier(copier)
+    {
+    }
+
+    virtual void Copy(const std::string& src, const std::string& dst)
+    {
+        m_copier.Copy(src, dst);
+    }
+
+private:
+    IFileCopier& m_copier;
+};
+
 class MockFileCopier: public IFileCopier
 {
 public:
@@ -17,8 +34,9 @@ public:
 TEST(FolderCopier, FolderCopier_CopyOneFile)
 {
     MockFileCopier mock;
+    FolderCopier copier(mock);
 
-    EXPECT_CALL(mock, Copy(::testing::_, ::testing::_)).WillOnce(::testing::Return());
+    EXPECT_CALL(mock, Copy(::testing::_, ::testing::_)).Times(0);
 
-    mock.Copy("D:/", "E:/");
+    copier.Copy("D:/1", "");
 }
