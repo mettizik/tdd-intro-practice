@@ -152,3 +152,24 @@ TEST(FolderCopier, FolderCopier_Copy_2_Files)
 
     copier.Copy("D:/1", "E:/1");
 }
+
+TEST(FolderCopier, FolderCopier_Copy_1_File_And_1_File_In_Sub_Folder)
+{
+    MockFileCopier mock;
+    FolderCopier copier(mock, mock);
+
+    MapFolders map;
+    map["D:/1"] = {"D:/1/file1.txt",
+                   "D:/1/2"};
+
+    map["D:/1/2"] = {"D:/1/2/file2.txt"};
+
+    mock.SetFolderList(map);
+
+    EXPECT_CALL(mock, CreateFolder("E:/1")).Times(1);
+    EXPECT_CALL(mock, Copy("D:/1/file1.txt", "E:/1/file1.txt")).Times(1);
+    EXPECT_CALL(mock, CreateFolder("E:/1/2")).Times(1);
+    EXPECT_CALL(mock, Copy("D:/1/2/file2.txt", "E:/1/2/file2.txt")).Times(1);
+
+    copier.Copy("D:/1", "E:/1");
+}
