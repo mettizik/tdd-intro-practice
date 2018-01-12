@@ -54,3 +54,14 @@ TEST(FolderCopier, FolderCopier_Source_Path_Empty)
 
     copier.Copy("", "E:/1");
 }
+
+TEST(FolderCopier, FolderCopier_Copy_One_File)
+{
+    MockFileCopier mock;
+    FolderCopier copier(mock);
+
+    EXPECT_CALL(mock, CreateFolder("E:/1",)).Times(1);
+    EXPECT_CALL(mock, Copy(::testing::_, ::testing::_)).Times(1);
+
+    copier.Copy("D:/1", "E:/1");
+}
