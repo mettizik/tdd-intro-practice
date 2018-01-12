@@ -42,25 +42,14 @@ public:
         const FolderList& folderIt = m_folderIt.FileList(src);
         if (!folderIt.empty())
         {
-            const std::string& item = folderIt[0];
-            const std::string relativePath(item.substr(src.size()));
-            const std::string destFullPath(dst + relativePath);
-            std::string absolutePath(destFullPath);
+            m_copier.CreateFolder(dst);
 
-            if (IsFile(absolutePath))
+            for (const auto& item : folderIt)
             {
-                absolutePath = AbsolutePath(absolutePath);
-            }
-            m_copier.CreateFolder(absolutePath);
-            m_copier.Copy(item, destFullPath);
+                const std::string relativePath(item.substr(src.size()));
+                const std::string destFullPath(dst + relativePath);
 
-            if (folderIt.size() > 1)
-            {
-                const std::string& item2 = folderIt[1];
-                const std::string relativePath2(item2.substr(src.size()));
-                const std::string destFullPath2(dst + relativePath2);
-
-                m_copier.Copy(item2, destFullPath2);
+                m_copier.Copy(item, destFullPath);
             }
         }
     }
