@@ -53,6 +53,15 @@ public:
             }
             m_copier.CreateFolder(absolutePath);
             m_copier.Copy(item, destFullPath);
+
+            if (folderIt.size() > 1)
+            {
+                const std::string& item2 = folderIt[1];
+                const std::string relativePath2(item2.substr(src.size()));
+                const std::string destFullPath2(dst + relativePath2);
+
+                m_copier.Copy(item2, destFullPath2);
+            }
         }
     }
 
