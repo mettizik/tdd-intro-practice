@@ -62,11 +62,6 @@ public:
         return path.find(".") != std::string::npos; // simple check of file
     }
 
-    std::string AbsolutePath(const std::string& path) const
-    {
-        return path.substr(0, path.find_last_of("/")); // simply check, not real
-    }
-
 private:
     IFileCopier& m_copier;
     IFolderIterator& m_folderIt;
