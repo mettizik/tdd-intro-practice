@@ -69,23 +69,24 @@ private:
     IFolderIterator& m_folderIt;
 };
 
+using MapFolders = std::map<std::string, FolderList>;
 class MockFileCopier: public IFileCopier, public IFolderIterator
 {
 public:
     MOCK_METHOD1(CreateFolder, void(const std::string& dir));
     MOCK_METHOD2(Copy, void(const std::string& src, const std::string& dst));
-    virtual FolderList FileList(const std::string& /*dir*/)
+    virtual FolderList FileList(const std::string& dir)
     {
-        return m_folderList;
+        return m_folderList[dir]; // if not exist, create and return empty list
     }
 
-    void SetFolderList(const FolderList& folderList)
+    void SetFolderList(const MapFolders& folderList)
     {
         m_folderList = folderList;
     }
 
 private:
-    FolderList m_folderList;
+    MapFolders m_folderList;
 };
 
 TEST(FolderCopier, FolderCopier_Destination_Path_Empty)
@@ -124,7 +125,9 @@ TEST(FolderCopier, FolderCopier_Copy_One_File)
     MockFileCopier mock;
     FolderCopier copier(mock, mock);
 
-    mock.SetFolderList({"D:/1/file1.txt"});
+    MapFolders map;
+    map["D:/1"] = {"D:/1/file1.txt"};
+    mock.SetFolderList(map);
 
     EXPECT_CALL(mock, CreateFolder("E:/1")).Times(1);
     EXPECT_CALL(mock, Copy("D:/1/file1.txt", "E:/1/file1.txt")).Times(1);
@@ -137,8 +140,11 @@ TEST(FolderCopier, FolderCopier_Copy_2_Files)
     MockFileCopier mock;
     FolderCopier copier(mock, mock);
 
-    mock.SetFolderList({"D:/1/file1.txt",
-                        "D:/1/file2.txt"});
+    MapFolders map;
+    map["D:/1"] = {"D:/1/file1.txt",
+                   "D:/1/file2.txt"};
+
+    mock.SetFolderList(map);
 
     EXPECT_CALL(mock, CreateFolder("E:/1")).Times(1);
     EXPECT_CALL(mock, Copy("D:/1/file1.txt", "E:/1/file1.txt")).Times(1);
