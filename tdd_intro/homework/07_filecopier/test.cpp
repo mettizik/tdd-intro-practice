@@ -18,7 +18,10 @@ public:
 
     virtual void Copy(const std::string& src, const std::string& dst)
     {
-        m_copier.Copy(src, dst);
+        if (!dst.empty())
+        {
+            m_copier.Copy(src, dst);
+        }
     }
 
 private:
@@ -31,7 +34,7 @@ public:
     MOCK_METHOD2(Copy, void(const std::string& src, const std::string& dst));
 };
 
-TEST(FolderCopier, FolderCopier_CopyOneFile)
+TEST(FolderCopier, FolderCopier_Destination_Path_Empty)
 {
     MockFileCopier mock;
     FolderCopier copier(mock);
