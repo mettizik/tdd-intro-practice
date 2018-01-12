@@ -49,7 +49,14 @@ public:
                 const std::string relativePath(item.substr(src.size()));
                 const std::string destFullPath(dst + relativePath);
 
-                m_copier.Copy(item, destFullPath);
+                if (!IsFile(item))
+                {
+                    Copy(item, dst + item.substr(src.size()));
+                }
+                else
+                {
+                    m_copier.Copy(item, destFullPath);
+                }
             }
         }
     }
