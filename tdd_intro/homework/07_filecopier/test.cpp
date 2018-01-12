@@ -35,10 +35,6 @@ public:
 
     virtual void Copy(const std::string& src, const std::string& dst)
     {
-        if (src.empty() || dst.empty())
-        {
-            return;
-        }
         const FolderList& folderIt = m_folderIt.FileList(src);
         if (!folderIt.empty())
         {
@@ -51,7 +47,7 @@ public:
 
                 if (!IsFile(item))
                 {
-                    Copy(item, dst + item.substr(src.size()));
+                    Copy(item, destFullPath);
                 }
                 else
                 {
