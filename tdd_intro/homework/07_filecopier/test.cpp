@@ -171,3 +171,36 @@ TEST(FolderCopier, FolderCopier_Copy_1_File_And_1_File_In_Sub_Folder)
 
     copier.Copy("D:/1", "E:/1");
 }
+
+TEST(FolderCopier, FolderCopier_Acceptence)
+{
+    MockFileCopier mock;
+    FolderCopier copier(mock, mock);
+
+    MapFolders map;
+    map["D:/1"] = {"D:/1/file1.txt",
+                   "D:/1/file2.txt",
+                   "D:/1/file3.txt",
+                   "D:/1/2",
+                   "D:/1/3"};
+
+    map["D:/1/2"] = {};
+    map["D:/1/3"] = {"D:/1/3/file4.txt",
+                     "D:/1/3/4"};
+
+    map["D:/1/3/4"] = {"D:/1/3/4/file5.txt"};
+
+    mock.SetFolderList(map);
+
+    EXPECT_CALL(mock, CreateFolder("E:")).Times(1);
+    EXPECT_CALL(mock, Copy("D:/1/file1.txt", "E:/file1.txt")).Times(1);
+    EXPECT_CALL(mock, Copy("D:/1/file2.txt", "E:/file2.txt")).Times(1);
+    EXPECT_CALL(mock, Copy("D:/1/file3.txt", "E:/file3.txt")).Times(1);
+    EXPECT_CALL(mock, CreateFolder("E:/3")).Times(1);
+    EXPECT_CALL(mock, Copy("D:/1/3/file4.txt", "E:/3/file4.txt")).Times(1);
+    EXPECT_CALL(mock, CreateFolder("E:/3/4")).Times(1);
+    EXPECT_CALL(mock, Copy("D:/1/3/4/file5.txt", "E:/3/4/file5.txt")).Times(1);
+
+    copier.Copy("D:/1", "E:");
+}
+
