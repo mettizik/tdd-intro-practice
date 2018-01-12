@@ -18,10 +18,11 @@ public:
 
     virtual void Copy(const std::string& src, const std::string& dst)
     {
-        if (!dst.empty())
+        if (src.empty() || dst.empty())
         {
-            m_copier.Copy(src, dst);
+            return;
         }
+        m_copier.Copy(src, dst);
     }
 
 private:
