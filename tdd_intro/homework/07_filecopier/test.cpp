@@ -29,6 +29,7 @@ public:
         {
             return;
         }
+        m_copier.CreateFolder(dst);
         m_copier.Copy(src, dst);
     }
 
