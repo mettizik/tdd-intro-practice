@@ -46,13 +46,24 @@ public:
             const std::string relativePath(item.substr(src.size()));
             const std::string destFullPath(dst + relativePath);
             std::string absolutePath(destFullPath);
-            if (absolutePath.find(".")) // simple check of file
+
+            if (IsFile(absolutePath))
             {
-                absolutePath = absolutePath.substr(0, absolutePath.find_last_of("/")); // simply check, not real
+                absolutePath = AbsolutePath(absolutePath);
             }
             m_copier.CreateFolder(absolutePath);
             m_copier.Copy(item, destFullPath);
         }
+    }
+
+    bool IsFile(const std::string& path) const
+    {
+        return path.find(".") != std::string::npos; // simple check of file
+    }
+
+    std::string AbsolutePath(const std::string& path) const
+    {
+        return path.substr(0, path.find_last_of("/")); // simply check, not real
     }
 
 private:
