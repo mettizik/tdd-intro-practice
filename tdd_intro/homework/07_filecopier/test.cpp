@@ -43,8 +43,15 @@ public:
         if (!folderIt.empty())
         {
             const std::string& item = folderIt[0];
-            m_copier.CreateFolder(item);
-            m_copier.Copy(item, item);
+            const std::string relativePath(item.substr(src.size()));
+            const std::string destFullPath(dst + relativePath);
+            std::string absolutePath(destFullPath);
+            if (absolutePath.find(".")) // simple check of file
+            {
+                absolutePath = absolutePath.substr(0, absolutePath.find_last_of("/")); // simply check, not real
+            }
+            m_copier.CreateFolder(absolutePath);
+            m_copier.Copy(item, destFullPath);
         }
     }
 
