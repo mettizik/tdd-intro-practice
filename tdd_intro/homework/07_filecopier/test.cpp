@@ -201,6 +201,6 @@ TEST(FolderCopier, FolderCopier_Acceptence)
     EXPECT_CALL(mock, CreateFolder("E:/3/4")).Times(1);
     EXPECT_CALL(mock, Copy("D:/1/3/4/file5.txt", "E:/3/4/file5.txt")).Times(1);
 
-    copier.Copy("D:/1", "E:");
+    copier.Copy("D:/1", "E:"); // image that E: is correct path
 }
 
