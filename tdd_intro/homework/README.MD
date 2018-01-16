@@ -334,3 +334,17 @@ You don't need to test filesystem functions.
 To work with a filesystem you should declare an interface and to mock it.
 
 You can start with GMock from https://goo.gl/j7EkQX, good luck!
+
+## Finalization task:
+
+### Chat-client
+
+Implement chat application, that communicates via TCP sockets.
+There is list of requirenments to this application:
+* Console application prefered;
+* It must use system calls for sockets, such as socket, bind, listen, accept, connect;
+* It must create connection between too applications. It must send and receive messages via created connection until it is dropped.
+
+Tips:
+* TCP socket can be mocked;
+* IO streams can be mocked;
