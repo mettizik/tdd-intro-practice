@@ -32,7 +32,6 @@ Needed file interface with such methods:
 class IFile
 {
     ~IFile(){}
-    IFile Copy();
     bool IsDir();
     const ChildFiles& GetChildrens() = 0;
     IFile GetParent();
@@ -45,26 +44,38 @@ class IFile
 {
 public:
     virtual ~IFile(){}
-    IFile Copy() = 0;
-    bool IsDir() = 0;
-    IFile GetParent() = 0;
-    const ChildFiles& GetChildrens() = 0;
-    void AddChild(IFile&&) = 0;
+    virtual bool IsDir() = 0;
+    virtual IFile& GetParent() = 0;
+    virtual const ChildFiles& GetChildrens() = 0;
+    virtual void AddChild(IFile&&) = 0;
 };
 
 class FileCopier
 {
 public:
-    static void Copy(const IFile& src, IFile& parentDst);
+    static void Copy(const IFile& src, IFile& parentDst)
+    {
+        src;
+        parentDst;
+    }
 };
-
+class FileMock;
+using ChildMockFiles = std::vector<FileMock>;
 class FileMock: public IFile
 {
+public:
     FileMock(){}
-    IFile Copy() {}
+    FileMock Copy() {return FileMock();}
     bool IsDir() {return false;}
-    IFile GetParent() {return FileMock();}
-    const ChildFiles& GetChildrens() {return {};}
+    IFile& GetParent() {return FileMock();}
+    const ChildFiles& GetChildrens() {return ChildMockFiles{};}
     void AddChild(IFile&&) {}
 }
 
+TEST(FileCopier, CopyCopiesOneFile)
+{
+    FileMock fileToCopy("fileName");
+    FileMock parentDist("parent");
+    FileCopier::Copy(fileToCopy, parentDist);
+    EXPECT_EQ(1, parentDist.GetChildrens().size());
+}
