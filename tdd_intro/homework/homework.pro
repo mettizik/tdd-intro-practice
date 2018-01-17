@@ -8,4 +8,4 @@ SUBDIRS += \
     05_trinary_numbers \
     06_bank_ocr \
     07_filecopier \
-    08_chatclient
+    08_timer
