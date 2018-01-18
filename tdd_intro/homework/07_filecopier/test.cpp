@@ -61,3 +61,14 @@ TEST(FileCopier, CopyOneFileToTheSameLocation)
 
     EXPECT_TRUE(copier.Copy("C:/f.txt", "C:/"));
 }
+
+TEST(FileCopier, CopyFolderToTheSameLocation)
+{
+    MockFileSystem fsys;
+    FileCopier copier(&fsys);
+
+    EXPECT_CALL(fsys, CopyFile(testing::_, testing::_))
+            .Times(0);
+
+    EXPECT_TRUE(copier.Copy("C:/", "C:/"));
+}
