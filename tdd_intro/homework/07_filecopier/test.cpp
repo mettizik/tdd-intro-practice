@@ -17,5 +17,16 @@ TEST(FileCopier, EmptySourcePath)
     EXPECT_CALL(fsys, Copy(testing::_, testing::_))
             .Times(0);
 
-    copier.Copy("", "C:/");
+    EXPECT_FALSE(copier.Copy("", "C:/"));
+}
+
+TEST(FileCopier, EmptyDestinationPath)
+{
+    MockFileSystem fsys;
+    FileCopier copier(&fsys);
+
+    EXPECT_CALL(fsys, Copy(testing::_, testing::_))
+            .Times(0);
+
+    EXPECT_FALSE(copier.Copy("C:/", ""));
 }
