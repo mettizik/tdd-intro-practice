@@ -3,6 +3,15 @@
 #include "FileCopier.h"
 #include "IFileSystem.h"
 
+/* Tests list:
+ * - copy file
+ * - copy folder
+ * - copy to the same location file
+ * - copy to the same location folder
+ * - copy not existing file
+ * - copy not existing folder
+*/
+
 class MockFileSystem : public IFileSystem
 {
 public:
@@ -40,4 +49,15 @@ TEST(FileCopier, CopyOneFile)
             .Times(1);
 
     EXPECT_TRUE(copier.Copy("C:/f.txt", "D:/"));
+}
+
+TEST(FileCopier, CopyOneFileToTheSameLocation)
+{
+    MockFileSystem fsys;
+    FileCopier copier(&fsys);
+
+    EXPECT_CALL(fsys, Copy(testing::_, testing::_))
+            .Times(0);
+
+    EXPECT_TRUE(copier.Copy("C:/f.txt", "C:/"));
 }

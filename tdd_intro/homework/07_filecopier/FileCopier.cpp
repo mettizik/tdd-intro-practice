@@ -13,6 +13,11 @@ bool FileCopier::Copy(const std::string& src, const std::string& dst)
         return false;
     }
 
+    if (src.find(dst) != std::string::npos)
+    {
+        return true;
+    }
+
     m_fsys->Copy("C:/f.txt", "D:/f.txt");
 
     return true;
