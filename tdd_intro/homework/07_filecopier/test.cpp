@@ -2,6 +2,7 @@
 #include <gmock/gmock.h>
 #include <vector>
 #include <memory>
+#include <string>
 
 /*
 Implement a class for recursively copying files from source directory to the destination directory.
@@ -71,6 +72,11 @@ class FileMock: public IFile
 {
 public:
     FileMock(){}
+    FileMock(const std::string& name)
+    {
+
+    }
+
     IFileGuard Copy() {return std::make_shared<FileMock>();}
     bool IsDir() {return false;}
     IFileGuard GetParent() {return std::make_shared<FileMock>();}
