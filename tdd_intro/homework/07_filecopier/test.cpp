@@ -30,3 +30,14 @@ TEST(FileCopier, EmptyDestinationPath)
 
     EXPECT_FALSE(copier.Copy("C:/", ""));
 }
+
+TEST(FileCopier, CopyOneFile)
+{
+    MockFileSystem fsys;
+    FileCopier copier(&fsys);
+
+    EXPECT_CALL(fsys, Copy("C:/f.txt", "D:/f.txt"))
+            .Times(1);
+
+    EXPECT_TRUE(copier.Copy("C:/f.txt", "D:/"));
+}

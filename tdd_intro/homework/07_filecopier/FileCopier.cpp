@@ -1,9 +1,9 @@
 #include "FileCopier.h"
-
+#include "IFileSystem.h"
 
 FileCopier::FileCopier(IFileSystem* fsys)
+    : m_fsys(fsys)
 {
-
 }
 
 bool FileCopier::Copy(const std::string& src, const std::string& dst)
@@ -12,6 +12,8 @@ bool FileCopier::Copy(const std::string& src, const std::string& dst)
     {
         return false;
     }
+
+    m_fsys->Copy("C:/f.txt", "D:/f.txt");
 
     return true;
 }
