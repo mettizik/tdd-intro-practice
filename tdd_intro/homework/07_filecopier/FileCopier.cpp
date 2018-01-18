@@ -25,7 +25,7 @@ bool FileCopier::Copy(const std::string& src, const std::string& dst)
         return true;
     }
 
-    m_fsys->Copy("C:/f.txt", "D:/f.txt");
+    m_fsys->CopyFile("C:/f.txt", "D:/f.txt");
 
     return true;
 }
