@@ -1,8 +1,5 @@
-#include <gtest/gtest.h>
-#include <gmock/gmock.h>
-#include <vector>
-#include <memory>
-#include <string>
+#include "stdafx.h"
+#include "filemock.h"
 
 /*
 Implement a class for recursively copying files from source directory to the destination directory.
@@ -41,19 +38,6 @@ class IFile
     void AddChild(IFile&&);
 }
 */
-class IFile;
-using IFileGuard = std::shared_ptr<IFile>;
-using ChildFiles = std::vector<IFileGuard>;
-class IFile
-{
-public:
-    virtual ~IFile(){}
-    virtual bool IsDir() = 0;
-    virtual IFileGuard Copy() = 0;
-    virtual IFileGuard GetParent() = 0;
-    virtual const ChildFiles& GetChildrens() = 0;
-    virtual void AddChild(IFileGuard) = 0;
-};
 
 class FileCopier
 {
@@ -66,23 +50,6 @@ public:
 };
 
 class FileMock;
-using FileMockGuard = std::shared_ptr<FileMock>;
-using ChildMockFiles = std::vector<FileMockGuard>;
-class FileMock: public IFile
-{
-public:
-    FileMock(){}
-    FileMock(const std::string& name)
-    {
-
-    }
-
-    IFileGuard Copy() {return std::make_shared<FileMock>();}
-    bool IsDir() {return false;}
-    IFileGuard GetParent() {return std::make_shared<FileMock>();}
-    const ChildFiles& GetChildrens() {return ChildFiles{};}
-    void AddChild(IFileGuard) {}
-};
 
 TEST(FileCopier, CopyCopiesOneFile)
 {
