@@ -5,7 +5,7 @@
 
 /* Tests list:
  * + copy file
- * - copy folder
+ * + copy folder
  * + copy to the same location file
  * + copy to the same location folder
  * - copy not existing file
