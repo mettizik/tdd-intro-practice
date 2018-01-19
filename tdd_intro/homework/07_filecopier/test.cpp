@@ -111,3 +111,23 @@ TEST(FileCopier, CopyFolderWithOneFile)
 
     EXPECT_TRUE(copier.Copy("C:/", "D:/"));
 }
+
+TEST(FileCopier, CopyFolderWithSeveralFiles)
+{
+    MockFileSystem fsys;
+    FileCopier copier(&fsys);
+
+    ON_CALL(fsys, ReadDir(testing::_))
+            .WillByDefault(testing::Return(Files{"img.jpg", "img2.jpg", "img3.jpg"}));
+
+    EXPECT_CALL(fsys, ReadDir("C:/"))
+            .Times(1);
+    EXPECT_CALL(fsys, CopyFile("C:/img.jpg", "D:/img.jpg"))
+            .Times(1);
+    EXPECT_CALL(fsys, CopyFile("C:/img2.jpg", "D:/img2.jpg"))
+            .Times(1);
+    EXPECT_CALL(fsys, CopyFile("C:/img3.jpg", "D:/img3.jpg"))
+            .Times(1);
+
+    EXPECT_TRUE(copier.Copy("C:/", "D:/"));
+}
