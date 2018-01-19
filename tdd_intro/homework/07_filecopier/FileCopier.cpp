@@ -39,6 +39,10 @@ bool FileCopier::Copy(const std::string& src, const std::string& dst)
     {
         return true;
     }
+    for (const auto& elem : dirContent)
+    {
+        m_fsys->CopyFile(src + elem, dst + elem);
+    }
 
     return true;
 }

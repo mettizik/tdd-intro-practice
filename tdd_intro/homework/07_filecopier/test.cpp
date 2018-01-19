@@ -95,3 +95,19 @@ TEST(FileCopier, CopyEmptyFolder)
 
     EXPECT_TRUE(copier.Copy("C:/", "D:/"));
 }
+
+TEST(FileCopier, CopyFolderWithOneFile)
+{
+    MockFileSystem fsys;
+    FileCopier copier(&fsys);
+
+    ON_CALL(fsys, ReadDir(testing::_))
+            .WillByDefault(testing::Return(Files{"img.jpg"}));
+
+    EXPECT_CALL(fsys, ReadDir("C:/"))
+            .Times(1);
+    EXPECT_CALL(fsys, CopyFile("C:/img.jpg", "D:/img.jpg"))
+            .Times(1);
+
+    EXPECT_TRUE(copier.Copy("C:/", "D:/"));
+}
