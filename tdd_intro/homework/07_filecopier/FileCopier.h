@@ -10,5 +10,8 @@ public:
     bool Copy(const std::string& src, const std::string& dst);
 
 private:
+    void RecursiveCopy(std::string src, std::string dst);
+
+private:
     IFileSystem* m_fsys;
 };

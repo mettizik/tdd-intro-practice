@@ -7,9 +7,18 @@ namespace
     {
         return src.find(dst) != std::string::npos;
     }
+
     std::string GetFilename(const std::string& path)
     {
         return path.substr(path.rfind('/') + 1);
+    }
+
+    void AppendSlashIfNeed(std::string& path)
+    {
+        if (path.back() != '/')
+        {
+            path.append("/");
+        }
     }
 }
 
@@ -34,11 +43,20 @@ bool FileCopier::Copy(const std::string& src, const std::string& dst)
         return true;
     }
 
+    RecursiveCopy(src, dst);
+
+    return true;
+}
+
+void FileCopier::RecursiveCopy(std::string src, std::string dst)
+{
     Files dirContent = m_fsys->ReadDir(src);
     if (dirContent.empty())
     {
-        return true;
+        return;
     }
+    AppendSlashIfNeed(src);
+    AppendSlashIfNeed(dst);
     for (const auto& elem : dirContent)
     {
         if (!elem.isDir)
@@ -47,20 +65,7 @@ bool FileCopier::Copy(const std::string& src, const std::string& dst)
         }
         else
         {
-            Files dirContent2 = m_fsys->ReadDir(src + elem.name);
-            if (dirContent2.empty())
-            {
-                continue;
-            }
-            for (const auto& elem2 : dirContent2)
-            {
-                if (!elem2.isDir)
-                {
-                    m_fsys->CopyFile(src + elem.name + '/' + elem2.name, dst + elem.name + '/' + elem2.name);
-                }
-            }
+            RecursiveCopy(src + elem.name, dst + elem.name);
         }
     }
-
-    return true;
 }
