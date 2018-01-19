@@ -18,7 +18,6 @@ public:
     const IFile::ChildFiles& GetChildrens();
     void AddChild(IFileGuard);
     const std::string& GetName();
-    void CheckCopied();
 
 private:
     IFile::ChildFiles m_childrens;

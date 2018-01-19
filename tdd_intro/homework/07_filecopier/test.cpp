@@ -52,14 +52,17 @@ public:
         parentDst->AddChild(copiedFile);
         if (src->IsDir())
         {
-            Copy(src->GetChildrens().front(), copiedFile);
+            for (const auto& file : src->GetChildrens())
+            {
+                Copy(file, copiedFile);
+            }
         }
     }
 };
 
 TEST(FileCopier, CopyCopiesOneFile)
 {
-    FileMock::FileMockGuard fileToCopy = std::make_shared<FileMock>("fileName");
+    FileMock::FileMockGuard fileToCopy = std::make_shared<FileMock>("fileName", true);
     FileMock::FileMockGuard parentDist = std::make_shared<FileMock>("parent");
     FileCopier::Copy(fileToCopy, parentDist);
     EXPECT_EQ(1, parentDist->GetChildrens().size());
@@ -68,7 +71,7 @@ TEST(FileCopier, CopyCopiesOneFile)
 TEST(FileCopier, CopyCopiesOneFileWithSavingNameOfCopiedFile)
 {
     std::string copiedFileName = "fileName";
-    FileMock::FileMockGuard fileToCopy = std::make_shared<FileMock>(copiedFileName);
+    FileMock::FileMockGuard fileToCopy = std::make_shared<FileMock>(copiedFileName, true);
     FileMock::FileMockGuard parentDist = std::make_shared<FileMock>("parent");
     FileCopier::Copy(fileToCopy, parentDist);
     EXPECT_EQ(copiedFileName, parentDist->GetChildrens().front()->GetName());
@@ -79,7 +82,6 @@ TEST(FileCopier, CopyCopiesOneFileAndMockChangesItsStateToCopied)
     FileMock::FileMockGuard fileToCopy = std::make_shared<FileMock>("fileName", true);
     FileMock::FileMockGuard parentDist = std::make_shared<FileMock>("parent", false);
     FileCopier::Copy(fileToCopy, parentDist);
-    fileToCopy->CheckCopied();
 }
 
 TEST(FileCopier, CopyNotCopiesEmptyDir)
@@ -87,7 +89,6 @@ TEST(FileCopier, CopyNotCopiesEmptyDir)
     FileMock::FileMockGuard dirToCopy = std::make_shared<FileMock>("dirName", false, true);
     FileMock::FileMockGuard parentDist = std::make_shared<FileMock>("parent", false);
     FileCopier::Copy(dirToCopy, parentDist);
-    dirToCopy->CheckCopied();
 }
 
 TEST(FileCopier, CopyCopiesDirAndOneFileInIt)
@@ -97,6 +98,15 @@ TEST(FileCopier, CopyCopiesDirAndOneFileInIt)
     FileMock::FileMockGuard parentDist = std::make_shared<FileMock>("parent", false);
     dirToCopy->AddChild(fileToCopy);
     FileCopier::Copy(dirToCopy, parentDist);
-    dirToCopy->CheckCopied();
-    fileToCopy->CheckCopied();
+}
+
+TEST(FileCopier, CopyCopiesDirAndTwoFilesInIt)
+{
+    FileMock::FileMockGuard dirToCopy = std::make_shared<FileMock>("dirName", true, true);
+    FileMock::FileMockGuard firstFileToCopy = std::make_shared<FileMock>("fileName1", true);
+    FileMock::FileMockGuard secondFileToCopy = std::make_shared<FileMock>("fileName2", true);
+    FileMock::FileMockGuard parentDist = std::make_shared<FileMock>("parent", false);
+    dirToCopy->AddChild(firstFileToCopy);
+    dirToCopy->AddChild(secondFileToCopy);
+    FileCopier::Copy(dirToCopy, parentDist);
 }

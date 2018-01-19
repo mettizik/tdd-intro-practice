@@ -27,6 +27,7 @@ FileMock::FileMock(const std::string& name, bool isToBeCopied, bool isDir)
 
 FileMock::~FileMock()
 {
+    EXPECT_EQ(m_isToBeCopied, m_isCopied);
 }
 
 IFile::IFileGuard FileMock::Copy()
@@ -58,9 +59,4 @@ void FileMock::AddChild(IFileGuard child)
 const std::string& FileMock::GetName()
 {
     return m_name;
-}
-
-void FileMock::CheckCopied()
-{
-    EXPECT_EQ(m_isToBeCopied, m_isCopied);
 }
