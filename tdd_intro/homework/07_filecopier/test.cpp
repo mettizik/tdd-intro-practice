@@ -48,7 +48,12 @@ public:
         {
             return;
         }
-        parentDst->AddChild(src->Copy());
+        IFile::IFileGuard copiedFile = src->Copy();
+        parentDst->AddChild(copiedFile);
+        if (src->IsDir())
+        {
+            Copy(src->GetChildrens().front(), copiedFile);
+        }
     }
 };
 
@@ -83,4 +88,15 @@ TEST(FileCopier, CopyNotCopiesEmptyDir)
     FileMock::FileMockGuard parentDist = std::make_shared<FileMock>("parent", false);
     FileCopier::Copy(dirToCopy, parentDist);
     dirToCopy->CheckCopied();
+}
+
+TEST(FileCopier, CopyCopiesDirAndOneFileInIt)
+{
+    FileMock::FileMockGuard dirToCopy = std::make_shared<FileMock>("dirName", true, true);
+    FileMock::FileMockGuard fileToCopy = std::make_shared<FileMock>("fileName", true);
+    FileMock::FileMockGuard parentDist = std::make_shared<FileMock>("parent", false);
+    dirToCopy->AddChild(fileToCopy);
+    FileCopier::Copy(dirToCopy, parentDist);
+    dirToCopy->CheckCopied();
+    fileToCopy->CheckCopied();
 }
