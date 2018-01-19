@@ -110,3 +110,12 @@ TEST(FileCopier, CopyCopiesDirAndTwoFilesInIt)
     dirToCopy->AddChild(secondFileToCopy);
     FileCopier::Copy(dirToCopy, parentDist);
 }
+
+TEST(FileCopier, CopyCopiesDirAndNotCopiesEmptyDirInIt)
+{
+    FileMock::FileMockGuard dirToCopy = std::make_shared<FileMock>("dirName", true, true);
+    FileMock::FileMockGuard emptyDirToCopy = std::make_shared<FileMock>("emptyDir", false, true);
+    FileMock::FileMockGuard parentDist = std::make_shared<FileMock>("parent", false);
+    dirToCopy->AddChild(emptyDirToCopy);
+    FileCopier::Copy(dirToCopy, parentDist);
+}
