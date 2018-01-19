@@ -14,7 +14,9 @@ public:
     IFileGuard GetParent();
     const IFile::ChildFiles& GetChildrens();
     void AddChild(IFileGuard);
+    const std::string& GetName();
 
 private:
     IFile::ChildFiles m_childrens;
+    std::string m_name;
 };

@@ -7,9 +7,9 @@ FileMock::FileMock()
 }
 
 FileMock::FileMock(const std::string& name)
-    : FileMock()
+    : m_childrens(0)
+    , m_name(name)
 {
-    name;
 }
 
 IFile::IFileGuard FileMock::Copy()
@@ -35,4 +35,9 @@ const IFile::ChildFiles& FileMock::GetChildrens()
 void FileMock::AddChild(IFileGuard child)
 {
     m_childrens.push_back(child);
+}
+
+const std::string& FileMock::GetName()
+{
+    return m_name;
 }

@@ -55,3 +55,12 @@ TEST(FileCopier, CopyCopiesOneFile)
     FileCopier::Copy(fileToCopy, parentDist);
     EXPECT_EQ(1, parentDist->GetChildrens().size());
 }
+
+TEST(FileCopier, CopyCopiesOneFileWithSavingNameOfCopiedFile)
+{
+    std::string copiedFileName = "fileName";
+    FileMock::FileMockGuard fileToCopy = std::make_shared<FileMock>(copiedFileName);
+    FileMock::FileMockGuard parentDist = std::make_shared<FileMock>("parent");
+    FileCopier::Copy(fileToCopy, parentDist);
+    EXPECT_EQ(copiedFileName, parentDist->GetChildrens().front()->GetName());
+}

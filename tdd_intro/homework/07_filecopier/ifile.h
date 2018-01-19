@@ -11,4 +11,5 @@ public:
     virtual IFileGuard GetParent() = 0;
     virtual const ChildFiles& GetChildrens() = 0;
     virtual void AddChild(IFileGuard) = 0;
+    virtual const std::string& GetName() = 0;
 };
