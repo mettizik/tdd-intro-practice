@@ -2,11 +2,12 @@
 #include "filemock.h"
 
 FileMock::FileMock()
+    : m_childrens(0)
 {
-
 }
 
 FileMock::FileMock(const std::string& name)
+    : FileMock()
 {
     name;
 }
@@ -28,8 +29,10 @@ IFile::IFileGuard FileMock::GetParent()
 
 const IFile::ChildFiles& FileMock::GetChildrens()
 {
-    return ChildFiles{};
+    return m_childrens;
 }
 
-void FileMock::AddChild(IFileGuard)
-{}
+void FileMock::AddChild(IFileGuard child)
+{
+    m_childrens.push_back(child);
+}

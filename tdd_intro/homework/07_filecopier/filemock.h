@@ -14,4 +14,7 @@ public:
     IFileGuard GetParent();
     const IFile::ChildFiles& GetChildrens();
     void AddChild(IFileGuard);
+
+private:
+    IFile::ChildFiles m_childrens;
 };

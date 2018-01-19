@@ -42,19 +42,16 @@ class IFile
 class FileCopier
 {
 public:
-    static void Copy(const IFile& src, IFile& parentDst)
+    static void Copy(IFile::IFileGuard src, IFile::IFileGuard parentDst)
     {
-        src;
-        parentDst;
+        parentDst->AddChild(src);
     }
 };
 
-class FileMock;
-
 TEST(FileCopier, CopyCopiesOneFile)
 {
-    FileMock fileToCopy("fileName");
-    FileMock parentDist("parent");
+    FileMock::FileMockGuard fileToCopy = std::make_shared<FileMock>("fileName");
+    FileMock::FileMockGuard parentDist = std::make_shared<FileMock>("parent");
     FileCopier::Copy(fileToCopy, parentDist);
-    EXPECT_EQ(1, parentDist.GetChildrens().size());
+    EXPECT_EQ(1, parentDist->GetChildrens().size());
 }
