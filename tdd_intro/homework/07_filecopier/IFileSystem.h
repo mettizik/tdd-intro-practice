@@ -1,7 +1,12 @@
 #pragma once
 #include "vector"
 
-using Files = std::vector<std::string>;
+struct File
+{
+    bool isDir;
+    std::string name;
+};
+using Files = std::vector<File>;
 
 class IFileSystem
 {

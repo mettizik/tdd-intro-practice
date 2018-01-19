@@ -102,7 +102,7 @@ TEST(FileCopier, CopyFolderWithOneFile)
     FileCopier copier(&fsys);
 
     ON_CALL(fsys, ReadDir(testing::_))
-            .WillByDefault(testing::Return(Files{"img.jpg"}));
+            .WillByDefault(testing::Return(Files{{false, "img.jpg"}}));
 
     EXPECT_CALL(fsys, ReadDir("C:/"))
             .Times(1);
@@ -118,7 +118,7 @@ TEST(FileCopier, CopyFolderWithSeveralFiles)
     FileCopier copier(&fsys);
 
     ON_CALL(fsys, ReadDir(testing::_))
-            .WillByDefault(testing::Return(Files{"img.jpg", "img2.jpg", "img3.jpg"}));
+            .WillByDefault(testing::Return(Files{{false, "img.jpg"}, {false, "img2.jpg"}, {false, "img3.jpg"}}));
 
     EXPECT_CALL(fsys, ReadDir("C:/"))
             .Times(1);
@@ -128,6 +128,24 @@ TEST(FileCopier, CopyFolderWithSeveralFiles)
             .Times(1);
     EXPECT_CALL(fsys, CopyFile("C:/img3.jpg", "D:/img3.jpg"))
             .Times(1);
+
+    EXPECT_TRUE(copier.Copy("C:/", "D:/"));
+}
+
+TEST(FileCopier, CopyFolderWithEmptyFolder)
+{
+    MockFileSystem fsys;
+    FileCopier copier(&fsys);
+
+    ON_CALL(fsys, ReadDir("C:/"))
+            .WillByDefault(testing::Return(Files{{true, "foto"}}));
+    ON_CALL(fsys, ReadDir("C:/foto"))
+            .WillByDefault(testing::Return(Files{}));
+
+    EXPECT_CALL(fsys, ReadDir("C:/"))
+            .Times(1);
+    EXPECT_CALL(fsys, CopyFile(testing::_, testing::_))
+            .Times(0);
 
     EXPECT_TRUE(copier.Copy("C:/", "D:/"));
 }
