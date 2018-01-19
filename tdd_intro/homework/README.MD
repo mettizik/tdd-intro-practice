@@ -122,7 +122,7 @@ Example input and output
 
  _  _  _  _  _  _  _  _  _
  _| _| _| _| _| _| _| _| _|
-|_ |_ |_ |_ |_ |_ |_ |_ |_ 
+|_ |_ |_ |_ |_ |_ |_ |_ |_
 
 => 222222222
 
@@ -169,7 +169,7 @@ Example input and output
 
     _  _     _  _  _  _  _
   | _| _||_||_ |_   ||_||_|
-  ||_  _|  | _||_|  ||_| _| 
+  ||_  _|  | _||_|  ||_| _|
 
 => 123456789
 ```
@@ -229,7 +229,7 @@ Example input and output:
 => 49006771? ILL
     _  _     _  _  _  _  _
   | _| _||_| _ |_   ||_||_|
-  ||_  _|  | _||_|  ||_| _ 
+  ||_  _|  | _||_|  ||_| _
 
 => 1234?678? ILL
 ```
@@ -295,7 +295,7 @@ Example input and output:
 => 490067715 AMB ['490067115', '490067719', '490867715']
     _  _     _  _  _  _  _
  _| _| _||_||_ |_   ||_||_|
-  ||_  _|  | _||_|  ||_| _| 
+  ||_  _|  | _||_|  ||_| _|
 
 => 123456789
  _     _  _  _  _  _  _
@@ -307,9 +307,30 @@ Example input and output:
 |_||_|| ||_||_   |  |  | _
   | _||_||_||_|  |  |  | _|
 
-=> 490867715 
+=> 490867715
 ```
+
 ## Mocking & Faking practicies
 
-### TODO
+### Folder copying
 
+Implement a class for recursively copying files from source directory to the destination directory.
+
+A folder hierarchy and file names must be saved.
+
+Empty folders should not be copied at all.
+
+For example it can be something that looks like a
+
+```
+class IFileCopier
+{
+public:
+	virtual void Copy(const std::string& src, const std::string& dst) = 0;
+};
+```
+
+You don't need to test filesystem functions.
+To work with a filesystem you should declare an interface and to mock it.
+
+You can start with GMock from https://goo.gl/j7EkQX, good luck!
