@@ -39,23 +39,28 @@ class IFile
 }
 */
 
+namespace
+{
+    bool isEmptyDir(IFile::IFileGuard src)
+    {
+        return src->IsDir() && src->GetChildrens().empty();
+    }
+}
+
 class FileCopier
 {
 public:
     static void Copy(IFile::IFileGuard src, IFile::IFileGuard parentDst)
     {
-        if (src->IsDir() && src->GetChildrens().empty())
+        if (isEmptyDir(src))
         {
             return;
         }
         IFile::IFileGuard copiedFile = src->Copy();
         parentDst->AddChild(copiedFile);
-        if (src->IsDir())
+        for (const auto& file : src->GetChildrens())
         {
-            for (const auto& file : src->GetChildrens())
-            {
-                Copy(file, copiedFile);
-            }
+            Copy(file, copiedFile);
         }
     }
 };
