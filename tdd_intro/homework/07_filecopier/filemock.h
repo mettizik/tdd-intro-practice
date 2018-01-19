@@ -9,6 +9,7 @@ public:
     FileMock();
     explicit FileMock(const std::string& name);
     FileMock(const std::string& name, bool isToBeCopied);
+    FileMock(const std::string& name, bool isToBeCopied, bool isDir);
     ~FileMock();
 
     IFileGuard Copy();
@@ -24,4 +25,5 @@ private:
     std::string m_name;
     bool m_isToBeCopied;
     bool m_isCopied;
+    bool m_isDir;
 };

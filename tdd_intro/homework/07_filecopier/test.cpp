@@ -44,6 +44,10 @@ class FileCopier
 public:
     static void Copy(IFile::IFileGuard src, IFile::IFileGuard parentDst)
     {
+        if (src->IsDir() && src->GetChildrens().empty())
+        {
+            return;
+        }
         parentDst->AddChild(src->Copy());
     }
 };
@@ -71,4 +75,12 @@ TEST(FileCopier, CopyCopiesOneFileAndMockChangesItsStateToCopied)
     FileMock::FileMockGuard parentDist = std::make_shared<FileMock>("parent", false);
     FileCopier::Copy(fileToCopy, parentDist);
     fileToCopy->CheckCopied();
+}
+
+TEST(FileCopier, CopyNotCopiesEmptyDir)
+{
+    FileMock::FileMockGuard dirToCopy = std::make_shared<FileMock>("dirName", false, true);
+    FileMock::FileMockGuard parentDist = std::make_shared<FileMock>("parent", false);
+    FileCopier::Copy(dirToCopy, parentDist);
+    dirToCopy->CheckCopied();
 }
