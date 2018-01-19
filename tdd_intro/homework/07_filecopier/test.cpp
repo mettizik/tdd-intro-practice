@@ -100,6 +100,19 @@ TEST(FileCopier, CopyCopiesDirAndOneFileInIt)
     FileCopier::Copy(dirToCopy, parentDist);
 }
 
+TEST(FileCopier, CopyCopiesDirAndOneFileInItWithSavingHierarchy)
+{
+    std::string dirName = "dirName";
+    std::string fileName = "dirName";
+    FileMock::FileMockGuard dirToCopy = std::make_shared<FileMock>(dirName, true, true);
+    FileMock::FileMockGuard fileToCopy = std::make_shared<FileMock>(fileName, true);
+    FileMock::FileMockGuard parentDist = std::make_shared<FileMock>("parent", false);
+    dirToCopy->AddChild(fileToCopy);
+    FileCopier::Copy(dirToCopy, parentDist);
+    EXPECT_EQ(dirName, parentDist->GetChildrens().front()->GetName());
+    EXPECT_EQ(fileName, parentDist->GetChildrens().front()->GetChildrens().front()->GetName());
+}
+
 TEST(FileCopier, CopyCopiesDirAndTwoFilesInIt)
 {
     FileMock::FileMockGuard dirToCopy = std::make_shared<FileMock>("dirName", true, true);
