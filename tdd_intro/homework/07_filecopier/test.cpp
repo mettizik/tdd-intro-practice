@@ -144,8 +144,32 @@ TEST(FileCopier, CopyFolderWithEmptyFolder)
 
     EXPECT_CALL(fsys, ReadDir("C:/"))
             .Times(1);
+    EXPECT_CALL(fsys, ReadDir("C:/foto"))
+            .Times(1);
     EXPECT_CALL(fsys, CopyFile(testing::_, testing::_))
             .Times(0);
+
+    EXPECT_TRUE(copier.Copy("C:/", "D:/"));
+}
+
+TEST(FileCopier, CopyFolderWithNotEmptyFolder)
+{
+    MockFileSystem fsys;
+    FileCopier copier(&fsys);
+
+    ON_CALL(fsys, ReadDir("C:/"))
+            .WillByDefault(testing::Return(Files{{true, "foto"}}));
+    ON_CALL(fsys, ReadDir("C:/foto"))
+            .WillByDefault(testing::Return(Files{{false, "img.jpg"}, {false, "img2.jpg"}}));
+
+    EXPECT_CALL(fsys, ReadDir("C:/"))
+            .Times(1);
+    EXPECT_CALL(fsys, ReadDir("C:/foto"))
+            .Times(1);
+    EXPECT_CALL(fsys, CopyFile("C:/foto/img.jpg", "D:/foto/img.jpg"))
+            .Times(1);
+    EXPECT_CALL(fsys, CopyFile("C:/foto/img2.jpg", "D:/foto/img2.jpg"))
+            .Times(1);
 
     EXPECT_TRUE(copier.Copy("C:/", "D:/"));
 }
