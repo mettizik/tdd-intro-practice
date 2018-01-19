@@ -173,3 +173,39 @@ TEST(FileCopier, CopyFolderWithNotEmptyFolder)
 
     EXPECT_TRUE(copier.Copy("C:/", "D:/"));
 }
+
+TEST(FileCopier, AcceptanceTest)
+{
+    MockFileSystem fsys;
+    FileCopier copier(&fsys);
+
+    ON_CALL(fsys, ReadDir("C:/"))
+            .WillByDefault(testing::Return(Files{{true, "foto"}, {true, "video"}}));
+    ON_CALL(fsys, ReadDir("C:/foto"))
+            .WillByDefault(testing::Return(Files{{false, "img.jpg"}, {false, "img2.jpg"}}));
+    ON_CALL(fsys, ReadDir("C:/video"))
+            .WillByDefault(testing::Return(Files{{true, "fun"}, {false, "my.mp4"}}));
+    ON_CALL(fsys, ReadDir("C:/video/fun"))
+            .WillByDefault(testing::Return(Files{{false, "1.mp4"}, {false, "2.mp4"}}));
+
+    EXPECT_CALL(fsys, ReadDir("C:/"))
+            .Times(1);
+    EXPECT_CALL(fsys, ReadDir("C:/foto"))
+            .Times(1);
+    EXPECT_CALL(fsys, ReadDir("C:/video"))
+            .Times(1);
+    EXPECT_CALL(fsys, ReadDir("C:/video/fun"))
+            .Times(1);
+    EXPECT_CALL(fsys, CopyFile("C:/foto/img.jpg", "D:/foto/img.jpg"))
+            .Times(1);
+    EXPECT_CALL(fsys, CopyFile("C:/foto/img2.jpg", "D:/foto/img2.jpg"))
+            .Times(1);
+    EXPECT_CALL(fsys, CopyFile("C:/video/my.mp4", "D:/video/my.mp4"))
+            .Times(1);
+    EXPECT_CALL(fsys, CopyFile("C:/video/fun/1.mp4", "D:/video/fun/1.mp4"))
+            .Times(1);
+    EXPECT_CALL(fsys, CopyFile("C:/video/fun/2.mp4", "D:/video/fun/2.mp4"))
+            .Times(1);
+
+    EXPECT_TRUE(copier.Copy("C:/", "D:/"));
+}
