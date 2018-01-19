@@ -12,9 +12,21 @@ FileMock::FileMock(const std::string& name)
 {
 }
 
+FileMock::FileMock(const std::string& name, bool isToBeCopied)
+    : m_childrens(0)
+    , m_name(name)
+    , m_isToBeCopied(isToBeCopied)
+{
+}
+
+FileMock::~FileMock()
+{
+}
+
 IFile::IFileGuard FileMock::Copy()
 {
-    return std::make_shared<FileMock>();
+    m_isCopied = true;
+    return std::make_shared<FileMock>(m_name);
 }
 
 bool FileMock::IsDir()
@@ -40,4 +52,9 @@ void FileMock::AddChild(IFileGuard child)
 const std::string& FileMock::GetName()
 {
     return m_name;
+}
+
+void FileMock::CheckCopied()
+{
+    EXPECT_EQ(m_isToBeCopied, m_isCopied);
 }

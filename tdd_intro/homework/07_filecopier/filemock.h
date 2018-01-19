@@ -7,7 +7,9 @@ public:
     using FileMockGuard = std::shared_ptr<FileMock>;
     using ChildMockFiles = std::vector<FileMockGuard>;
     FileMock();
-    FileMock(const std::string& name);
+    explicit FileMock(const std::string& name);
+    FileMock(const std::string& name, bool isToBeCopied);
+    ~FileMock();
 
     IFileGuard Copy();
     bool IsDir();
@@ -15,8 +17,11 @@ public:
     const IFile::ChildFiles& GetChildrens();
     void AddChild(IFileGuard);
     const std::string& GetName();
+    void CheckCopied();
 
 private:
     IFile::ChildFiles m_childrens;
     std::string m_name;
+    bool m_isToBeCopied;
+    bool m_isCopied;
 };
