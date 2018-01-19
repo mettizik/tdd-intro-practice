@@ -7,6 +7,10 @@ namespace
     {
         return src.find(dst) != std::string::npos;
     }
+    std::string GetFilename(const std::string& path)
+    {
+        return path.substr(path.rfind('/') + 1);
+    }
 }
 
 FileCopier::FileCopier(IFileSystem* fsys)
@@ -26,7 +30,7 @@ bool FileCopier::Copy(const std::string& src, const std::string& dst)
     }
     if (m_fsys->IsFile(src))
     {
-        m_fsys->CopyFile("C:/f.txt", "D:/f.txt");
+        m_fsys->CopyFile(src, dst + GetFilename(src));
         return true;
     }
 
