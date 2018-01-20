@@ -10,7 +10,7 @@ class ITimer
   public:
     virtual ~ITimer() {}
 
-    virtual void Start() = 0;
+    virtual void Start(uint32_t msec) = 0;
     virtual bool IsExpired() const = 0;
     virtual Duration TimeLeft() const = 0;
 };
