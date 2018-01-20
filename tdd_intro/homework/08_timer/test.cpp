@@ -17,3 +17,10 @@ TEST(Timer, Timer_Not_Expired)
     timer.Start();
     EXPECT_FALSE(timer.IsExpired());
 }
+
+TEST(Timer, Timer_Expired)
+{
+    Timer timer;
+    timer.Start();
+    EXPECT_TRUE(timer.IsExpired());
+}
