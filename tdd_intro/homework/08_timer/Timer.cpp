@@ -18,10 +18,15 @@ void Timer::Start(uint32_t msec)
 
 bool Timer::IsExpired() const
 {
-    return m_systemTime.CurrentSystemTime() - m_systemTime.GetSavedCurrentSystemTime() >= m_msec;
+    return GetDiffCurrentAndSavedTime() >= m_msec;
 }
 
 Duration Timer::TimeLeft() const
 {
-    return Duration(m_msec - (m_systemTime.CurrentSystemTime() - m_systemTime.GetSavedCurrentSystemTime()));
+    return Duration(m_msec - GetDiffCurrentAndSavedTime());
+}
+
+uint32_t Timer::GetDiffCurrentAndSavedTime() const
+{
+    return m_systemTime.CurrentSystemTime() - m_systemTime.GetSavedCurrentSystemTime();
 }

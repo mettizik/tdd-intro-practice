@@ -21,6 +21,9 @@ class Timer : public ITimer
     virtual Duration TimeLeft() const override;
 
 private:
+    uint32_t GetDiffCurrentAndSavedTime() const;
+
+private:
     ISystemTime& m_systemTime;
     uint32_t m_msec;
 };
