@@ -7,4 +7,9 @@ SUBDIRS += \
     04_leap_year \
     05_trinary_numbers \
     06_bank_ocr \
+<<<<<<< HEAD
     07_filecopier
+=======
+    07_filecopier \
+    08_timer
+>>>>>>> master

@@ -6,4 +6,4 @@ SUBDIRS += \
     03_word_wrapp \
     04_trinary \
     05_bank_ocr \
-    06_timer
+    06_filecopier
