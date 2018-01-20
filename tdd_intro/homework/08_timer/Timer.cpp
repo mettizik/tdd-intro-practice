@@ -18,10 +18,6 @@ void Timer::Start(uint32_t msec)
 
 bool Timer::IsExpired() const
 {
-    if (m_msec == 0)
-    {
-        return false;
-    }
     return m_systemTime.CurrentSystemTime() - m_systemTime.GetSavedCurrentSystemTime() >= m_msec;
 }
 

@@ -24,13 +24,13 @@ TEST(Timer, Timer_Take_0)
 {
     MockSystemTime mock;
     EXPECT_CALL(mock, SaveCurrentSystemTime()).Times(0);
-    EXPECT_CALL(mock, GetSavedCurrentSystemTime()).Times(0);
-    EXPECT_CALL(mock, CurrentSystemTime()).Times(0);
+    EXPECT_CALL(mock, GetSavedCurrentSystemTime()).Times(1);
+    EXPECT_CALL(mock, CurrentSystemTime()).Times(1);
 
     Timer timer(mock);
     timer.Start(0);
 
-    EXPECT_FALSE(timer.IsExpired());
+    EXPECT_TRUE(timer.IsExpired());
 }
 
 TEST(Timer, Timer_Not_Expired)
@@ -59,16 +59,17 @@ TEST(Timer, Timer_Expired)
     EXPECT_TRUE(timer.IsExpired());
 }
 
-TEST(Timer, Timer_TimeLeft)
+TEST(Timer, Timer_TimeLeft_Return_0)
 {
     MockSystemTime mock;
 
     EXPECT_CALL(mock, SaveCurrentSystemTime()).Times(0);
-    EXPECT_CALL(mock, GetSavedCurrentSystemTime()).Times(0);
-    EXPECT_CALL(mock, CurrentSystemTime()).Times(0);
+    EXPECT_CALL(mock, GetSavedCurrentSystemTime()).Times(1);
+    EXPECT_CALL(mock, CurrentSystemTime()).Times(1);
 
     Timer timer(mock);
     timer.Start(0);
+    EXPECT_TRUE(timer.IsExpired());
     EXPECT_EQ(Duration(0), timer.TimeLeft());
 }
 
