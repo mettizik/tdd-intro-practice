@@ -14,5 +14,6 @@ Followed by this specification:
 TEST(Timer, Timer_Not_Expired)
 {
     Timer timer;
+    timer.Start();
     EXPECT_FALSE(timer.IsExpired());
 }
