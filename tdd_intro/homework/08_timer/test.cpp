@@ -106,7 +106,7 @@ TEST(Timer, Timer_TimeLeft_Return_900_Start_Return_999)
 {
     MockSystemTime mock;
 
-    EXPECT_CALL(mock, SaveCurrentSystemTime()).Times(1);
+    EXPECT_CALL(mock, SaveCurrentSystemTime()).Times(2);
     EXPECT_CALL(mock, GetSavedCurrentSystemTime()).Times(4).WillRepeatedly(::testing::Return(1));
     EXPECT_CALL(mock, CurrentSystemTime()).Times(4).WillOnce(::testing::Return(101))
                                                    .WillOnce(::testing::Return(101))
@@ -122,4 +122,3 @@ TEST(Timer, Timer_TimeLeft_Return_900_Start_Return_999)
     EXPECT_FALSE(timer.IsExpired());
     EXPECT_EQ(Duration(999), timer.TimeLeft());
 }
-
