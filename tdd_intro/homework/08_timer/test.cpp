@@ -73,3 +73,17 @@ TEST(Timer, Timer_TimeLeft_Return_0)
     EXPECT_EQ(Duration(0), timer.TimeLeft());
 }
 
+TEST(Timer, Timer_TimeLeft_Return_999)
+{
+    MockSystemTime mock;
+
+    EXPECT_CALL(mock, SaveCurrentSystemTime()).Times(0);
+    EXPECT_CALL(mock, GetSavedCurrentSystemTime()).Times(1).WillOnce(::testing::Return(1));
+    EXPECT_CALL(mock, CurrentSystemTime()).Times(1).WillOnce(::testing::Return(1000));
+
+    Timer timer(mock);
+    timer.Start(1000);
+    EXPECT_FALSE(timer.IsExpired());
+    EXPECT_EQ(Duration(999), timer.TimeLeft());
+}
+
