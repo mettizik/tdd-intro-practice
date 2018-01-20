@@ -58,3 +58,17 @@ TEST(Timer, Timer_Expired)
     timer.Start(1000);
     EXPECT_TRUE(timer.IsExpired());
 }
+
+TEST(Timer, Timer_TimeLeft)
+{
+    MockSystemTime mock;
+
+    EXPECT_CALL(mock, SaveCurrentSystemTime()).Times(0);
+    EXPECT_CALL(mock, GetSavedCurrentSystemTime()).Times(0);
+    EXPECT_CALL(mock, CurrentSystemTime()).Times(0);
+
+    Timer timer(mock);
+    timer.Start(0);
+    EXPECT_EQ(Duration(0), timer.TimeLeft());
+}
+
