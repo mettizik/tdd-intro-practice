@@ -23,5 +23,5 @@ bool Timer::IsExpired() const
 
 Duration Timer::TimeLeft() const
 {
-    return Duration(0);
+    return Duration(m_msec - (m_systemTime.CurrentSystemTime() - m_systemTime.GetSavedCurrentSystemTime()));
 }
