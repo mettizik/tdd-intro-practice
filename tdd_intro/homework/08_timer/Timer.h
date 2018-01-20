@@ -7,7 +7,7 @@ public:
     virtual ~ISystemTime() {}
 
     virtual uint32_t CurrentSystemTime() = 0;
-    virtual uint32_t SaveCurrentSystemTime() = 0;
+    virtual void SaveCurrentSystemTime() = 0;
     virtual uint32_t GetSavedCurrentSystemTime() = 0;
 };
 
