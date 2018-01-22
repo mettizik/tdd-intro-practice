@@ -1,16 +1,20 @@
 #include "Timer.h"
 
-void Timer::Start()
+Timer::Timer(Duration duration)
+    : m_duration(duration)
 {
-
 }
 
-bool Timer::IsExpired() const
+void Timer::Start(TimeLambda& currentTime)
+{
+}
+
+bool Timer::IsExpired(TimeLambda& currentTime) const
 {
     return false;
 }
 
-Duration Timer::TimeLeft() const
+Duration Timer::TimeLeft(TimeLambda& currentTime) const
 {
     return Duration(0);
 }

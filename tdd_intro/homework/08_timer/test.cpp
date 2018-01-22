@@ -21,9 +21,13 @@ Followed by this specification:
    6. Start called and before timer expires start called one more time and it is still not expired.
 */
 
+using namespace std::chrono_literals;
+
 TEST(Timer, TimerNotExpiresIfFlowedTimeIsLessThanTimerWasBoundTo)
 {
-    Timer timer;
-    timer.Start();
-    EXPECT_FALSE(timer.IsExpired());
+    Timer timer{2s};
+    TimeLambda startOnOneSecond = [](){return TimePoint{1s};};
+    TimeLambda checkOnTwoSeconds = [](){return TimePoint{2s};};
+    timer.Start(startOnOneSecond);
+    EXPECT_FALSE(timer.IsExpired(checkOnTwoSeconds));
 }
