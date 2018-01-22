@@ -31,3 +31,12 @@ TEST(Timer, TimerNotExpiresIfFlowedTimeIsLessThanTimerWasBoundTo)
     timer.Start(startOnOneSecond);
     EXPECT_FALSE(timer.IsExpired(checkOnTwoSeconds));
 }
+
+TEST(Timer, TimerExpiresIfFlowedTimeIsMoreThanTimerWasBoundTo)
+{
+    Timer timer{2s};
+    TimeLambda startOnOneSecond = [](){return TimePoint{1s};};
+    TimeLambda checkOnFourSeconds = [](){return TimePoint{4s};};
+    timer.Start(startOnOneSecond);
+    EXPECT_TRUE(timer.IsExpired(checkOnFourSeconds));
+}
