@@ -6,4 +6,10 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-    test.cpp
+    test.cpp \
+    filemock.cpp
+
+HEADERS += \
+    ifile.h \
+    filemock.h \
+    stdafx.h
