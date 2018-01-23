@@ -83,3 +83,12 @@ TEST(Timer, TimerExpiresAndThanStartCalledAndTimerNoLongerExpired)
     timer.Start(s_twoSeconds);
     EXPECT_FALSE(timer.IsExpired(s_twoSeconds));
 }
+
+TEST(Timer, TimerNotExpiredAndStartCalledAndTimerStillNotExpired)
+{
+    Timer timer{2s};
+    timer.Start(s_oneSecond);
+    EXPECT_FALSE(timer.IsExpired(s_twoSeconds));
+    timer.Start(s_twoSeconds);
+    EXPECT_FALSE(timer.IsExpired(s_threeSeconds));
+}
