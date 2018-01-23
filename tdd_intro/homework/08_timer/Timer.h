@@ -11,6 +11,9 @@ public:
     virtual Duration TimeLeft(const TimeLambda& currentTime) const override;
 
 private:
+    TimePoint ExpiredOn() const;
+
+private:
     Duration m_duration;
     TimePoint m_startPoint;
 };

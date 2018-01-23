@@ -12,7 +12,7 @@ void Timer::Start(const TimeLambda& currentTime)
 
 bool Timer::IsExpired(const TimeLambda& currentTime) const
 {
-    return (m_duration + m_startPoint) <= currentTime();
+    return ExpiredOn() <= currentTime();
 }
 
 Duration Timer::TimeLeft(const TimeLambda& currentTime) const
@@ -20,7 +20,12 @@ Duration Timer::TimeLeft(const TimeLambda& currentTime) const
     Duration ret{0};
     if (!IsExpired(currentTime))
     {
-        ret = m_duration + m_startPoint - currentTime();
+        ret = ExpiredOn() - currentTime();
     }
     return ret;
+}
+
+TimePoint Timer::ExpiredOn() const
+{
+    return m_duration + m_startPoint;
 }
