@@ -58,3 +58,11 @@ TEST(Timer, TimeLeftReturnsTimeLeftForExpiring)
     Duration expectedDuration{8s};
     EXPECT_EQ(expectedDuration, timer.TimeLeft(s_threeSeconds));
 }
+
+TEST(Timer, TimeLeftReturns0IfTimeJustExpired)
+{
+    Timer timer{2s};
+    timer.Start(s_oneScond);
+    Duration expectedDuration{0s};
+    EXPECT_EQ(expectedDuration, timer.TimeLeft(s_threeSeconds));
+}
