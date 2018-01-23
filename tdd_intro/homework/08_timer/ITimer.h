@@ -12,7 +12,7 @@ class ITimer
   public:
     virtual ~ITimer() {}
 
-    virtual void Start(TimeLambda& currentTime) = 0;
-    virtual bool IsExpired(TimeLambda& currentTime) const = 0;
-    virtual Duration TimeLeft(TimeLambda& currentTime) const = 0;
+    virtual void Start(const TimeLambda& currentTime) = 0;
+    virtual bool IsExpired(const TimeLambda& currentTime) const = 0;
+    virtual Duration TimeLeft(const TimeLambda& currentTime) const = 0;
 };
