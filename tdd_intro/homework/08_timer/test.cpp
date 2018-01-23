@@ -74,3 +74,12 @@ TEST(Timer, TimeLeftReturns0IfTimeWasExpiredWhileAgo)
     Duration expectedDuration{0s};
     EXPECT_EQ(expectedDuration, timer.TimeLeft(s_fourSeconds));
 }
+
+TEST(Timer, TimerExpiresAndThanStartCalledAndTimerNoLongerExpired)
+{
+    Timer timer{1s};
+    timer.Start(s_oneSecond);
+    EXPECT_TRUE(timer.IsExpired(s_twoSeconds));
+    timer.Start(s_twoSeconds);
+    EXPECT_FALSE(timer.IsExpired(s_twoSeconds));
+}
