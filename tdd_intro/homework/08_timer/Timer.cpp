@@ -18,5 +18,5 @@ bool Timer::IsExpired(TimeLambda& currentTime) const
 
 Duration Timer::TimeLeft(TimeLambda& currentTime) const
 {
-    return Duration(0);
+    return m_duration - (currentTime() - m_startPoint);
 }

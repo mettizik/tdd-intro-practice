@@ -49,3 +49,13 @@ TEST(Timer, TimerExpiresIfFlowedTimeIsExectAsTimerWasBoundTo)
     timer.Start(startOnOneSecond);
     EXPECT_TRUE(timer.IsExpired(checkOnThreeSeconds));
 }
+
+TEST(Timer, TimeLeftReturnsTimeLeftForExpiring)
+{
+    Timer timer{10s};
+    TimeLambda startOnOneSecond = [](){return TimePoint{1s};};
+    TimeLambda checkOnThreeSeconds = [](){return TimePoint{3s};};
+    timer.Start(startOnOneSecond);
+    Duration expectedDuration{8s};
+    EXPECT_EQ(expectedDuration, timer.TimeLeft(checkOnThreeSeconds));
+}
