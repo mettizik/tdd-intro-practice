@@ -12,11 +12,16 @@ void Timer::Start(const TimeLambda& currentTime)
 
 bool Timer::IsExpired(const TimeLambda& currentTime) const
 {
-    TimePoint currenPoint = currentTime();
-    return (m_duration + m_startPoint) <= currenPoint;
+    TimePoint currentPoint = currentTime();
+    return (m_duration + m_startPoint) <= currentPoint;
 }
 
 Duration Timer::TimeLeft(const TimeLambda& currentTime) const
 {
-    return m_duration - (currentTime() - m_startPoint);
+    Duration ret{0};
+    if (!IsExpired(currentTime))
+    {
+        ret = m_duration - (currentTime() - m_startPoint);
+    }
+    return ret;
 }

@@ -24,8 +24,8 @@ Followed by this specification:
 using namespace std::chrono_literals;
 namespace
 {
-    const TimeLambda s_oneScond = [](){return TimePoint{1s};};
-    const TimeLambda s_twoSconds = [](){return TimePoint{2s};};
+    const TimeLambda s_oneSecond = [](){return TimePoint{1s};};
+    const TimeLambda s_twoSeconds = [](){return TimePoint{2s};};
     const TimeLambda s_threeSeconds = [](){return TimePoint{3s};};
     const TimeLambda s_fourSeconds = [](){return TimePoint{4s};};
 }
@@ -33,28 +33,28 @@ namespace
 TEST(Timer, TimerNotExpiresIfFlowedTimeIsLessThanTimerWasBoundTo)
 {
     Timer timer{2s};
-    timer.Start(s_oneScond);
-    EXPECT_FALSE(timer.IsExpired(s_twoSconds));
+    timer.Start(s_oneSecond);
+    EXPECT_FALSE(timer.IsExpired(s_twoSeconds));
 }
 
 TEST(Timer, TimerExpiresIfFlowedTimeIsMoreThanTimerWasBoundTo)
 {
     Timer timer{2s};
-    timer.Start(s_oneScond);
+    timer.Start(s_oneSecond);
     EXPECT_TRUE(timer.IsExpired(s_fourSeconds));
 }
 
 TEST(Timer, TimerExpiresIfFlowedTimeIsExectAsTimerWasBoundTo)
 {
     Timer timer{2s};
-    timer.Start(s_oneScond);
+    timer.Start(s_oneSecond);
     EXPECT_TRUE(timer.IsExpired(s_threeSeconds));
 }
 
 TEST(Timer, TimeLeftReturnsTimeLeftForExpiring)
 {
     Timer timer{10s};
-    timer.Start(s_oneScond);
+    timer.Start(s_oneSecond);
     Duration expectedDuration{8s};
     EXPECT_EQ(expectedDuration, timer.TimeLeft(s_threeSeconds));
 }
@@ -62,7 +62,15 @@ TEST(Timer, TimeLeftReturnsTimeLeftForExpiring)
 TEST(Timer, TimeLeftReturns0IfTimeJustExpired)
 {
     Timer timer{2s};
-    timer.Start(s_oneScond);
+    timer.Start(s_oneSecond);
     Duration expectedDuration{0s};
     EXPECT_EQ(expectedDuration, timer.TimeLeft(s_threeSeconds));
+}
+
+TEST(Timer, TimeLeftReturns0IfTimeWasExpiredWhileAgo)
+{
+    Timer timer{2s};
+    timer.Start(s_oneSecond);
+    Duration expectedDuration{0s};
+    EXPECT_EQ(expectedDuration, timer.TimeLeft(s_fourSeconds));
 }
