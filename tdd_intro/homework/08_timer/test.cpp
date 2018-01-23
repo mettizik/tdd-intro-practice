@@ -13,11 +13,11 @@ Followed by this specification:
 
 /*
    Test list:
-   1. Start called and IsExpired returns false on non expired time
-   2. Start called and IsExpired returns true on expired time
-   3. Start called and TimeLeft returns duration beetwin maxTime and 1 on non expired time
-   4. Start called and TimeLeft returns 0 on expired time
-   5. Start called and after timer expires start called one more time and timer is no longer expired
+   1. Start called and IsExpired returns false on non expired time;
+   2. Start called and IsExpired returns true on expired time;
+   3. Start called and TimeLeft returns duration beetwin maxTime and 1 on non expired time;
+   4. Start called and TimeLeft returns 0 on expired time;
+   5. Start called and after timer expires start called one more time and timer is no longer expired;
    6. Start called and before timer expires start called one more time and it is still not expired.
 */
 
@@ -39,4 +39,13 @@ TEST(Timer, TimerExpiresIfFlowedTimeIsMoreThanTimerWasBoundTo)
     TimeLambda checkOnFourSeconds = [](){return TimePoint{4s};};
     timer.Start(startOnOneSecond);
     EXPECT_TRUE(timer.IsExpired(checkOnFourSeconds));
+}
+
+TEST(Timer, TimerExpiresIfFlowedTimeIsExectAsTimerWasBoundTo)
+{
+    Timer timer{2s};
+    TimeLambda startOnOneSecond = [](){return TimePoint{1s};};
+    TimeLambda checkOnThreeSeconds = [](){return TimePoint{3s};};
+    timer.Start(startOnOneSecond);
+    EXPECT_TRUE(timer.IsExpired(checkOnThreeSeconds));
 }
