@@ -16,6 +16,8 @@ public:
     MockFilesystem(Contents_mt initialContents);
     bool Exists(const PathType &path) const override;
     bool IsDirectory(const PathType& path) const override;
+    PathType_vt Childrens(const PathType& path) const override;
+    void CopyFile(const PathType& src, const PathType& dst) override;
 
 private:
     Contents_mt m_contents;
@@ -36,6 +38,25 @@ bool MockFilesystem::IsDirectory(const PathType& path) const
     return m_contents.find(path)->second == MockFiletype::Directory;
 }
 
+PathType_vt MockFilesystem::Childrens(const PathType& path) const
+{
+    PathType_vt result;
+    for (const std::pair<PathType, MockFiletype>& entry : m_contents)
+    {
+        const PathType& entryPath = entry.first;
+        if (entryPath.find(path) != PathType::npos && entryPath != path)
+        {
+            result.push_back(entryPath);
+        }
+    }
+    return result;
+}
+
+void MockFilesystem::CopyFile(const PathType& src, const PathType& dst)
+{
+    m_contents[dst] = MockFiletype::NormalFile;
+}
+
 TEST(CopyDirectory, returns_nosuchfile_when_source_is_absent)
 {
     MockFilesystem fs({});
@@ -52,4 +73,13 @@ TEST(CopyDirectory, returns_success_when_source_is_empty)
 {
     MockFilesystem fs({{"/source", MockFiletype::Directory}});
     EXPECT_FALSE(CopyDirectory(&fs, "/source", "/destination"));
+}
+
+TEST(CopyDirectory, returns_success_and_copies_one_file)
+{
+    MockFilesystem fs({{"/source", MockFiletype::Directory},
+                       {"/source/file", MockFiletype::NormalFile},
+                       {"/destination", MockFiletype::Directory}});
+    EXPECT_FALSE(CopyDirectory(&fs, "/source", "/destination"));
+    EXPECT_EQ(fs.Childrens("/destination"), PathType_vt{"/destination/file"});
 }

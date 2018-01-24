@@ -10,5 +10,10 @@ std::error_code CopyDirectory(IFilesystem* fs, const PathType& src, const PathTy
     {
         return std::make_error_code(std::errc::not_a_directory);
     }
+    for (const PathType& childrenPath : fs->Childrens(src))
+    {
+        const PathType childrenDstPath = dst + childrenPath.substr(src.size());
+        fs->CopyFile(childrenPath, childrenDstPath);
+    }
     return {};
 }
