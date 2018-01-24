@@ -5,7 +5,7 @@
 Implement a timer class that implements ITimer interface defined in header file ITimer.h
 
 Followed by this specification:
-    Timer allows to determine if specific period of time expired or not since Start was called last time
+    + Timer allows to determine if specific period of time expired or not since Start was called last time
     Timer allows to determine how much time left till period is expired
     Timer can be started again any time, no metter in what state it is
 */
@@ -28,4 +28,10 @@ TEST(Timer, IsExpiredReturnstTrueWhenTimerStarted)
     Timer t;
     t.Start(Clock::now() + std::chrono::seconds(0));
     EXPECT_TRUE(t.IsExpired(Clock::now()));
+}
+
+TEST(Timer, TimeLeftReturnsZeroWhenTimerIsNotStarted)
+{
+    Timer t;
+    EXPECT_EQ(Duration{0}, t.TimeLeft());
 }

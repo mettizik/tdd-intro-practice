@@ -13,5 +13,5 @@ bool Timer::IsExpired(TimePoint now) const
 
 Duration Timer::TimeLeft() const
 {
-    return Duration();
+    return Duration{0};
 }
