@@ -8,11 +8,11 @@ typedef std::chrono::time_point<Clock> TimePoint;
 class Timer
 {
 public:
-    void Start(TimePoint now, Duration duration);
+    void Start(TimePoint endTime);
     bool IsExpired(TimePoint now) const;
     Duration TimeLeft() const;
 
 private:
-    TimePoint m_start;
-    Duration m_duration;
+    TimePoint m_endTime;
+    bool m_started = false;
 };

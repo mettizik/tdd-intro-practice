@@ -19,6 +19,13 @@ TEST(Timer, IsExpiredReturnsFalseWhenTimerIsNotStarted)
 TEST(Timer, IsExpiredReturnsFalseWhenTimerStarted)
 {
     Timer t;
-    t.Start(Clock::now(), std::chrono::seconds(2));
+    t.Start(Clock::now() + std::chrono::seconds(2));
     EXPECT_FALSE(t.IsExpired(Clock::now()));
+}
+
+TEST(Timer, IsExpiredReturnstTrueWhenTimerStarted)
+{
+    Timer t;
+    t.Start(Clock::now() + std::chrono::seconds(0));
+    EXPECT_TRUE(t.IsExpired(Clock::now()));
 }
