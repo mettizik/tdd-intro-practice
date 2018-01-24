@@ -15,6 +15,7 @@ public:
 
     MockFilesystem(Contents_mt initialContents);
     bool Exists(const PathType &path) const override;
+    bool IsDirectory(const PathType& path) const override;
 
 private:
     Contents_mt m_contents;
@@ -30,6 +31,11 @@ bool MockFilesystem::Exists(const PathType& path) const
     return m_contents.count(path) != 0;
 }
 
+bool MockFilesystem::IsDirectory(const PathType& path) const
+{
+    return m_contents.find(path)->second == MockFiletype::Directory;
+}
+
 TEST(CopyDirectory, returns_nosuchfile_when_source_is_absent)
 {
     MockFilesystem fs({});
@@ -42,3 +48,8 @@ TEST(CopyDirectory, returns_notadirectory_when_source_is_not_a_directory)
     EXPECT_EQ(std::errc::not_a_directory, CopyDirectory(&fs, "/source", "/destination"));
 }
 
+TEST(CopyDirectory, returns_success_when_source_is_empty)
+{
+    MockFilesystem fs({{"/source", MockFiletype::Directory}});
+    EXPECT_FALSE(CopyDirectory(&fs, "/source", "/destination"));
+}

@@ -6,4 +6,5 @@ class IFilesystem
 {
 public:
     virtual bool Exists(const PathType& path) const = 0;
+    virtual bool IsDirectory(const PathType& path) const = 0;
 };

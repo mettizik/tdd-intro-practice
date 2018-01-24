@@ -6,5 +6,9 @@ std::error_code CopyDirectory(IFilesystem* fs, const PathType& src, const PathTy
     {
         return std::make_error_code(std::errc::no_such_file_or_directory);
     }
-    return std::make_error_code(std::errc::not_a_directory);
+    if (!fs->IsDirectory(src))
+    {
+        return std::make_error_code(std::errc::not_a_directory);
+    }
+    return {};
 }
