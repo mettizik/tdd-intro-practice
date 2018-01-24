@@ -21,8 +21,9 @@ Start doing things :)
 
 Note that there are three subroots in this project:
 
-- workshops - this is a root for all practice tasks, to be processed in group or demo mode
-- homework - this is a root for all excercises proposed by course for your own practice at home
+- [workshops](https://github.com/mettizik/tdd-intro-practice/tree/master/tdd_intro/workshops) - this is a root for all practice tasks, to be processed in group or demo mode
+- [homework](https://github.com/mettizik/tdd-intro-practice/tree/master/tdd_intro/homework) - this is a root for all excercises proposed by course for your own practice at home
+- [clean room](https://github.com/mettizik/tdd-intro-practice/tree/master/tdd_intro/cleanroom) - this is a root for the biggest conclusive part of course - complex task to implement
 - 3rd_party - this is a place where all dependencies are stored. Each dependency has it's *.pri file under rootfolder (e.g. gtest.pri)
 
 ## Remarks
