@@ -44,3 +44,10 @@ TEST(Timer, TimeLeftReturnsCorrectValueWhenTimerIsStarted)
     t.Start(Clock::now() + sec(2));
     EXPECT_EQ(sec(2), t.TimeLeft(Clock::now()));
 }
+
+TEST(Timer, TimeLeftReturnsZeroWhenTimerIsExpired)
+{
+    Timer t;
+    t.Start(Clock::now());
+    EXPECT_EQ(Duration{0}, t.TimeLeft(Clock::now()));
+}
