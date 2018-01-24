@@ -1,10 +1,14 @@
 #pragma once
-#include "ITimer.h"
+#include <chrono>
 
-class Timer : public ITimer
+typedef std::chrono::high_resolution_clock Clock;
+typedef Clock::duration Duration;
+typedef std::chrono::time_point<Clock> TimePoint;
+
+class Timer
 {
   public:
-    virtual void Start() override;
-    virtual bool IsExpired() const override;
-    virtual Duration TimeLeft() const override;
+    void Start();
+    bool IsExpired() const;
+    Duration TimeLeft() const;
 };
