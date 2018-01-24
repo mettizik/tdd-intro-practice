@@ -71,3 +71,12 @@ TEST(Timer, StartTimerThriceAndCheckTimeLeftCalls)
     t.Start(Clock::now() + sec(5));
     EXPECT_EQ(sec(5), t.TimeLeft(Clock::now()));
 }
+
+TEST(Timer, StartTimerTwiceAndExpireOnFirst)
+{
+    Timer t;
+    t.Start(Clock::now() + sec(0));
+    EXPECT_TRUE(t.IsExpired(Clock::now()));
+    t.Start(Clock::now() + sec(2));
+    EXPECT_FALSE(t.IsExpired(Clock::now()));
+}
