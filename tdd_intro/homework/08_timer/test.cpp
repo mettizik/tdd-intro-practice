@@ -10,6 +10,8 @@ Followed by this specification:
     Timer can be started again any time, no metter in what state it is
 */
 
+using sec = std::chrono::seconds;
+
 TEST(Timer, IsExpiredReturnsFalseWhenTimerIsNotStarted)
 {
     Timer t;
@@ -19,19 +21,26 @@ TEST(Timer, IsExpiredReturnsFalseWhenTimerIsNotStarted)
 TEST(Timer, IsExpiredReturnsFalseWhenTimerStarted)
 {
     Timer t;
-    t.Start(Clock::now() + std::chrono::seconds(2));
+    t.Start(Clock::now() + sec(2));
     EXPECT_FALSE(t.IsExpired(Clock::now()));
 }
 
 TEST(Timer, IsExpiredReturnstTrueWhenTimerStarted)
 {
     Timer t;
-    t.Start(Clock::now() + std::chrono::seconds(0));
+    t.Start(Clock::now() + sec(0));
     EXPECT_TRUE(t.IsExpired(Clock::now()));
 }
 
 TEST(Timer, TimeLeftReturnsZeroWhenTimerIsNotStarted)
 {
     Timer t;
-    EXPECT_EQ(Duration{0}, t.TimeLeft());
+    EXPECT_EQ(Duration{0}, t.TimeLeft(Clock::now()));
+}
+
+TEST(Timer, TimeLeftReturnsCorrectValueWhenTimerIsStarted)
+{
+    Timer t;
+    t.Start(Clock::now() + sec(2));
+    EXPECT_EQ(sec(2), t.TimeLeft(Clock::now()));
 }
