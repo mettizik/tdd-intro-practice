@@ -6,4 +6,9 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-    test.cpp
+    test.cpp \
+    FilesystemUtils.cpp
+
+HEADERS += \
+    FilesystemUtils.h \
+    IFilesystem.h

@@ -1,26 +1,6 @@
 #include <gtest/gtest.h>
-
-#include <string>
-#include <system_error>
-
 #include <map>
-
-using PathType = std::string;
-
-class IFilesystem
-{
-public:
-    virtual bool Exists(const PathType& path) const = 0;
-};
-
-std::error_code CopyDirectory(IFilesystem* fs, const PathType& src, const PathType& dst)
-{
-    if (!fs->Exists(src))
-    {
-        return std::make_error_code(std::errc::no_such_file_or_directory);
-    }
-    return std::make_error_code(std::errc::not_a_directory);
-}
+#include "FilesystemUtils.h"
 
 enum class MockFiletype
 {
