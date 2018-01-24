@@ -83,3 +83,13 @@ TEST(CopyDirectory, returns_success_and_copies_one_file)
     EXPECT_FALSE(CopyDirectory(&fs, "/source", "/destination"));
     EXPECT_EQ(fs.Childrens("/destination"), PathType_vt{"/destination/file"});
 }
+
+
+TEST(CopyDirectory, returns_success_and_skips_subdirectory)
+{
+    MockFilesystem fs({{"/source", MockFiletype::Directory},
+                       {"/source/subdir", MockFiletype::Directory},
+                       {"/destination", MockFiletype::Directory}});
+    EXPECT_FALSE(CopyDirectory(&fs, "/source", "/destination"));
+    EXPECT_EQ(fs.Childrens("/destination"), PathType_vt{});
+}
