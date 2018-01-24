@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-
 #include "Timer.h"
 
 /*
@@ -14,5 +13,12 @@ Followed by this specification:
 TEST(Timer, IsExpiredReturnsFalseWhenTimerIsNotStarted)
 {
     Timer t;
-    EXPECT_FALSE(t.IsExpired());
+    EXPECT_FALSE(t.IsExpired(Clock::now()));
+}
+
+TEST(Timer, IsExpiredReturnsFalseWhenTimerStarted)
+{
+    Timer t;
+    t.Start(Clock::now(), std::chrono::seconds(2));
+    EXPECT_FALSE(t.IsExpired(Clock::now()));
 }

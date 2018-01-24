@@ -1,11 +1,12 @@
 #include "Timer.h"
 
-void Timer::Start()
+void Timer::Start(TimePoint now, Duration duration)
 {
-
+    m_start = now;
+    m_duration = duration;
 }
 
-bool Timer::IsExpired() const
+bool Timer::IsExpired(TimePoint now) const
 {
     return false;
 }
