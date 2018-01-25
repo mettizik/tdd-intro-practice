@@ -1,6 +1,7 @@
 #pragma once
+#include "ISocketWrapper.h"
 
-class SocketWrapper
+class SocketWrapper : public ISocketWrapper
 {
 public:
     SocketWrapper();
@@ -10,7 +11,7 @@ public:
     void Bind(const std::string& addr, int16_t port);
     void Listen();
     SocketWrapper Accept();
-    SocketWrapper Connect(const std::string& addr, int16_t port);
+    virtual SockPtr Connect(const std::string& addr, int16_t port) override;
     void Read(std::vector<char>& buffer);
     void Write(const std::vector<char>& buffer);
 
