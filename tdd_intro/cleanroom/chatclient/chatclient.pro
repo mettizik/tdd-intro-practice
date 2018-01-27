@@ -7,12 +7,16 @@ CONFIG -= qt
 
 SOURCES += \
     test.cpp \
-    socketwrapper.cpp
+    socketwrapper.cpp \
+    ChatSession.cpp \
+    ChatSessionUtils.cpp
 
 HEADERS += \
     socketwrapper.h \
     ISocketWrapper.h \
-    IGui.h
+    IGui.h \
+    ChatSession.h \
+    ChatSessionUtils.h
 
 LIBS += \
     Ws2_32.lib \
