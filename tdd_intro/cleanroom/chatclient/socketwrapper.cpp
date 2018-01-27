@@ -73,7 +73,7 @@ SocketWrapper SocketWrapper::Accept()
     return SocketWrapper(other);
 }
 
-SocketWrapper SocketWrapper::Connect(const std::string& addr, int16_t port)
+ISocketWrapper::SockPtr SocketWrapper::Connect(const std::string& addr, int16_t port)
 {
     sockaddr_in addres;
     addres.sin_family = AF_INET;
@@ -84,7 +84,7 @@ SocketWrapper SocketWrapper::Connect(const std::string& addr, int16_t port)
     {
         throw std::runtime_error(GetExceptionString("Failed to connect to server.", WSAGetLastError()));
     }
-    return SocketWrapper(other);
+    return std::make_shared<SocketWrapper>(other);
 }
 
 void SocketWrapper::Read(std::vector<char>& buffer)
