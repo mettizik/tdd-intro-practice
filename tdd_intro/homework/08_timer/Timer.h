@@ -3,8 +3,17 @@
 
 class Timer : public ITimer
 {
-  public:
-    virtual void Start() override;
-    virtual bool IsExpired() const override;
-    virtual Duration TimeLeft() const override;
+public:
+    explicit Timer(Duration duration);
+
+    virtual void Start(const TimeLambda& currentTime) override;
+    virtual bool IsExpired(const TimeLambda& currentTime) const override;
+    virtual Duration TimeLeft(const TimeLambda& currentTime) const override;
+
+private:
+    TimePoint ExpiredOn() const;
+
+private:
+    Duration m_duration;
+    TimePoint m_startPoint;
 };
