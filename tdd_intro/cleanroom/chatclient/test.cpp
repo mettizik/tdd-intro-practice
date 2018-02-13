@@ -2,6 +2,7 @@
 #include <gmock/gmock.h>
 #include "ISocketWrapper.h"
 #include "IGui.h"
+#include "Session.h"
 
 using namespace testing;
 /*
@@ -59,30 +60,6 @@ const std::string s_host = "localhost";
 const int16_t s_port = 4444;
 const std::string s_listenMessage = "No one is here…";
 
-void Connect(ISocketWrapper& socket)
-{
-    socket.Connect(s_host, s_port);
-}
-
-void SetupServer(ISocketWrapper& socket)
-{
-    socket.Bind(s_host, s_port);
-    socket.Listen();
-}
-
-void InitSession(ISocketWrapper& socket, IGui& gui)
-{
-    try
-    {
-        Connect(socket);
-    }
-    catch(const std::runtime_error& /*ex*/)
-    {
-        SetupServer(socket);
-        gui.Print(s_listenMessage);
-    }
-}
-
 namespace TestSubcase
 {
     void SuccesfulConnect(MockSocketWrapper& socket)
@@ -104,7 +81,7 @@ TEST(SocketConnectionTest, Connect_localhost_4444)
 {
     MockSocketWrapper mock;
     EXPECT_CALL(mock, Connect(s_host, s_port)).WillOnce(Return(ISocketWrapper::SockPtr{}));
-    Connect(mock);
+    utils::Connect(mock);
 }
 
 TEST(SocketConnectionTest, ListenIfBindSuccess)
@@ -112,22 +89,24 @@ TEST(SocketConnectionTest, ListenIfBindSuccess)
     MockSocketWrapper mock;
     EXPECT_CALL(mock, Bind(s_host, s_port));
     EXPECT_CALL(mock, Listen());
-    SetupServer(mock);
+    utils::SetupServer(mock);
 }
 
 TEST(SocketConnectionTest, IfConnectSuccessListenAndBindIsNotCalled)
 {
     MockSocketWrapper mock;
     MockGui gui;
+    Session session;
     TestSubcase::SuccesfulConnect(mock);
-    InitSession(mock, gui);
+    session.InitSession(mock, gui);
 }
 
 TEST(SocketConnectionTest, MessageIsDispayedAfterUnsuccesfulConnect)
 {
     MockSocketWrapper mock;
     MockGui gui;
+    Session session;
     TestSubcase::UnsuccesfulConnect(mock);
     EXPECT_CALL(gui, Print(s_listenMessage)).Times(1);
-    InitSession(mock, gui);
+    session.InitSession(mock, gui);
 }
