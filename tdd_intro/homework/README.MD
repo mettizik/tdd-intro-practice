@@ -357,3 +357,16 @@ Followed by this specification:
 * Timer allows to determine if specific period of time expired or not since Start was called last time
 * Timer allows to determine how much time left till period is expired
 * Timer can be started again any time, no metter in what state it is
+## Finalization task:
+
+### Chat-client
+
+Implement chat application, that communicates via TCP sockets.
+There is list of requirenments to this application:
+* Console application prefered;
+* It must use system calls for sockets, such as socket, bind, listen, accept, connect;
+* It must create connection between too applications. It must send and receive messages via created connection until it is dropped.
+
+Tips:
+* TCP socket can be mocked;
+* IO streams can be mocked;

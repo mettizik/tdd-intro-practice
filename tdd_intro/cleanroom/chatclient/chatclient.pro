@@ -10,7 +10,9 @@ SOURCES += \
     socketwrapper.cpp
 
 HEADERS += \
-    socketwrapper.h
+    socketwrapper.h \
+    ISocketWrapper.h \
+    IGui.h
 
 LIBS += \
     Ws2_32.lib \
