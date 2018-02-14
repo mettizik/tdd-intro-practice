@@ -2,6 +2,8 @@
 #include <gmock/gmock.h>
 #include "ISocketWrapper.h"
 #include "IGui.h"
+#include "sessionutils.h"
+#include "session.h"
 
 using namespace testing;
 /*
@@ -55,47 +57,19 @@ public:
     MOCK_METHOD1(Print, void(const std::string&));
 };
 
-const std::string s_host = "localhost";
-const int16_t s_port = 4444;
-const std::string s_listenMessage = "No one is here…";
-
-void Connect(ISocketWrapper& socket)
-{
-    socket.Connect(s_host, s_port);
-}
-
-void SetupServer(ISocketWrapper& socket)
-{
-    socket.Bind(s_host, s_port);
-    socket.Listen();
-}
-
-void InitSession(ISocketWrapper& socket, IGui& gui)
-{
-    try
-    {
-        Connect(socket);
-    }
-    catch(const std::runtime_error& /*ex*/)
-    {
-        SetupServer(socket);
-        gui.Print(s_listenMessage);
-    }
-}
-
 namespace TestSubcase
 {
     void SuccesfulConnect(MockSocketWrapper& socket)
     {
-        EXPECT_CALL(socket, Connect(s_host, s_port)).WillOnce(Return(ISocketWrapper::SockPtr{}));
-        EXPECT_CALL(socket, Bind(s_host, s_port)).Times(0);
+        EXPECT_CALL(socket, Connect(sessionUtils::GetHost(), sessionUtils::GetPort())).WillOnce(Return(ISocketWrapper::SockPtr{}));
+        EXPECT_CALL(socket, Bind(sessionUtils::GetHost(), sessionUtils::GetPort())).Times(0);
         EXPECT_CALL(socket, Listen()).Times(0);
     }
 
     void UnsuccesfulConnect(MockSocketWrapper& socket)
     {
-        EXPECT_CALL(socket, Connect(s_host, s_port)).WillOnce(Throw(std::runtime_error("")));
-        EXPECT_CALL(socket, Bind(s_host, s_port));
+        EXPECT_CALL(socket, Connect(sessionUtils::GetHost(), sessionUtils::GetPort())).WillOnce(Throw(std::runtime_error("")));
+        EXPECT_CALL(socket, Bind(sessionUtils::GetHost(), sessionUtils::GetPort()));
         EXPECT_CALL(socket, Listen());
     }
 }
@@ -103,16 +77,16 @@ namespace TestSubcase
 TEST(SocketConnectionTest, Connect_localhost_4444)
 {
     MockSocketWrapper mock;
-    EXPECT_CALL(mock, Connect(s_host, s_port)).WillOnce(Return(ISocketWrapper::SockPtr{}));
-    Connect(mock);
+    EXPECT_CALL(mock, Connect(sessionUtils::GetHost(), sessionUtils::GetPort())).WillOnce(Return(ISocketWrapper::SockPtr{}));
+    sessionUtils::Connect(mock);
 }
 
 TEST(SocketConnectionTest, ListenIfBindSuccess)
 {
     MockSocketWrapper mock;
-    EXPECT_CALL(mock, Bind(s_host, s_port));
+    EXPECT_CALL(mock, Bind(sessionUtils::GetHost(), sessionUtils::GetPort()));
     EXPECT_CALL(mock, Listen());
-    SetupServer(mock);
+    sessionUtils::SetupServer(mock);
 }
 
 TEST(SocketConnectionTest, IfConnectSuccessListenAndBindIsNotCalled)
@@ -120,7 +94,7 @@ TEST(SocketConnectionTest, IfConnectSuccessListenAndBindIsNotCalled)
     MockSocketWrapper mock;
     MockGui gui;
     TestSubcase::SuccesfulConnect(mock);
-    InitSession(mock, gui);
+    Session(mock, gui);
 }
 
 TEST(SocketConnectionTest, MessageIsDispayedAfterUnsuccesfulConnect)
@@ -128,6 +102,6 @@ TEST(SocketConnectionTest, MessageIsDispayedAfterUnsuccesfulConnect)
     MockSocketWrapper mock;
     MockGui gui;
     TestSubcase::UnsuccesfulConnect(mock);
-    EXPECT_CALL(gui, Print(s_listenMessage)).Times(1);
-    InitSession(mock, gui);
+    EXPECT_CALL(gui, Print(sessionUtils::GetListenMessage())).Times(1);
+    Session(mock, gui);
 }
