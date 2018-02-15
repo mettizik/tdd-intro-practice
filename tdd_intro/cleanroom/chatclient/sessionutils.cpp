@@ -20,13 +20,14 @@ const std::string sessionUtils::GetListenMessage()
     return s_listenMessage;
 }
 
-void sessionUtils::Connect(ISocketWrapper& socket)
+ISocketWrapper::SockPtr sessionUtils::Connect(ISocketWrapper& socket)
 {
-    socket.Connect(s_host, s_port);
+    return socket.Connect(s_host, s_port);
 }
 
-void sessionUtils::SetupServer(ISocketWrapper& socket)
+ISocketWrapper::SockPtr sessionUtils::SetupServer(ISocketWrapper& socket)
 {
     socket.Bind(s_host, s_port);
     socket.Listen();
+    return socket.Accept();
 }

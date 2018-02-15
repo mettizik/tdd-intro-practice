@@ -5,21 +5,25 @@
 
 namespace
 {
-    void InitSession(ISocketWrapper& socket, IGui& gui)
+    ISocketWrapper::SockPtr InitSession(ISocketWrapper& socket, IGui& gui)
     {
         try
         {
-            sessionUtils::Connect(socket);
+            return sessionUtils::Connect(socket);
         }
         catch(const std::runtime_error& /*ex*/)
         {
-            sessionUtils::SetupServer(socket);
+            auto socketServer = sessionUtils::SetupServer(socket);
             gui.Print(sessionUtils::GetListenMessage());
+            std::string result;
+            socketServer->Read(result);
+            return socketServer;
         }
     }
 }
 
-Session::Session(ISocketWrapper& socket, IGui& gui)
+Session::Session(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
 {
-    InitSession(socket, gui);
+    auto socketConnection = InitSession(socket, gui);
+    socketConnection->Write(nickName + ":HELLO!");
 }

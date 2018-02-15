@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 class ISocketWrapper;
 class IGui;
@@ -6,5 +7,5 @@ class IGui;
 class Session
 {
     public:
-        Session(ISocketWrapper& socket, IGui& gui);
+        Session(ISocketWrapper& socket, IGui& gui, const std::string& nickName);
 };

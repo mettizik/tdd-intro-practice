@@ -1,8 +1,8 @@
 #pragma once
+#include "ISocketWrapper.h"
+
 #include <string>
 #include <memory>
-
-class ISocketWrapper;
 
 namespace sessionUtils
 {
@@ -10,6 +10,6 @@ namespace sessionUtils
     const int16_t GetPort();
     const std::string GetListenMessage();
 
-    void Connect(ISocketWrapper& socket);
-    void SetupServer(ISocketWrapper& socket);
+    ISocketWrapper::SockPtr Connect(ISocketWrapper& socket);
+    ISocketWrapper::SockPtr SetupServer(ISocketWrapper& socket);
 }
