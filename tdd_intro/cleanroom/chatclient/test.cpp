@@ -1,6 +1,11 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include "ISocketWrapper.h"
+#include "IGui.h"
+#include "Session.h"
+#include "ChatUtils.h"
 
+using namespace testing;
 /*
 Implement chat application, that communicates via TCP sockets.
  There is list of requirenments to this application:
@@ -37,3 +42,68 @@ Implement chat application, that communicates via TCP sockets.
     * If user enters '!exit!' message, application must close connection and exit
     * If user runs app with 'me' nickname - error with text "Username me is reserved and can not be used"  is displayed and application exits
 */
+
+class MockSocketWrapper : public ISocketWrapper
+{
+public:
+    MOCK_METHOD2(Connect, ISocketWrapper::SockPtr(const std::string& addr, int16_t port));
+    MOCK_METHOD2(Bind, void(const std::string& addr, int16_t port));
+    MOCK_METHOD0(Listen, void());
+};
+
+class MockGui : public chat::IGui
+{
+public:
+    MOCK_METHOD1(Print, void(const std::string&));
+};
+
+namespace TestSubcase
+{
+    void SuccesfulConnect(MockSocketWrapper& socket)
+    {
+        EXPECT_CALL(socket, Connect(chat::GetHost(), chat::GetPort())).WillOnce(Return(ISocketWrapper::SockPtr{}));
+        EXPECT_CALL(socket, Bind(chat::GetHost(), chat::GetPort())).Times(0);
+        EXPECT_CALL(socket, Listen()).Times(0);
+    }
+
+    void UnsuccesfulConnect(MockSocketWrapper& socket)
+    {
+        EXPECT_CALL(socket, Connect(chat::GetHost(), chat::GetPort())).WillOnce(Throw(std::runtime_error("")));
+        EXPECT_CALL(socket, Bind(chat::GetHost(), chat::GetPort()));
+        EXPECT_CALL(socket, Listen());
+    }
+}
+
+TEST(SocketConnectionTest, Connect_localhost_4444)
+{
+    MockSocketWrapper mock;
+    EXPECT_CALL(mock, Connect(chat::GetHost(), chat::GetPort())).WillOnce(Return(ISocketWrapper::SockPtr{}));
+    chat::details::Connect(mock);
+}
+
+TEST(SocketConnectionTest, ListenIfBindSuccess)
+{
+    MockSocketWrapper mock;
+    EXPECT_CALL(mock, Bind(chat::GetHost(), chat::GetPort()));
+    EXPECT_CALL(mock, Listen());
+    chat::details::SetupServer(mock);
+}
+
+TEST(SocketConnectionTest, IfConnectSuccessListenAndBindIsNotCalled)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    TestSubcase::SuccesfulConnect(mock);
+    chat::Session session;
+    session.InitSession(mock, gui);
+}
+
+TEST(SocketConnectionTest, MessageIsDispayedAfterUnsuccesfulConnect)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    TestSubcase::UnsuccesfulConnect(mock);
+    EXPECT_CALL(gui, Print(chat::GetListenMessage())).Times(1);
+    chat::Session session;
+    session.InitSession(mock, gui);
+}
