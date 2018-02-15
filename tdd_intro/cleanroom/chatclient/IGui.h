@@ -1,9 +1,12 @@
 #pragma once
 #include <string>
 
-class IGui
+namespace chat
 {
-public:
-    virtual ~IGui() {}
-    virtual void Print(const std::string& text) = 0;
-};
+    class IGui
+    {
+    public:
+        virtual ~IGui() {}
+        virtual void Print(const std::string& text) = 0;
+    };
+}
