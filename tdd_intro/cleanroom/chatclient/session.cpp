@@ -23,10 +23,11 @@ namespace
 ServerSession::ServerSession(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
 {
     auto socketConnection = InitSession(socket, gui);
-    socketConnection->Write(nickName + ":HELLO!");
+    socketConnection->Write(sessionUtils::GetFullName(nickName));
     std::string handshakeResult;
     socketConnection->Read(handshakeResult);
-    if (handshakeResult.find_last_of(":HELLO!") != handshakeResult.size() - 8)
+    const std::string hello(sessionUtils::GetFullName(""));
+    if (handshakeResult.find_last_of(hello) != handshakeResult.size() - hello.size() - 1)
     {
         socketConnection->Close();
     }
@@ -35,10 +36,10 @@ ServerSession::ServerSession(ISocketWrapper& socket, IGui& gui, const std::strin
 ClientSession::ClientSession(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
 {
     auto socketConnection = sessionUtils::Connect(socket);
-    socketConnection->Write(nickName + ":HELLO!");
+    socketConnection->Write(sessionUtils::GetFullName(nickName));
     std::string handshakeResult;
     socketConnection->Read(handshakeResult);
-    if (handshakeResult.find("server:HELLO!") == handshakeResult.npos)
+    if (handshakeResult.find(sessionUtils::GetFullName("server")) == handshakeResult.npos)
     {
         gui.Print(sessionUtils::GetHandshareErrorMessage());
         socketConnection->Close();

@@ -10,6 +10,7 @@ namespace sessionUtils
     const int16_t GetPort();
     const std::string GetListenMessage();
     const std::string GetHandshareErrorMessage();
+    const std::string GetFullName(const std::string& userName);
 
     ISocketWrapper::SockPtr Connect(ISocketWrapper& socket);
     ISocketWrapper::SockPtr SetupServer(ISocketWrapper& socket);
