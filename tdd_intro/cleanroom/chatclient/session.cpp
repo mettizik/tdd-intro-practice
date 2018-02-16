@@ -15,8 +15,6 @@ namespace
         {
             auto socketServer = sessionUtils::SetupServer(socket);
             gui.Print(sessionUtils::GetListenMessage());
-            std::string result;
-            socketServer->Read(result);
             return socketServer;
         }
     }
@@ -26,4 +24,6 @@ Session::Session(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
 {
     auto socketConnection = InitSession(socket, gui);
     socketConnection->Write(nickName + ":HELLO!");
+    std::string handshakeResult;
+    socketConnection->Read(handshakeResult);
 }
