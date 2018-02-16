@@ -40,6 +40,11 @@ SocketWrapper::SocketWrapper(SOCKET & other)
 
 SocketWrapper::~SocketWrapper()
 {
+    Close();
+}
+
+void SocketWrapper::Close()
+{
     closesocket(m_socket);
 }
 

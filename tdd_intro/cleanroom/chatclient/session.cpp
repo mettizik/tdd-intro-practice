@@ -27,3 +27,16 @@ Session::Session(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
     std::string handshakeResult;
     socketConnection->Read(handshakeResult);
 }
+
+ClientSession::ClientSession(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
+{
+    auto socketConnection = sessionUtils::Connect(socket);
+    socketConnection->Write(nickName + ":HELLO!");
+    std::string handshakeResult;
+    socketConnection->Read(handshakeResult);
+    if (handshakeResult.find("server:HELLO!") == handshakeResult.npos)
+    {
+        gui.Print(sessionUtils::GetHandshareErrorMessage());
+        socketConnection->Close();
+    }
+}

@@ -46,6 +46,7 @@ Implement chat application, that communicates via TCP sockets.
 class MockSocketWrapper : public ISocketWrapper
 {
 public:
+    MOCK_METHOD0(Close, void());
     MOCK_METHOD2(Connect, ISocketWrapper::SockPtr(const std::string& addr, int16_t port));
     MOCK_METHOD2(Bind, void(const std::string& addr, int16_t port));
     MOCK_METHOD0(Listen, void());
@@ -104,7 +105,7 @@ TEST(SocketConnectionTest, IfConnectSuccessListenAndBindIsNotCalled)
     MockSocketWrapper mock;
     MockGui gui;
     TestSubcase::SetupClientPreconditions(mock);
-    Session(mock, gui, "");
+    ClientSession(mock, gui, "");
 }
 
 TEST(SocketConnectionTest, MessageIsDispayedAfterUnsuccesfulConnect)
@@ -121,7 +122,7 @@ TEST(SocketConnectionTest, ClientHandshake)
     MockGui gui;
     auto clientMock = TestSubcase::SetupClientPreconditions(mock);
     EXPECT_CALL(*clientMock, Write("metizik:HELLO!"));
-    Session(mock, gui, "metizik");
+    ClientSession(mock, gui, "metizik");
 }
 
 TEST(SocketConnectionTest, ServerAnswersOnHandshake)
@@ -141,7 +142,7 @@ TEST(SocketConnectionTest, ClientChecksCorrectHandshake)
     auto clientMock = TestSubcase::SetupClientPreconditions(mock);
     EXPECT_CALL(*clientMock, Write(_));
     EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("server:HELLO!"));
-    Session(mock, gui, "metizik");
+    ClientSession(mock, gui, "metizik");
 }
 
 TEST(SocketConnectionTest, ClientChecksInvalidHandshake)
@@ -151,7 +152,9 @@ TEST(SocketConnectionTest, ClientChecksInvalidHandshake)
     auto clientMock = TestSubcase::SetupClientPreconditions(mock);
     EXPECT_CALL(*clientMock, Write(_));
     EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("hacker:HELLO!"));
-    EXPECT_THROW(Session(mock, gui, "metizik"), std::runtime_error);
+    EXPECT_CALL(gui, Print(sessionUtils::GetHandshareErrorMessage())).Times(1);
+    EXPECT_CALL(*clientMock, Close()).Times(1);;
+    ClientSession(mock, gui, "metizik");
 }
 
 // Sample for set reference:

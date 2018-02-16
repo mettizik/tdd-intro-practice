@@ -8,6 +8,7 @@ public:
     explicit SocketWrapper(SOCKET& other);
     ~SocketWrapper();
 
+    virtual void Close() override;
     void Bind(const std::string& addr, int16_t port);
     void Listen();
     SockPtr Accept() override;
