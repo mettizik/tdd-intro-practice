@@ -3,7 +3,8 @@
 #include "ISocketWrapper.h"
 #include "IGui.h"
 #include "sessionutils.h"
-#include "session.h"
+#include "ServerSession.h"
+#include "ClientSession.h"
 
 using namespace testing;
 /*

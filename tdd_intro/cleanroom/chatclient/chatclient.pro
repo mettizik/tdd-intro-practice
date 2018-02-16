@@ -8,14 +8,16 @@ CONFIG -= qt
 SOURCES += \
     test.cpp \
     socketwrapper.cpp \
-    session.cpp \
+    ServerSession.cpp \
+    ClientSession.cpp \
     sessionutils.cpp
 
 HEADERS += \
     socketwrapper.h \
     ISocketWrapper.h \
     IGui.h \
-    session.h \
+    ServerSession.h \
+    ClientSession.h \
     sessionutils.h
 
 LIBS += \
