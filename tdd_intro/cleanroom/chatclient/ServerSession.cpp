@@ -27,8 +27,12 @@ ServerSession::ServerSession(ISocketWrapper& socket, IGui& gui, const std::strin
     std::string handshakeResult;
     socketConnection->Read(handshakeResult);
     const std::string hello(sessionUtils::GetFullName(""));
-    if (handshakeResult.find_last_of(hello) != handshakeResult.size() - hello.size() - 1)
+    if (handshakeResult.find(hello) != handshakeResult.size() - hello.size())
     {
         socketConnection->Close();
+    }
+    else
+    {
+        socket.Close();
     }
 }

@@ -131,8 +131,9 @@ TEST(SocketConnectionTest, ServerAnswersOnHandshake)
     MockSocketWrapper mock;
     MockGui gui;
     std::shared_ptr<MockSocketWrapper> acceptedSocket = TestSubcase::SetupServerPreconditions(mock, gui);
-    EXPECT_CALL(*acceptedSocket, Read(_));
+    EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0>("user:HELLO!"));
     EXPECT_CALL(*acceptedSocket, Write("server:HELLO!"));
+    EXPECT_CALL(*acceptedSocket, Close()).Times(0);
     ServerSession(mock, gui, "server");
 }
 
@@ -168,6 +169,18 @@ TEST(SocketConnectionTest, ServerChecksInvalidHandshake)
     EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0>("notHello!"));
     EXPECT_CALL(*acceptedSocket, Write("server:HELLO!"));
     EXPECT_CALL(*acceptedSocket, Close()).Times(1);
+    ServerSession(mock, gui, "server");
+}
+
+TEST(SocketConnectionTest, ServerCloseListenSocket)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    std::shared_ptr<MockSocketWrapper> acceptedSocket = TestSubcase::SetupServerPreconditions(mock, gui);
+    EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0>("user:HELLO!"));
+    EXPECT_CALL(*acceptedSocket, Write("server:HELLO!"));
+    EXPECT_CALL(*acceptedSocket, Close()).Times(0);
+    EXPECT_CALL(mock, Close()).Times(1);
     ServerSession(mock, gui, "server");
 }
 
