@@ -8,8 +8,7 @@ CONFIG -= qt
 DEFINES += NOMINMAX
 
 HEADERS += \
-    Timer.h \
-    ITimer.h
+    Timer.h
 
 SOURCES += \
     Timer.cpp \
