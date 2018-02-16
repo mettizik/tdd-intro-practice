@@ -26,6 +26,10 @@ ServerSession::ServerSession(ISocketWrapper& socket, IGui& gui, const std::strin
     socketConnection->Write(nickName + ":HELLO!");
     std::string handshakeResult;
     socketConnection->Read(handshakeResult);
+    if (handshakeResult.find_last_of(":HELLO!") != handshakeResult.size() - 8)
+    {
+        socketConnection->Close();
+    }
 }
 
 ClientSession::ClientSession(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
