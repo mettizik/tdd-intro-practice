@@ -20,7 +20,7 @@ namespace
     }
 }
 
-Session::Session(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
+ServerSession::ServerSession(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
 {
     auto socketConnection = InitSession(socket, gui);
     socketConnection->Write(nickName + ":HELLO!");

@@ -113,7 +113,7 @@ TEST(SocketConnectionTest, MessageIsDispayedAfterUnsuccesfulConnect)
     MockSocketWrapper mock;
     MockGui gui;
     TestSubcase::SetupServerPreconditions(mock, gui);
-    Session(mock, gui, "");
+    ServerSession(mock, gui, "");
 }
 
 TEST(SocketConnectionTest, ClientHandshake)
@@ -132,7 +132,7 @@ TEST(SocketConnectionTest, ServerAnswersOnHandshake)
     std::shared_ptr<MockSocketWrapper> acceptedSocket = TestSubcase::SetupServerPreconditions(mock, gui);
     EXPECT_CALL(*acceptedSocket, Read(_));
     EXPECT_CALL(*acceptedSocket, Write("server:HELLO!"));
-    Session(mock, gui, "server");
+    ServerSession(mock, gui, "server");
 }
 
 TEST(SocketConnectionTest, ClientChecksCorrectHandshake)
@@ -142,6 +142,8 @@ TEST(SocketConnectionTest, ClientChecksCorrectHandshake)
     auto clientMock = TestSubcase::SetupClientPreconditions(mock);
     EXPECT_CALL(*clientMock, Write(_));
     EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("server:HELLO!"));
+    EXPECT_CALL(gui, Print(sessionUtils::GetHandshareErrorMessage())).Times(0);
+    EXPECT_CALL(*clientMock, Close()).Times(0);
     ClientSession(mock, gui, "metizik");
 }
 
@@ -153,9 +155,10 @@ TEST(SocketConnectionTest, ClientChecksInvalidHandshake)
     EXPECT_CALL(*clientMock, Write(_));
     EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("hacker:HELLO!"));
     EXPECT_CALL(gui, Print(sessionUtils::GetHandshareErrorMessage())).Times(1);
-    EXPECT_CALL(*clientMock, Close()).Times(1);;
+    EXPECT_CALL(*clientMock, Close()).Times(1);
     ClientSession(mock, gui, "metizik");
 }
+
 
 // Sample for set reference:
 //    EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("server:HELLO!"));

@@ -4,10 +4,10 @@
 class ISocketWrapper;
 class IGui;
 
-class Session
+class ServerSession
 {
     public:
-        Session(ISocketWrapper& socket, IGui& gui, const std::string& nickName);
+        ServerSession(ISocketWrapper& socket, IGui& gui, const std::string& nickName);
 };
 
 class ClientSession
