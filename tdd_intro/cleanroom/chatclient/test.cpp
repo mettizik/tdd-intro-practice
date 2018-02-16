@@ -134,5 +134,15 @@ TEST(SocketConnectionTest, ServerAnswersOnHandshake)
     Session(mock, gui, "server");
 }
 
+TEST(SocketConnectionTest, ClientChecksCorrectHandshake)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    auto clientMock = TestSubcase::SetupClientPreconditions(mock);
+    EXPECT_CALL(*clientMock, Write(_));
+    EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("server:HELLO!"));
+    Session(mock, gui, "metizik");
+}
+
 // Sample for set reference:
 //    EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("server:HELLO!"));
