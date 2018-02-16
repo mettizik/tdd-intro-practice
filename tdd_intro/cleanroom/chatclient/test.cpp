@@ -159,6 +159,16 @@ TEST(SocketConnectionTest, ClientChecksInvalidHandshake)
     ClientSession(mock, gui, "metizik");
 }
 
+TEST(SocketConnectionTest, ServerChecksInvalidHandshake)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    std::shared_ptr<MockSocketWrapper> acceptedSocket = TestSubcase::SetupServerPreconditions(mock, gui);
+    EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0>("notHello!"));
+    EXPECT_CALL(*acceptedSocket, Write("server:HELLO!"));
+    EXPECT_CALL(*acceptedSocket, Close()).Times(1);
+    ServerSession(mock, gui, "server");
+}
 
 // Sample for set reference:
 //    EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("server:HELLO!"));
