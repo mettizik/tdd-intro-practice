@@ -14,6 +14,7 @@ public:
     virtual SockPtr Connect(const std::string& addr, int16_t port) override;
     void Read(std::string& buffer) override;
     void Write(const std::string& buffer) override;
+    virtual void Close() override {};
 
 private:
     SOCKET m_socket;
