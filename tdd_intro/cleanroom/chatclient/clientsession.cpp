@@ -6,5 +6,5 @@
 ClientSession::ClientSession(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
 {
     auto socketConnection = sessionUtils::Connect(socket);
-    socketConnection->Write(nickName + ":HELLO!");
+    sessionUtils::HandShake(socketConnection, nickName);
 }
