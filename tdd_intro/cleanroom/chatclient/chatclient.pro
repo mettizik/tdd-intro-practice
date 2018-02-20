@@ -9,14 +9,16 @@ SOURCES += \
     test.cpp \
     socketwrapper.cpp \
     session.cpp \
-    sessionutils.cpp
+    sessionutils.cpp \
+    clientsession.cpp
 
 HEADERS += \
     socketwrapper.h \
     ISocketWrapper.h \
     IGui.h \
     session.h \
-    sessionutils.h
+    sessionutils.h \
+    clientsession.h
 
 LIBS += \
     Ws2_32.lib \

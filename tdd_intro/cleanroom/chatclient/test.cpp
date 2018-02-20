@@ -4,6 +4,7 @@
 #include "IGui.h"
 #include "sessionutils.h"
 #include "session.h"
+#include "clientsession.h"
 
 using namespace testing;
 /*
@@ -104,7 +105,7 @@ TEST(SocketConnectionTest, IfConnectSuccessListenAndBindIsNotCalled)
     MockSocketWrapper mock;
     MockGui gui;
     TestSubcase::SetupClientPreconditions(mock);
-    Session(mock, gui, "");
+    ClientSession(mock, gui, "");
 }
 
 TEST(SocketConnectionTest, MessageIsDispayedAfterUnsuccesfulConnect)
@@ -121,7 +122,7 @@ TEST(SocketConnectionTest, ClientHandshake)
     MockGui gui;
     auto clientMock = TestSubcase::SetupClientPreconditions(mock);
     EXPECT_CALL(*clientMock, Write("metizik:HELLO!"));
-    Session(mock, gui, "metizik");
+    ClientSession(mock, gui, "metizik");
 }
 
 TEST(SocketConnectionTest, ServerAnswersOnHandshake)
@@ -129,10 +130,8 @@ TEST(SocketConnectionTest, ServerAnswersOnHandshake)
     MockSocketWrapper mock;
     MockGui gui;
     std::shared_ptr<MockSocketWrapper> acceptedSocket = TestSubcase::SetupServerPreconditions(mock, gui);
-    EXPECT_CALL(*acceptedSocket, Read(_));
+    EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0>("user:HELLO!"));
     EXPECT_CALL(*acceptedSocket, Write("server:HELLO!"));
     Session(mock, gui, "server");
 }
 
-// Sample for set reference:
-//    EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("server:HELLO!"));
