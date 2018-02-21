@@ -134,5 +134,15 @@ TEST(SocketConnectionTest, ServerAnswersOnHandshake)
     Session(mock, gui, "server");
 }
 
+TEST(SocketConnectionTest, ClientReadsHandshakeAnswer)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    std::shared_ptr<MockSocketWrapper> acceptedSocket = TestSubcase::SetupClientPreconditions(mock);
+    EXPECT_CALL(*acceptedSocket, Write("metizik:HELLO!"));
+    EXPECT_CALL(*acceptedSocket, Read(_));
+    Session(mock, gui, "metizik");
+}
+
 // Sample for set reference:
 //    EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("server:HELLO!"));
