@@ -19,6 +19,17 @@ namespace
             return socketServer;
         }
     }
+
+    void WriteHandshake(ISocketWrapper& socket, const std::string& nickName)
+    {
+        socket.Write(nickName + ":HELLO!");
+    }
+
+    void ReadHandshake(ISocketWrapper& socket)
+    {
+        std::string handshake;
+        socket.Read(handshake);
+    }
 }
 
 Session::Session(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
@@ -27,14 +38,12 @@ Session::Session(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
     auto socketConnection = InitSession(socket, gui, isClient);
     if (isClient)
     {
-        socketConnection->Write(nickName + ":HELLO!");
-        std::string handshakeAnswer;
-        socketConnection->Read(handshakeAnswer);
+        WriteHandshake(*socketConnection, nickName);
+        ReadHandshake(*socketConnection);
     }
     else
     {
-        std::string handshake;
-        socketConnection->Read(handshake);
-        socketConnection->Write(nickName + ":HELLO!");
+        ReadHandshake(*socketConnection);
+        WriteHandshake(*socketConnection, nickName);
     }
 }
