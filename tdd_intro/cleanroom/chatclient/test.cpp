@@ -59,6 +59,7 @@ class MockGui : public IGui
 {
 public:
     MOCK_METHOD1(Print, void(const std::string&));
+    MOCK_METHOD0(Exit, void());
 };
 
 namespace TestSubcase
@@ -154,7 +155,8 @@ TEST(SocketConnectionTest, ClientHandlesInvalidHandshakeAnswer)
     EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0>(""));
     EXPECT_CALL(*acceptedSocket, Close());
     EXPECT_CALL(gui, Print("Error: Invalid handshake received, exiting."));
-    EXPECT_ANY_THROW(Session(mock, gui, "metizik"));
+    EXPECT_CALL(gui, Exit());
+    Session(mock, gui, "metizik");
 }
 
 // Sample for set reference:
