@@ -146,7 +146,7 @@ TEST(SocketConnectionTest, ClientReadsHandshakeAnswer)
     Session(mock, gui, "metizik");
 }
 
-TEST(SocketConnectionTest, ClientHandlesInvalidHandshakeAnswer)
+TEST(SocketConnectionTest, ClientClosesSocketOnInvalidHandshakeAnswer)
 {
     MockSocketWrapper mock;
     MockGui gui;
@@ -154,8 +154,6 @@ TEST(SocketConnectionTest, ClientHandlesInvalidHandshakeAnswer)
     EXPECT_CALL(*acceptedSocket, Write("metizik:HELLO!"));
     EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0>(""));
     EXPECT_CALL(*acceptedSocket, Close());
-    EXPECT_CALL(gui, Print("Error: Invalid handshake received, exiting."));
-    EXPECT_CALL(gui, Exit());
     Session(mock, gui, "metizik");
 }
 
