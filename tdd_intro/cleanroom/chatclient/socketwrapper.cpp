@@ -40,7 +40,7 @@ SocketWrapper::SocketWrapper(SOCKET & other)
 
 SocketWrapper::~SocketWrapper()
 {
-    closesocket(m_socket);
+    Close();
 }
 
 void SocketWrapper::Bind(const std::string& addr, int16_t port)
@@ -100,4 +100,9 @@ void SocketWrapper::Read(std::string& /*buffer*/)
 void SocketWrapper::Write(const std::string& buffer)
 {
     send(m_socket, buffer.data(), buffer.size(), 0);
+}
+
+void SocketWrapper::Close()
+{
+    closesocket(m_socket);
 }

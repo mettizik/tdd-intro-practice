@@ -52,6 +52,7 @@ public:
     MOCK_METHOD0(Accept, ISocketWrapper::SockPtr());
     MOCK_METHOD1(Read, void(std::string& nickName));
     MOCK_METHOD1(Write, void(const std::string& nickName));
+    MOCK_METHOD0(Close, void());
 };
 
 class MockGui : public IGui
@@ -142,6 +143,18 @@ TEST(SocketConnectionTest, ClientReadsHandshakeAnswer)
     EXPECT_CALL(*acceptedSocket, Write("metizik:HELLO!"));
     EXPECT_CALL(*acceptedSocket, Read(_));
     Session(mock, gui, "metizik");
+}
+
+TEST(SocketConnectionTest, ClientHandlesInvalidHandshakeAnswer)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    std::shared_ptr<MockSocketWrapper> acceptedSocket = TestSubcase::SetupClientPreconditions(mock);
+    EXPECT_CALL(*acceptedSocket, Write("metizik:HELLO!"));
+    EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0>(""));
+    EXPECT_CALL(*acceptedSocket, Close());
+    EXPECT_CALL(gui, Print("Error: Invalid handshake received, exiting."));
+    EXPECT_ANY_THROW(Session(mock, gui, "metizik"));
 }
 
 // Sample for set reference:
