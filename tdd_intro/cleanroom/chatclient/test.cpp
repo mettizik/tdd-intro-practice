@@ -157,5 +157,15 @@ TEST(SocketConnectionTest, ClientClosesSocketOnInvalidHandshakeAnswer)
     Session(mock, gui, "metizik");
 }
 
+TEST(SocketConnectionTest, ClientPrintsMessageOnInvalidHandshakeAnswer)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    std::shared_ptr<MockSocketWrapper> acceptedSocket = TestSubcase::SetupClientPreconditions(mock);
+    EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0>(""));
+    EXPECT_CALL(gui, Print("Error: Invalid handshake received, exiting."));
+    Session(mock, gui, "metizik");
+}
+
 // Sample for set reference:
 //    EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("server:HELLO!"));
