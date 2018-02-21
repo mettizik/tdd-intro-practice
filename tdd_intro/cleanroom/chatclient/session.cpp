@@ -25,7 +25,7 @@ namespace
         socket.Write(nickName + ":HELLO!");
     }
 
-    void ReadHandshake(ISocketWrapper& socket)
+    std::string ReadHandshake(ISocketWrapper& socket)
     {
         std::string handshake;
         socket.Read(handshake);
@@ -33,6 +33,7 @@ namespace
         {
             socket.Close();
         }
+        return handshake;
     }
 }
 
@@ -43,7 +44,11 @@ Session::Session(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
     if (isClient)
     {
         WriteHandshake(*socketConnection, nickName);
-        ReadHandshake(*socketConnection);
+        const std::string handshake = ReadHandshake(*socketConnection);
+        if (handshake == "")
+        {
+            gui.Print("Error: Invalid handshake received, exiting.");
+        }
     }
     else
     {
