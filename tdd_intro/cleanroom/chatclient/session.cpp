@@ -5,7 +5,7 @@
 
 namespace
 {
-    ISocketWrapper::SockPtr InitSession(ISocketWrapper& socket, IGui& gui)
+    ISocketWrapper::SockPtr InitSession(ISocketWrapper& socket, IGui& gui, bool& isClient)
     {
         try
         {
@@ -15,8 +15,7 @@ namespace
         {
             auto socketServer = sessionUtils::SetupServer(socket);
             gui.Print(sessionUtils::GetListenMessage());
-            std::string result;
-            socketServer->Read(result);
+            isClient = false;
             return socketServer;
         }
     }
@@ -24,6 +23,18 @@ namespace
 
 Session::Session(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
 {
-    auto socketConnection = InitSession(socket, gui);
-    socketConnection->Write(nickName + ":HELLO!");
+    bool isClient = true;
+    auto socketConnection = InitSession(socket, gui, isClient);
+    if (isClient)
+    {
+        socketConnection->Write(nickName + ":HELLO!");
+        std::string handshakeAnswer;
+        socketConnection->Read(handshakeAnswer);
+    }
+    else
+    {
+        std::string handshake;
+        socketConnection->Read(handshake);
+        socketConnection->Write(nickName + ":HELLO!");
+    }
 }
