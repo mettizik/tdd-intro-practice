@@ -13,4 +13,5 @@ public:
     virtual SockPtr Accept() = 0;
     virtual void Read(std::string& buffer) = 0;
     virtual void Write(const std::string& buffer) = 0;
+    virtual void Close() = 0;
 };

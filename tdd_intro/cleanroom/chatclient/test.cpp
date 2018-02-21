@@ -52,12 +52,14 @@ public:
     MOCK_METHOD0(Accept, ISocketWrapper::SockPtr());
     MOCK_METHOD1(Read, void(std::string& nickName));
     MOCK_METHOD1(Write, void(const std::string& nickName));
+    MOCK_METHOD0(Close, void());
 };
 
 class MockGui : public IGui
 {
 public:
     MOCK_METHOD1(Print, void(const std::string&));
+    MOCK_METHOD0(Exit, void());
 };
 
 namespace TestSubcase
@@ -132,6 +134,37 @@ TEST(SocketConnectionTest, ServerAnswersOnHandshake)
     EXPECT_CALL(*acceptedSocket, Read(_));
     EXPECT_CALL(*acceptedSocket, Write("server:HELLO!"));
     Session(mock, gui, "server");
+}
+
+TEST(SocketConnectionTest, ClientReadsHandshakeAnswer)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    std::shared_ptr<MockSocketWrapper> acceptedSocket = TestSubcase::SetupClientPreconditions(mock);
+    EXPECT_CALL(*acceptedSocket, Write("metizik:HELLO!"));
+    EXPECT_CALL(*acceptedSocket, Read(_));
+    Session(mock, gui, "metizik");
+}
+
+TEST(SocketConnectionTest, ClientClosesSocketOnInvalidHandshakeAnswer)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    std::shared_ptr<MockSocketWrapper> acceptedSocket = TestSubcase::SetupClientPreconditions(mock);
+    EXPECT_CALL(*acceptedSocket, Write("metizik:HELLO!"));
+    EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0>(""));
+    EXPECT_CALL(*acceptedSocket, Close());
+    Session(mock, gui, "metizik");
+}
+
+TEST(SocketConnectionTest, ClientPrintsMessageOnInvalidHandshakeAnswer)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    std::shared_ptr<MockSocketWrapper> acceptedSocket = TestSubcase::SetupClientPreconditions(mock);
+    EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0>(""));
+    EXPECT_CALL(gui, Print("Error: Invalid handshake received, exiting."));
+    Session(mock, gui, "metizik");
 }
 
 // Sample for set reference:
