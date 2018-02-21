@@ -29,6 +29,10 @@ namespace
     {
         std::string handshake;
         socket.Read(handshake);
+        if (handshake == "")
+        {
+            socket.Close();
+        }
     }
 }
 
