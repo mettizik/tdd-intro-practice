@@ -121,6 +121,7 @@ TEST(SocketConnectionTest, ClientHandshake)
     MockGui gui;
     auto clientMock = TestSubcase::SetupClientPreconditions(mock);
     EXPECT_CALL(*clientMock, Write("metizik:HELLO!"));
+    EXPECT_CALL(*clientMock, Read(_));
     Session(mock, gui, "metizik");
 }
 
@@ -128,7 +129,7 @@ TEST(SocketConnectionTest, ServerAnswersOnHandshake)
 {
     MockSocketWrapper mock;
     MockGui gui;
-    std::shared_ptr<MockSocketWrapper> acceptedSocket = TestSubcase::SetupServerPreconditions(mock, gui);
+    auto acceptedSocket = TestSubcase::SetupServerPreconditions(mock, gui);
     EXPECT_CALL(*acceptedSocket, Read(_));
     EXPECT_CALL(*acceptedSocket, Write("server:HELLO!"));
     Session(mock, gui, "server");
