@@ -2,7 +2,8 @@
 #include <gmock/gmock.h>
 #include "ISocketWrapper.h"
 #include "IGui.h"
-#include "Session.h"
+#include "sessionutils.h"
+#include "session.h"
 
 using namespace testing;
 /*
@@ -48,6 +49,9 @@ public:
     MOCK_METHOD2(Connect, ISocketWrapper::SockPtr(const std::string& addr, int16_t port));
     MOCK_METHOD2(Bind, void(const std::string& addr, int16_t port));
     MOCK_METHOD0(Listen, void());
+    MOCK_METHOD0(Accept, ISocketWrapper::SockPtr());
+    MOCK_METHOD1(Read, void(std::string& nickName));
+    MOCK_METHOD1(Write, void(const std::string& nickName));
 };
 
 class MockGui : public IGui
@@ -56,57 +60,79 @@ public:
     MOCK_METHOD1(Print, void(const std::string&));
 };
 
-const std::string s_host = "localhost";
-const int16_t s_port = 4444;
-const std::string s_listenMessage = "No one is here…";
-
 namespace TestSubcase
 {
-    void SuccesfulConnect(MockSocketWrapper& socket)
+    std::shared_ptr<MockSocketWrapper> SetupClientPreconditions(MockSocketWrapper& socket)
     {
-        EXPECT_CALL(socket, Connect(s_host, s_port)).WillOnce(Return(ISocketWrapper::SockPtr{}));
-        EXPECT_CALL(socket, Bind(s_host, s_port)).Times(0);
+        auto acceptedSocket = std::make_shared<MockSocketWrapper>();
+        EXPECT_CALL(socket, Connect(sessionUtils::GetHost(), sessionUtils::GetPort())).WillOnce(Return(acceptedSocket));
+        EXPECT_CALL(socket, Bind(sessionUtils::GetHost(), sessionUtils::GetPort())).Times(0);
         EXPECT_CALL(socket, Listen()).Times(0);
+        return acceptedSocket;
     }
 
-    void UnsuccesfulConnect(MockSocketWrapper& socket)
+    std::shared_ptr<MockSocketWrapper> SetupServerPreconditions(MockSocketWrapper& socket, MockGui& gui)
     {
-        EXPECT_CALL(socket, Connect(s_host, s_port)).WillOnce(Throw(std::runtime_error("")));
-        EXPECT_CALL(socket, Bind(s_host, s_port));
+        EXPECT_CALL(socket, Connect(sessionUtils::GetHost(), sessionUtils::GetPort())).WillOnce(Throw(std::runtime_error("")));
+        EXPECT_CALL(socket, Bind(sessionUtils::GetHost(), sessionUtils::GetPort()));
         EXPECT_CALL(socket, Listen());
+        auto acceptedSocket = std::make_shared<MockSocketWrapper>();
+        EXPECT_CALL(socket, Accept()).WillOnce(Return(acceptedSocket));
+        EXPECT_CALL(gui, Print(sessionUtils::GetListenMessage())).Times(1);
+        return acceptedSocket;
     }
 }
 
 TEST(SocketConnectionTest, Connect_localhost_4444)
 {
     MockSocketWrapper mock;
-    EXPECT_CALL(mock, Connect(s_host, s_port)).WillOnce(Return(ISocketWrapper::SockPtr{}));
-    utils::Connect(mock);
+    EXPECT_CALL(mock, Connect(sessionUtils::GetHost(), sessionUtils::GetPort())).WillOnce(Return(ISocketWrapper::SockPtr{}));
+    sessionUtils::Connect(mock);
 }
 
 TEST(SocketConnectionTest, ListenIfBindSuccess)
 {
     MockSocketWrapper mock;
-    EXPECT_CALL(mock, Bind(s_host, s_port));
+    EXPECT_CALL(mock, Bind(sessionUtils::GetHost(), sessionUtils::GetPort()));
     EXPECT_CALL(mock, Listen());
-    utils::SetupServer(mock);
+    EXPECT_CALL(mock, Accept()).WillOnce(Return(ISocketWrapper::SockPtr{}));
+    sessionUtils::SetupServer(mock);
 }
 
 TEST(SocketConnectionTest, IfConnectSuccessListenAndBindIsNotCalled)
 {
     MockSocketWrapper mock;
     MockGui gui;
-    Session session;
-    TestSubcase::SuccesfulConnect(mock);
-    session.InitSession(mock, gui);
+    TestSubcase::SetupClientPreconditions(mock);
+    Session(mock, gui, "");
 }
 
 TEST(SocketConnectionTest, MessageIsDispayedAfterUnsuccesfulConnect)
 {
     MockSocketWrapper mock;
     MockGui gui;
-    Session session;
-    TestSubcase::UnsuccesfulConnect(mock);
-    EXPECT_CALL(gui, Print(s_listenMessage)).Times(1);
-    session.InitSession(mock, gui);
+    TestSubcase::SetupServerPreconditions(mock, gui);
+    Session(mock, gui, "");
 }
+
+TEST(SocketConnectionTest, ClientHandshake)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    auto clientMock = TestSubcase::SetupClientPreconditions(mock);
+    EXPECT_CALL(*clientMock, Write("metizik:HELLO!"));
+    Session(mock, gui, "metizik");
+}
+
+TEST(SocketConnectionTest, ServerAnswersOnHandshake)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    std::shared_ptr<MockSocketWrapper> acceptedSocket = TestSubcase::SetupServerPreconditions(mock, gui);
+    EXPECT_CALL(*acceptedSocket, Read(_));
+    EXPECT_CALL(*acceptedSocket, Write("server:HELLO!"));
+    Session(mock, gui, "server");
+}
+
+// Sample for set reference:
+//    EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("server:HELLO!"));
