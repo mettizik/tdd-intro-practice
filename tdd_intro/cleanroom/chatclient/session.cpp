@@ -5,39 +5,46 @@
 
 namespace
 {
+    const std::string handShakeMagic = ":HELLO!";
+
     ISocketWrapper::SockPtr InitClient(ISocketWrapper& socket)
     {
             return sessionUtils::Connect(socket);
 
     }
+
     ISocketWrapper::SockPtr InitServer(ISocketWrapper& socket)
     {
             return sessionUtils::SetupServer(socket);
+    }
+
+    bool CheckHandshake(ISocketWrapper::SockPtr& socket)
+    {
+        std::string result;
+        socket->Read(result);
+        size_t magicPosition = result.find(handShakeMagic);
+        if (magicPosition == std::string::npos)
+        {
+            socket->DropSocket();
+            return false;
+        }
+        return true;
     }
 }
 
 Session::Session(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
 {
-    const std::string handShakeMagic = ":HELLO!";
     try
     {
         m_socket = InitClient(socket);
         m_socket->Write(nickName + handShakeMagic);
-        std::string result;
-        m_socket->Read(result);
+        CheckHandshake(m_socket);
     }
     catch(const std::runtime_error& /*ex*/)
     {
         m_socket = InitServer(socket);
         gui.Print(sessionUtils::GetListenMessage());
-        std::string result;
-        m_socket->Read(result);
-        size_t magicPosition = result.find(handShakeMagic);
-        if (magicPosition == std::string::npos)
-        {
-            m_socket->DropSocket();
-        }
-        else
+        if (CheckHandshake(m_socket))
         {
             m_socket->Write(nickName + handShakeMagic);
         }

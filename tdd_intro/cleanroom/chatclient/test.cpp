@@ -148,5 +148,16 @@ TEST(SocketConnectionTest, ServerDropsConnectionWithClientAfterMalformedPacket)
     Session(mock, gui, "server");
 }
 
+TEST(SocketConnectionTest, ClientDropsConnectionOnMalformedHandshake)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    auto clientMock = TestSubcase::SetupClientPreconditions(mock);
+    EXPECT_CALL(*clientMock, Write("metizik:HELLO!"));
+    EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0, std::string>("server:HELLO"));
+    EXPECT_CALL(*clientMock, DropSocket() );
+    Session(mock, gui, "metizik");
+}
+
 // Sample for set reference:
 //    EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("server:HELLO!"));
