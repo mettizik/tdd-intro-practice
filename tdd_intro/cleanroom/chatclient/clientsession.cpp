@@ -4,7 +4,14 @@
 #include "sessionutils.h"
 
 ClientSession::ClientSession(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
+    : m_gui(gui)
+    , m_nick(nickName)
 {
-    auto socketConnection = sessionUtils::Connect(socket);
-    sessionUtils::HandShake(socketConnection, nickName);
+    m_socket = sessionUtils::Connect(socket);
+}
+
+void ClientSession::PerformHandshake()
+{
+    sessionUtils::SendHandShake(*m_socket, m_nick);
+    sessionUtils::ReadHandShake(*m_socket);
 }

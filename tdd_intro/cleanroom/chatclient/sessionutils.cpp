@@ -1,5 +1,6 @@
 #include "sessionutils.h"
-#include "ISocketWrapper.h"
+#include "clientsession.h"
+#include "serversession.h"
 
 const std::string s_host = "localhost";
 const int16_t s_port = 4444;
@@ -38,15 +39,37 @@ ISocketWrapper::SockPtr sessionUtils::SetupServer(ISocketWrapper& socket)
     return socket.Accept();
 }
 
-bool sessionUtils::HandShake(ISocketWrapper::SockPtr socketConnection, const std::string& nickName)
+void sessionUtils::ReadHandShake(ISocketWrapper& socket)
 {
-    socketConnection->Write(nickName + sessionUtils::GetHelloMessage());
-    std::string readResult;
-    socketConnection->Read(readResult);
-    if (readResult.find(sessionUtils::GetHelloMessage()) == readResult.npos)
+    std::string buffer;
+    socket.Read(buffer);
+    if (buffer.find(sessionUtils::GetHelloMessage()) == std::string::npos)
     {
-        socketConnection->Close();
-        return true;
+        socket.Close();
+        throw std::runtime_error("Invalid handshake message!");
     }
-    return false;
+}
+
+void sessionUtils::SendHandShake(ISocketWrapper& socket, const std::string& nickname)
+{
+    socket.Write(nickname + sessionUtils::GetHelloMessage());
+}
+
+IChatSession_ptr CreateNewSession(ISocketWrapper& socket, IGui& gui, const std::string& nickname)
+{
+    try
+    {
+        return std::make_shared<ClientSession>(socket, gui, nickname);
+    }
+    catch (const std::exception& ex)
+    {
+        return std::make_shared<ServerSession>(socket, gui, nickname);
+    }
+}
+
+IChatSession_ptr sessionUtils::StartSession(ISocketWrapper& socket, IGui& gui, const std::string& nickname)
+{
+    auto session = CreateNewSession(socket, gui, nickname);
+    session->PerformHandshake();
+    return session;
 }

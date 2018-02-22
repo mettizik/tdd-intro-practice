@@ -1,14 +1,15 @@
 #pragma once
+#include <memory>
 #include <string>
 #include "ISocketWrapper.h"
 #include "IChatSession.h"
 
 class IGui;
 
-class ClientSession : public IChatSession
+class ServerSession : public IChatSession
 {
 public:
-    ClientSession(ISocketWrapper& socket, IGui& gui, const std::string& nickName);
+    ServerSession(ISocketWrapper& socket, IGui& gui, const std::string& nickName);
 
     virtual void PerformHandshake() override;
 
