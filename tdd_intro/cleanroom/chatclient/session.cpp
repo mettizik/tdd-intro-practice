@@ -18,10 +18,11 @@ namespace
 
 Session::Session(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
 {
+    const std::string handShakeMagic = ":HELLO!";
     try
     {
         m_socket = InitClient(socket);
-        m_socket->Write(nickName + ":HELLO!");
+        m_socket->Write(nickName + handShakeMagic);
         std::string result;
         m_socket->Read(result);
     }
@@ -31,13 +32,14 @@ Session::Session(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
         gui.Print(sessionUtils::GetListenMessage());
         std::string result;
         m_socket->Read(result);
-        if (result != "metizik:HELLO!")
+        size_t magicPosition = result.find(handShakeMagic);
+        if (magicPosition == std::string::npos)
         {
             m_socket->DropSocket();
         }
         else
         {
-            m_socket->Write(nickName + ":HELLO!");
+            m_socket->Write(nickName + handShakeMagic);
         }
     }
 }
