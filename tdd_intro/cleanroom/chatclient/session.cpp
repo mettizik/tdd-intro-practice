@@ -47,6 +47,7 @@ Session::Session(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
         if (CheckHandshake(m_socket))
         {
             m_socket->Write(nickName + handShakeMagic);
+            socket.DropSocket();
         }
     }
 }

@@ -126,7 +126,7 @@ TEST(SocketConnectionTest, ClientHandshake)
     Session(mock, gui, "metizik");
 }
 
-TEST(SocketConnectionTest, ServerAnswersOnHandshake)
+TEST(SocketConnectionTest, ServerAnswersOnHandshakeAndClosesListeningSocket)
 {
     MockSocketWrapper mock;
     MockGui gui;
@@ -134,6 +134,7 @@ TEST(SocketConnectionTest, ServerAnswersOnHandshake)
     EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0, std::string>("metizik:HELLO!"));
     EXPECT_CALL(*acceptedSocket, DropSocket() ).Times(0);
     EXPECT_CALL(*acceptedSocket, Write("server:HELLO!"));
+    EXPECT_CALL(mock, DropSocket());
     Session(mock, gui, "server");
 }
 
