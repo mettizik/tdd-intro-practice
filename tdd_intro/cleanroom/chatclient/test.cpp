@@ -205,3 +205,24 @@ TEST(SocketConnectionTest, ReadHandshakeReadsFromSocketThrowsOnEmptyHandshake)
     EXPECT_CALL(mock, Read(_)).WillOnce(SetArgReferee<0>(""));
     EXPECT_THROW(sessionUtils::ReadHandShake(mock), std::exception);
 }
+
+TEST(SessionTests, ServerSessionCreateDoesNotThrowAndReturnsServerObject)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    std::shared_ptr<MockSocketWrapper> acceptedSocket = TestSubcase::SetupServerPreconditions(mock, gui);
+    EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0>("client:HELLO!"));
+    EXPECT_CALL(*acceptedSocket, Close()).Times(0);
+    EXPECT_NE(nullptr, dynamic_cast<ServerSession*>(sessionUtils::StartSession(mock, gui, "server").get()));
+}
+
+TEST(SessionTests, ClientSessionCreateDoesNotThrowAndReturnsClientObject)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    auto clientMock = TestSubcase::SetupClientPreconditions(mock);
+    EXPECT_CALL(*clientMock, Write(_));
+    EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("server:HELLO!"));
+    EXPECT_CALL(*clientMock, Close()).Times(0);
+    EXPECT_NE(nullptr, dynamic_cast<ClientSession*>(sessionUtils::StartSession(mock, gui, "client").get()));
+}
