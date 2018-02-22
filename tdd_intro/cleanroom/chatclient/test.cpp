@@ -52,6 +52,7 @@ public:
     MOCK_METHOD0(Accept, ISocketWrapper::SockPtr());
     MOCK_METHOD1(Read, void(std::string& nickName));
     MOCK_METHOD1(Write, void(const std::string& nickName));
+    MOCK_METHOD0(DropSocket, void());
 };
 
 class MockGui : public IGui
@@ -130,8 +131,20 @@ TEST(SocketConnectionTest, ServerAnswersOnHandshake)
     MockSocketWrapper mock;
     MockGui gui;
     auto acceptedSocket = TestSubcase::SetupServerPreconditions(mock, gui);
-    EXPECT_CALL(*acceptedSocket, Read(_));
+    EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0, std::string>("metizik:HELLO!"));
+    EXPECT_CALL(*acceptedSocket, DropSocket() ).Times(0);
     EXPECT_CALL(*acceptedSocket, Write("server:HELLO!"));
+    Session(mock, gui, "server");
+}
+
+TEST(SocketConnectionTest, ServerDropsConnectionWithClientAfterMalformedPacket)
+{
+    MockSocketWrapper mock;
+    MockGui gui;
+    auto acceptedSocket = TestSubcase::SetupServerPreconditions(mock, gui);
+    EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0, std::string>("metizik"));
+    EXPECT_CALL(*acceptedSocket, DropSocket());
+    EXPECT_CALL(*acceptedSocket, Write(_) ).Times(0);
     Session(mock, gui, "server");
 }
 

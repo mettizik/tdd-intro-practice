@@ -31,6 +31,13 @@ Session::Session(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
         gui.Print(sessionUtils::GetListenMessage());
         std::string result;
         m_socket->Read(result);
-        m_socket->Write(nickName + ":HELLO!");
+        if (result != "metizik:HELLO!")
+        {
+            m_socket->DropSocket();
+        }
+        else
+        {
+            m_socket->Write(nickName + ":HELLO!");
+        }
     }
 }
