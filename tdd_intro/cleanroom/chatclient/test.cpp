@@ -103,9 +103,8 @@ TEST(SocketConnectionTest, ListenIfBindSuccess)
 TEST(SocketConnectionTest, IfConnectSuccessListenAndBindIsNotCalled)
 {
     MockSocketWrapper mock;
-    MockGui gui;
     TestSubcase::SetupClientPreconditions(mock);
-    ClientSession(mock, gui, "");
+    ClientSession session(mock);
 }
 
 TEST(SocketConnectionTest, MessageIsDispayedAfterUnsuccesfulConnect)
@@ -113,18 +112,17 @@ TEST(SocketConnectionTest, MessageIsDispayedAfterUnsuccesfulConnect)
     MockSocketWrapper mock;
     MockGui gui;
     TestSubcase::SetupServerPreconditions(mock, gui);
-    ServerSession(mock, gui, "");
+    sessionUtils::CreateNewSession(mock, gui);
 }
 
 TEST(SocketConnectionTest, ClientHandshake)
 {
     MockSocketWrapper mock;
-    MockGui gui;
     auto clientMock = TestSubcase::SetupClientPreconditions(mock);
     EXPECT_CALL(*clientMock, Write("metizik:HELLO!"));
     EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("user:HELLO!"));
-    ClientSession session(mock, gui, "metizik");
-    session.PerformHandshake();
+    ClientSession session(mock);
+    session.PerformHandshake("metizik");
 }
 
 TEST(SocketConnectionTest, ServerAnswersOnHandshake)
@@ -135,32 +133,29 @@ TEST(SocketConnectionTest, ServerAnswersOnHandshake)
     EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0>("user:HELLO!"));
     EXPECT_CALL(*acceptedSocket, Write("server:HELLO!"));
     EXPECT_CALL(*acceptedSocket, Close()).Times(0);
-    ServerSession server(mock, gui, "server");
-    server.PerformHandshake();
+    sessionUtils::StartSession(mock, gui, "server");
 }
 
 TEST(SocketConnectionTest, ClientSessionHandshake)
 {
     MockSocketWrapper mock;
-    MockGui gui;
     auto clientMock = TestSubcase::SetupClientPreconditions(mock);
     EXPECT_CALL(*clientMock, Write(_));
     EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("server:HELLO!"));
     EXPECT_CALL(*clientMock, Close()).Times(0);
-    ClientSession session(mock, gui, "metizik");
-    session.PerformHandshake();
+    ClientSession session(mock);
+    session.PerformHandshake("metizik");
 }
 
 TEST(SocketConnectionTest, InvalidClientSessionHandshakeThrows)
 {
     MockSocketWrapper mock;
-    MockGui gui;
     auto clientMock = TestSubcase::SetupClientPreconditions(mock);
     EXPECT_CALL(*clientMock, Write(_));
     EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("123"));
     EXPECT_CALL(*clientMock, Close()).Times(1);
-    ClientSession session(mock, gui, "metizik");
-    EXPECT_THROW(session.PerformHandshake(), std::exception);
+    ClientSession session(mock);
+    EXPECT_THROW(session.PerformHandshake("metizik"), std::exception);
 }
 
 TEST(SocketConnectionTest, MainSessionHandshake)
@@ -170,8 +165,7 @@ TEST(SocketConnectionTest, MainSessionHandshake)
     std::shared_ptr<MockSocketWrapper> acceptedSocket = TestSubcase::SetupServerPreconditions(mock, gui);
     EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0>("metizik:HELLO!"));
     EXPECT_CALL(*acceptedSocket, Close()).Times(0);
-    ServerSession server(mock, gui, "server");
-    server.PerformHandshake();
+    sessionUtils::StartSession(mock, gui, "server");
 }
 
 TEST(SocketConnectionTest, InvalidMainSessionHandshake)
@@ -181,8 +175,7 @@ TEST(SocketConnectionTest, InvalidMainSessionHandshake)
     std::shared_ptr<MockSocketWrapper> acceptedSocket = TestSubcase::SetupServerPreconditions(mock, gui);
     EXPECT_CALL(*acceptedSocket, Read(_)).WillOnce(SetArgReferee<0>("321"));
     EXPECT_CALL(*acceptedSocket, Close()).Times(1);
-    ServerSession server(mock, gui, "server");
-    EXPECT_THROW(server.PerformHandshake(), std::exception);
+    EXPECT_THROW(sessionUtils::StartSession(mock, gui, "server"), std::exception);
 }
 
 TEST(SocketConnectionTest, ReadHandshakeReadsFromSocketAndDoesNotThrowOnValidHandshake)
@@ -225,4 +218,42 @@ TEST(SessionTests, ClientSessionCreateDoesNotThrowAndReturnsClientObject)
     EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("server:HELLO!"));
     EXPECT_CALL(*clientMock, Close()).Times(0);
     EXPECT_NE(nullptr, dynamic_cast<ClientSession*>(sessionUtils::StartSession(mock, gui, "client").get()));
+}
+
+TEST(SessionTests, ClientSessionSendMessageWritesToSocketUsedToInitializeObject)
+{
+    std::shared_ptr<MockSocketWrapper> socket = std::make_shared<MockSocketWrapper>();
+    EXPECT_CALL(*socket, Write("hello"));
+    ClientSession session(socket);
+    session.SendMessage("hello");
+}
+
+TEST(SessionTests, ServerSessionSendMessageWritesToSocketUsedToInitializeObject)
+{
+    std::shared_ptr<MockSocketWrapper> socket = std::make_shared<MockSocketWrapper>();
+    MockGui gui;
+    EXPECT_CALL(*socket, Write("hello"));
+    ServerSession session(socket);
+    session.SendMessage("hello");
+}
+
+TEST(SessionTests, ServerSessionReadsMessageFromSocket)
+{
+    std::shared_ptr<MockSocketWrapper> socket = std::make_shared<MockSocketWrapper>();
+    MockGui gui;
+    EXPECT_CALL(*socket, Read(_)).WillOnce(SetArgReferee<0>("hello"));
+    ServerSession session(socket);
+    std::string msg;
+    session.ReadMessage(msg);
+    EXPECT_EQ("hello", msg);
+}
+
+TEST(SessionTests, ClientSessionReadsMessageFromSocket)
+{
+    std::shared_ptr<MockSocketWrapper> socket = std::make_shared<MockSocketWrapper>();
+    EXPECT_CALL(*socket, Read(_)).WillOnce(SetArgReferee<0>("hello"));
+    ClientSession session(socket);
+    std::string msg;
+    session.ReadMessage(msg);
+    EXPECT_EQ("hello", msg);
 }

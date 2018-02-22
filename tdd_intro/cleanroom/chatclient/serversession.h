@@ -2,19 +2,15 @@
 #include <memory>
 #include <string>
 #include "ISocketWrapper.h"
-#include "IChatSession.h"
+#include "ChatSessionBase.h"
 
 class IGui;
 
-class ServerSession : public IChatSession
+class ServerSession : public ChatSessionBase
 {
 public:
-    ServerSession(ISocketWrapper& socket, IGui& gui, const std::string& nickName);
+    ServerSession(ISocketWrapper::SockPtr socket);
+    ServerSession(ISocketWrapper& socket);
 
-    virtual void PerformHandshake() override;
-
-private:
-    ISocketWrapper::SockPtr m_socket;
-    IGui& m_gui;
-    const std::string m_nick;
+    virtual void PerformHandshake(const std::string& nickname) override;
 };

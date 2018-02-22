@@ -18,5 +18,6 @@ namespace sessionUtils
     void ReadHandShake(ISocketWrapper& socket);
     void SendHandShake(ISocketWrapper& socket, const std::string& nickname);
 
+    IChatSession_ptr CreateNewSession(ISocketWrapper& socket, IGui& gui);
     IChatSession_ptr StartSession(ISocketWrapper& socket, IGui& gui, const std::string& nickname);
 }

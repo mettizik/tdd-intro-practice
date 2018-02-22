@@ -4,16 +4,20 @@
 #include "sessionutils.h"
 
 
-ServerSession::ServerSession(ISocketWrapper& socket, IGui& gui, const std::string& nickName)
-    : m_gui(gui)
-    , m_nick(nickName)
+ServerSession::ServerSession(ISocketWrapper::SockPtr socket)
+    : ChatSessionBase(socket)
 {
-    m_socket = sessionUtils::SetupServer(socket);
-    gui.Print(sessionUtils::GetListenMessage());
 }
 
-void ServerSession::PerformHandshake()
+ServerSession::ServerSession(ISocketWrapper& socket)
+    : ChatSessionBase(nullptr)
+{
+    m_socket = sessionUtils::SetupServer(socket);
+    //gui.Print(sessionUtils::GetListenMessage());
+}
+
+void ServerSession::PerformHandshake(const std::string& nickname)
 {
     sessionUtils::ReadHandShake(*m_socket);
-    sessionUtils::SendHandShake(*m_socket, m_nick);
+    sessionUtils::SendHandShake(*m_socket, nickname);
 }

@@ -10,7 +10,8 @@ SOURCES += \
     socketwrapper.cpp \
     sessionutils.cpp \
     clientsession.cpp \
-    serversession.cpp
+    serversession.cpp \
+    ChatSessionBase.cpp
 
 HEADERS += \
     socketwrapper.h \
@@ -19,7 +20,8 @@ HEADERS += \
     sessionutils.h \
     clientsession.h \
     serversession.h \
-    IChatSession.h
+    IChatSession.h \
+    ChatSessionBase.h
 
 LIBS += \
     Ws2_32.lib \

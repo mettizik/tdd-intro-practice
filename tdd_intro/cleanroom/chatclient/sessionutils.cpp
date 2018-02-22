@@ -55,21 +55,22 @@ void sessionUtils::SendHandShake(ISocketWrapper& socket, const std::string& nick
     socket.Write(nickname + sessionUtils::GetHelloMessage());
 }
 
-IChatSession_ptr CreateNewSession(ISocketWrapper& socket, IGui& gui, const std::string& nickname)
+IChatSession_ptr sessionUtils::CreateNewSession(ISocketWrapper& socket, IGui& gui)
 {
     try
     {
-        return std::make_shared<ClientSession>(socket, gui, nickname);
+        return std::make_shared<ClientSession>(socket);
     }
-    catch (const std::exception& ex)
+    catch (const std::exception& )
     {
-        return std::make_shared<ServerSession>(socket, gui, nickname);
+        gui.Print(sessionUtils::GetListenMessage());
+        return std::make_shared<ServerSession>(socket);
     }
 }
 
 IChatSession_ptr sessionUtils::StartSession(ISocketWrapper& socket, IGui& gui, const std::string& nickname)
 {
-    auto session = CreateNewSession(socket, gui, nickname);
-    session->PerformHandshake();
+    auto session = CreateNewSession(socket, gui);
+    session->PerformHandshake(nickname);
     return session;
 }
