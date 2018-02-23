@@ -10,7 +10,6 @@ class ServerSession : public ChatSessionBase
 {
 public:
     ServerSession(ISocketWrapper::SockPtr socket);
-    ServerSession(ISocketWrapper& socket);
 
-    virtual void PerformHandshake(const std::string& nickname) override;
+    virtual std::string PerformHandshake(const std::string& nickname) override;
 };

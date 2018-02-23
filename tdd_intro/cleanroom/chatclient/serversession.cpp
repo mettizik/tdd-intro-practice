@@ -9,15 +9,9 @@ ServerSession::ServerSession(ISocketWrapper::SockPtr socket)
 {
 }
 
-ServerSession::ServerSession(ISocketWrapper& socket)
-    : ChatSessionBase(nullptr)
+std::string ServerSession::PerformHandshake(const std::string& nickname)
 {
-    m_socket = sessionUtils::SetupServer(socket);
-    //gui.Print(sessionUtils::GetListenMessage());
-}
-
-void ServerSession::PerformHandshake(const std::string& nickname)
-{
-    sessionUtils::ReadHandShake(*m_socket);
+    auto handshake = sessionUtils::ReadHandShake(*m_socket);
     sessionUtils::SendHandShake(*m_socket, nickname);
+    return handshake;
 }

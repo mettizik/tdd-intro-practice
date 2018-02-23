@@ -5,6 +5,7 @@
 #include "sessionutils.h"
 #include "serversession.h"
 #include "clientsession.h"
+#include "Application.h"
 
 using namespace testing;
 /*
@@ -56,10 +57,19 @@ public:
     MOCK_METHOD0(Close, void());
 };
 
+class MockChatSession : public IChatSession
+{
+public:
+    MOCK_METHOD1(PerformHandshake, std::string(const std::string&));
+    MOCK_METHOD1(SendMessage, void(const std::string&));
+    MOCK_METHOD1(ReadMessage, void(std::string&));
+};
+
 class MockGui : public IGui
 {
 public:
     MOCK_METHOD1(Print, void(const std::string&));
+    MOCK_METHOD0(Read, std::string());
 };
 
 namespace TestSubcase
@@ -103,8 +113,9 @@ TEST(SocketConnectionTest, ListenIfBindSuccess)
 TEST(SocketConnectionTest, IfConnectSuccessListenAndBindIsNotCalled)
 {
     MockSocketWrapper mock;
+    MockGui gui;
     TestSubcase::SetupClientPreconditions(mock);
-    ClientSession session(mock);
+    sessionUtils::CreateNewSession(mock, gui);
 }
 
 TEST(SocketConnectionTest, MessageIsDispayedAfterUnsuccesfulConnect)
@@ -117,11 +128,10 @@ TEST(SocketConnectionTest, MessageIsDispayedAfterUnsuccesfulConnect)
 
 TEST(SocketConnectionTest, ClientHandshake)
 {
-    MockSocketWrapper mock;
-    auto clientMock = TestSubcase::SetupClientPreconditions(mock);
+    auto clientMock = std::make_shared<MockSocketWrapper>();
     EXPECT_CALL(*clientMock, Write("metizik:HELLO!"));
     EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("user:HELLO!"));
-    ClientSession session(mock);
+    ClientSession session(clientMock);
     session.PerformHandshake("metizik");
 }
 
@@ -138,23 +148,21 @@ TEST(SocketConnectionTest, ServerAnswersOnHandshake)
 
 TEST(SocketConnectionTest, ClientSessionHandshake)
 {
-    MockSocketWrapper mock;
-    auto clientMock = TestSubcase::SetupClientPreconditions(mock);
+    auto clientMock = std::make_shared<MockSocketWrapper>();
     EXPECT_CALL(*clientMock, Write(_));
     EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("server:HELLO!"));
     EXPECT_CALL(*clientMock, Close()).Times(0);
-    ClientSession session(mock);
+    ClientSession session(clientMock);
     session.PerformHandshake("metizik");
 }
 
 TEST(SocketConnectionTest, InvalidClientSessionHandshakeThrows)
 {
-    MockSocketWrapper mock;
-    auto clientMock = TestSubcase::SetupClientPreconditions(mock);
+    auto clientMock = std::make_shared<MockSocketWrapper>();
     EXPECT_CALL(*clientMock, Write(_));
     EXPECT_CALL(*clientMock, Read(_)).WillOnce(SetArgReferee<0>("123"));
     EXPECT_CALL(*clientMock, Close()).Times(1);
-    ClientSession session(mock);
+    ClientSession session(clientMock);
     EXPECT_THROW(session.PerformHandshake("metizik"), std::exception);
 }
 
@@ -256,4 +264,78 @@ TEST(SessionTests, ClientSessionReadsMessageFromSocket)
     std::string msg;
     session.ReadMessage(msg);
     EXPECT_EQ("hello", msg);
+}
+
+TEST(SessionTests, ApplicationCreatesWithSessionAndPerformsHandshakeWithNickname)
+{
+    MockChatSession mockChat;
+    EXPECT_CALL(mockChat, PerformHandshake("metizik")).Times(1);
+    Application app(mockChat, "metizik");
+}
+
+
+TEST(SessionTests, PrintQueryForInput)
+{
+    MockChatSession mockChat;
+    MockGui mockGui;
+    EXPECT_CALL(mockGui, Print("me: ")).Times(1);
+    Application app(mockChat, "metizik");
+    app.StartCommunication(mockGui);
+}
+
+TEST(SessionTests, ApplicationSendsUserInput)
+{
+    MockChatSession mockChat;
+    MockGui mockGui;
+    {
+        InSequence dummy;
+        EXPECT_CALL(mockGui, Print("me: ")).Times(1);
+        EXPECT_CALL(mockGui, Read()).WillOnce(Return("hello world"));
+        EXPECT_CALL(mockChat, SendMessage("hello world")).Times(1);
+    }
+    Application app(mockChat, "metizik");
+    app.StartCommunication(mockGui);
+}
+
+TEST(SessionTests, ApplicationWaitsForAnswerAndReadsIt)
+{
+    MockChatSession mockChat;
+    MockGui mockGui;
+    {
+        InSequence dummy;
+        EXPECT_CALL(mockChat, SendMessage(_)).Times(1);
+        EXPECT_CALL(mockChat, ReadMessage(_)).Times(1);
+    }
+    Application app(mockChat, "metizik");
+    app.StartCommunication(mockGui);
+}
+
+TEST(SessionTests, ClientRetreivesServerNick)
+{
+    std::shared_ptr<MockSocketWrapper> socket = std::make_shared<MockSocketWrapper>();
+    EXPECT_CALL(*socket, Read(_)).WillOnce(SetArgReferee<0>("server:HELLO!"));
+    ClientSession session(socket);
+    EXPECT_EQ("server", session.PerformHandshake(""));
+}
+
+TEST(SessionTests, ServerRetreivesClientNick)
+{
+    std::shared_ptr<MockSocketWrapper> socket = std::make_shared<MockSocketWrapper>();
+    EXPECT_CALL(*socket, Read(_)).WillOnce(SetArgReferee<0>("client:HELLO!"));
+    ServerSession session(socket);
+    EXPECT_EQ("client", session.PerformHandshake(""));
+}
+
+
+TEST(SessionTests, ApplicationPrintsReceivedMessage)
+{
+    MockChatSession mockChat;
+    MockGui mockGui;
+    {
+        InSequence dummy;
+        EXPECT_CALL(mockChat, ReadMessage(_)).WillOnce(SetArgReferee<0>("and to you!"));
+        EXPECT_CALL(mockGui, Print("server: and to you!")).Times(1);
+    }
+    Application app(mockChat, "metizik");
+    app.StartCommunication(mockGui);
 }

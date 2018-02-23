@@ -15,7 +15,7 @@ namespace sessionUtils
 
     ISocketWrapper::SockPtr Connect(ISocketWrapper& socket);
     ISocketWrapper::SockPtr SetupServer(ISocketWrapper& socket);
-    void ReadHandShake(ISocketWrapper& socket);
+    std::string ReadHandShake(ISocketWrapper& socket);
     void SendHandShake(ISocketWrapper& socket, const std::string& nickname);
 
     IChatSession_ptr CreateNewSession(ISocketWrapper& socket, IGui& gui);

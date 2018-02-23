@@ -39,15 +39,18 @@ ISocketWrapper::SockPtr sessionUtils::SetupServer(ISocketWrapper& socket)
     return socket.Accept();
 }
 
-void sessionUtils::ReadHandShake(ISocketWrapper& socket)
+std::string sessionUtils::ReadHandShake(ISocketWrapper& socket)
 {
     std::string buffer;
     socket.Read(buffer);
-    if (buffer.find(sessionUtils::GetHelloMessage()) == std::string::npos)
+    size_t nickEnd = buffer.find(sessionUtils::GetHelloMessage());
+    if (nickEnd == std::string::npos)
     {
         socket.Close();
         throw std::runtime_error("Invalid handshake message!");
     }
+
+    return buffer.substr(0, nickEnd);
 }
 
 void sessionUtils::SendHandShake(ISocketWrapper& socket, const std::string& nickname)
@@ -59,12 +62,12 @@ IChatSession_ptr sessionUtils::CreateNewSession(ISocketWrapper& socket, IGui& gu
 {
     try
     {
-        return std::make_shared<ClientSession>(socket);
+        return std::make_shared<ClientSession>(sessionUtils::Connect(socket));
     }
     catch (const std::exception& )
     {
         gui.Print(sessionUtils::GetListenMessage());
-        return std::make_shared<ServerSession>(socket);
+        return std::make_shared<ServerSession>(SetupServer(socket));
     }
 }
 

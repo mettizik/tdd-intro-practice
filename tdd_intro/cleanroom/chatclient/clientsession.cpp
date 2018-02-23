@@ -8,14 +8,8 @@ ClientSession::ClientSession(ISocketWrapper::SockPtr socket)
 {
 }
 
-ClientSession::ClientSession(ISocketWrapper& socket)
-    : ChatSessionBase(nullptr)
-{
-    m_socket = sessionUtils::Connect(socket);
-}
-
-void ClientSession::PerformHandshake(const std::string& nickname)
+std::string ClientSession::PerformHandshake(const std::string& nickname)
 {
     sessionUtils::SendHandShake(*m_socket, nickname);
-    sessionUtils::ReadHandShake(*m_socket);
+    return sessionUtils::ReadHandShake(*m_socket);
 }
