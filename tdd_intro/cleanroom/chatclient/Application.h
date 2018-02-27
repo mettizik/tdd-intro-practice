@@ -4,16 +4,26 @@
 #include "IChatSession.h"
 class IGui;
 
-class Application
+class IApplication
+{
+public:
+    virtual ~IApplication(){}
+    virtual void ReadMessage(IGui& gui) = 0;
+    virtual void DisplayReceivedMessage(IGui& gui) = 0;
+};
+
+class Application : public IApplication
 {
 public:
     Application(IChatSession& chat, const std::string& nickname);
-    void StartCommunication(IGui& gui);
-
-    std::string ReadMessage(IGui& gui);
+    virtual void ReadMessage(IGui& gui) override;
+    virtual void DisplayReceivedMessage(IGui& gui) override;
 
 private:
     IChatSession& m_chat;
+    std::string m_otherNick;
 };
+
+void StartCommunication(IApplication& app, IGui& gui);
 
 #endif // APPLICATION_H

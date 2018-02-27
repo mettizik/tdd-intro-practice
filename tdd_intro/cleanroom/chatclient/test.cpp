@@ -72,6 +72,13 @@ public:
     MOCK_METHOD0(Read, std::string());
 };
 
+class MockApplication : public IApplication
+{
+public:
+    MOCK_METHOD1(ReadMessage, void(IGui&));
+    MOCK_METHOD1(DisplayReceivedMessage, void(IGui&));
+};
+
 namespace TestSubcase
 {
     std::shared_ptr<MockSocketWrapper> SetupClientPreconditions(MockSocketWrapper& socket)
@@ -280,7 +287,7 @@ TEST(SessionTests, PrintQueryForInput)
     MockGui mockGui;
     EXPECT_CALL(mockGui, Print("me: ")).Times(1);
     Application app(mockChat, "metizik");
-    app.StartCommunication(mockGui);
+    app.ReadMessage(mockGui);
 }
 
 TEST(SessionTests, ApplicationSendsUserInput)
@@ -294,7 +301,7 @@ TEST(SessionTests, ApplicationSendsUserInput)
         EXPECT_CALL(mockChat, SendMessage("hello world")).Times(1);
     }
     Application app(mockChat, "metizik");
-    app.StartCommunication(mockGui);
+    app.ReadMessage(mockGui);
 }
 
 TEST(SessionTests, ApplicationWaitsForAnswerAndReadsIt)
@@ -303,11 +310,10 @@ TEST(SessionTests, ApplicationWaitsForAnswerAndReadsIt)
     MockGui mockGui;
     {
         InSequence dummy;
-        EXPECT_CALL(mockChat, SendMessage(_)).Times(1);
         EXPECT_CALL(mockChat, ReadMessage(_)).Times(1);
     }
     Application app(mockChat, "metizik");
-    app.StartCommunication(mockGui);
+    app.DisplayReceivedMessage(mockGui);
 }
 
 TEST(SessionTests, ClientRetreivesServerNick)
@@ -327,15 +333,57 @@ TEST(SessionTests, ServerRetreivesClientNick)
 }
 
 
-TEST(SessionTests, ApplicationPrintsReceivedMessage)
+TEST(SessionTests, ApplicationPrintsMessageWithOtherSideName)
 {
-    MockChatSession mockChat;
+    MockChatSession mockChat;    
     MockGui mockGui;
     {
         InSequence dummy;
+        EXPECT_CALL(mockChat, PerformHandshake(_)).WillOnce(Return("server"));
         EXPECT_CALL(mockChat, ReadMessage(_)).WillOnce(SetArgReferee<0>("and to you!"));
         EXPECT_CALL(mockGui, Print("server: and to you!")).Times(1);
     }
     Application app(mockChat, "metizik");
-    app.StartCommunication(mockGui);
+    app.DisplayReceivedMessage(mockGui);
+}
+
+TEST(SessionTests, CommunicationExitsOnReadWhenSocketClosed)
+{
+    MockApplication app;
+    MockGui mockGui;
+    EXPECT_CALL(app, ReadMessage(_)).WillOnce(Throw(std::runtime_error{""}));
+    EXPECT_CALL(app, DisplayReceivedMessage(_)).Times(0);
+    EXPECT_NO_THROW(StartCommunication(app, mockGui));
+}
+
+TEST(SessionTests, CommunicationExitsOnWriteWhenSocketClosed)
+{
+    MockApplication app;
+    MockGui mockGui;
+    EXPECT_CALL(app, ReadMessage(_)).Times(1);
+    EXPECT_CALL(app, DisplayReceivedMessage(_)).WillOnce(Throw(std::runtime_error{""}));
+    EXPECT_NO_THROW(StartCommunication(app, mockGui));
+}
+
+TEST(SessionTests, MessageDisplayedAboutClosedSession)
+{
+    MockApplication app;
+    MockGui mockGui;
+    EXPECT_CALL(app, ReadMessage(_)).WillOnce(Throw(std::runtime_error{""}));
+    EXPECT_CALL(mockGui, Print("You are alone now")).Times(1);
+    EXPECT_NO_THROW(StartCommunication(app, mockGui));
+}
+
+TEST(SessionTests, CommunicationContinuesForHUNDREDTimes)
+{
+    MockApplication app;
+    MockGui mockGui;
+    InSequence dummy;
+    for (int i = 0; i < 100; ++i)
+    {
+        EXPECT_CALL(app, ReadMessage(_)).Times(1);
+        EXPECT_CALL(app, DisplayReceivedMessage(_)).Times(1);
+    }
+    EXPECT_CALL(app, ReadMessage(_)).WillOnce(Throw(std::runtime_error{""}));
+    EXPECT_NO_THROW(StartCommunication(app, mockGui));
 }
