@@ -335,25 +335,16 @@ To work with a filesystem you should declare an interface and to mock it.
 
 You can start with GMock from https://goo.gl/j7EkQX, good luck!
 
-### Timer
+## Finalization task:
 
-Implement a timer class that implements a following interface:
-```
-typedef std::chrono::high_resolution_clock Clock;
-typedef Clock::duration Duration;
-typedef std::chrono::time_point<Clock> TimePoint;
+### Chat-client
 
-class ITimer {
-public:
-  virtual ~ITimer() {}
+Implement chat application, that communicates via TCP sockets.
+There is list of requirenments to this application:
+* Console application prefered;
+* It must use system calls for sockets, such as socket, bind, listen, accept, connect;
+* It must create connection between too applications. It must send and receive messages via created connection until it is dropped.
 
-  virtual void Start() = 0;
-  virtual bool IsExpired() const = 0;
-  virtual Duration TimeLeft() const = 0;
-};
-```
-
-Followed by this specification:
-* Timer allows to determine if specific period of time expired or not since Start was called last time
-* Timer allows to determine how much time left till period is expired
-* Timer can be started again any time, no metter in what state it is
+Tips:
+* TCP socket can be mocked;
+* IO streams can be mocked;

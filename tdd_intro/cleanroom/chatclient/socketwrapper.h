@@ -8,12 +8,13 @@ public:
     explicit SocketWrapper(SOCKET& other);
     ~SocketWrapper();
 
+    virtual void Close() override;
     void Bind(const std::string& addr, int16_t port);
     void Listen();
-    SocketWrapper Accept();
+    SockPtr Accept() override;
     virtual SockPtr Connect(const std::string& addr, int16_t port) override;
-    void Read(std::vector<char>& buffer);
-    void Write(const std::vector<char>& buffer);
+    void Read(std::string& buffer) override;
+    void Write(const std::string& buffer) override;
 
 private:
     SOCKET m_socket;

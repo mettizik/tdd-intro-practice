@@ -40,6 +40,11 @@ SocketWrapper::SocketWrapper(SOCKET & other)
 
 SocketWrapper::~SocketWrapper()
 {
+    Close();
+}
+
+void SocketWrapper::Close()
+{
     closesocket(m_socket);
 }
 
@@ -63,14 +68,14 @@ void SocketWrapper::Listen()
     }
 }
 
-SocketWrapper SocketWrapper::Accept()
+ISocketWrapper::SockPtr SocketWrapper::Accept()
 {
     SOCKET other = accept(m_socket, nullptr, nullptr);
     if (other == INVALID_SOCKET)
     {
         throw std::runtime_error(GetExceptionString("Failed to connect to client.", WSAGetLastError()));
     }
-    return SocketWrapper(other);
+    return std::make_shared<SocketWrapper>(other);
 }
 
 ISocketWrapper::SockPtr SocketWrapper::Connect(const std::string& addr, int16_t port)
@@ -87,12 +92,17 @@ ISocketWrapper::SockPtr SocketWrapper::Connect(const std::string& addr, int16_t 
     return std::make_shared<SocketWrapper>(other);
 }
 
-void SocketWrapper::Read(std::vector<char>& buffer)
+void SocketWrapper::Read(std::string& /*buffer*/)
 {
-    recv(m_socket, buffer.data(), buffer.size(), 0);
+   /* std::vector buffer;
+    //buffer.resize
+    if (SOCKET_ERROR == recv(m_socket, buffer.data(), buffer.size(), 0))
+    {
+        throw std::runtime_error(GetExceptionString("Failed to connect to server.", WSAGetLastError()));
+    }*/
 }
 
-void SocketWrapper::Write(const std::vector<char>& buffer)
+void SocketWrapper::Write(const std::string& buffer)
 {
     send(m_socket, buffer.data(), buffer.size(), 0);
 }

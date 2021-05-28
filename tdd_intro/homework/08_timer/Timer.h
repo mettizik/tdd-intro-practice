@@ -1,10 +1,17 @@
 #pragma once
-#include "ITimer.h"
+#include <chrono>
 
-class Timer : public ITimer
+typedef std::chrono::high_resolution_clock DefaultClock;
+typedef DefaultClock::duration DefaultDuration;
+typedef std::chrono::time_point<DefaultClock> DefaultTimePoint;
+
+class Timer
 {
-  public:
-    virtual void Start() override;
-    virtual bool IsExpired() const override;
-    virtual Duration TimeLeft() const override;
+public:
+    template <class DurationT>
+    explicit Timer(DurationT timeout);
+
+    void Start();
+    bool Expired() const;
+    DefaultDuration TimeLeft() const;
 };
